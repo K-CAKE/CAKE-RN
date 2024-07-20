@@ -28,9 +28,8 @@ export default function App() {
   }
   return (
     <View>
-      {id ? id : "Not signed in"}
-      {/* <Button onPress={signInWithKakao}>Sign in with Kakao</Button>
-      <Button onPress={signOut}>Sign out</Button> */}
+      <Button onPress={signInWithKakao}>Sign in with Kakao</Button>
+      <Button onPress={signOut}>Sign out</Button>
     </View>
   );
 }
