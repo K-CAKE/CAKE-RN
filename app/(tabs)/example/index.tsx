@@ -70,13 +70,18 @@ export default function App() {
       await createSessionFromUrl(url);
     }
   };
-
+  async function signOut() {
+    await supabase.auth.signOut();
+    setUseridState("");
+    AsyncStorage.removeItem("access_token");
+    AsyncStorage.removeItem("refresh_token");
+  }
   const url = Linking.useURL();
   if (url) createSessionFromUrl(url);
   return (
     <View>
       <Button onPress={performOAuth}>Sign in with Kakao</Button>
-      {/* <Button onPress={signOut}>Sign out</Button> */}
+      <Button onPress={signOut}>Sign out</Button>
       <Button onPress={() => Updatetoken()} title="Update" />
     </View>
   );
