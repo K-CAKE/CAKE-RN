@@ -51,7 +51,7 @@ export default function Index() {
 
   // main code
   return (
-    <View className="bg-white flex-1 flex justify-center items-center">
+    <View className="flex items-center justify-center flex-1 bg-white">
       <StatusBar style="light"/>
       <Animated.Image 
         style={{ width: 160, height: 160, transform: [{ translateY }] }}
@@ -61,7 +61,7 @@ export default function Index() {
 
       <LinearGradient colors={['transform']} className='absolute bottom-0 left-0 right-0 p-4'>
         <View className='flex items-center mb-6'>
-          <Text className='text-black text-2xl font-bold tracking-wide'>
+          <Text className='text-2xl font-bold tracking-wide text-black'>
             {displayedText}
           </Text>
         </View>
@@ -70,7 +70,7 @@ export default function Index() {
           // 로그인 페이지로 이동
           onPress={()=> router.push('Login')} 
           className='bg-rose-400 flex h-16 w-[300px] mb-16 justify-center rounded-full border-[3px]'>
-            <Text className='text-black text-2xl font-bold tracking-wide text-center'>
+            <Text className='text-2xl font-bold tracking-wide text-center text-black'>
               START
             </Text>
           </TouchableOpacity>
