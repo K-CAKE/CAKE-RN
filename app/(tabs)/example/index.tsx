@@ -11,6 +11,7 @@ import { userid } from '@/atoms/userState';
 
 const redirectTo = makeRedirectUri();
 WebBrowser.maybeCompleteAuthSession();
+
 export default function App() {
   const [useridState, setUseridState] = useRecoilState(userid);
 
@@ -71,6 +72,14 @@ export default function App() {
     AsyncStorage.removeItem('access_token');
     AsyncStorage.removeItem('refresh_token');
   }
+
+  const handleInserts = (payload: any) => {
+    console.log('Change received!', payload);
+  };
+  supabase
+    .channel('chat')
+    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat' }, handleInserts)
+    .subscribe();
   const url = Linking.useURL();
   if (url) createSessionFromUrl(url);
   return (
