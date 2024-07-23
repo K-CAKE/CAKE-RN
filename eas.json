@@ -1,0 +1,21 @@
+{
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "channel": "development",
+      "android": {
+        "distribution": "internal",
+        "withoutCredentials": true
+      },
+      "ios": {
+        "simulator": true
+      }
+    },
+    "production": {
+      "extends": "base",
+      "env": {
+        "ENVIRONMENT": "production"
+      }
+    }
+  }
+}
