@@ -1,12 +1,15 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
+import { useFonts } from "expo-font";
+import { Stack,useRouter } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from 'react';
-import 'react-native-reanimated';
-import { useRouter } from "expo-router";
-
-import { useColorScheme } from '@/hooks/useColorScheme';
+import "react-native-reanimated";
+import { RecoilRoot } from "recoil";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync(); 
@@ -29,6 +32,7 @@ export default function RootLayout() {
 
   return (
     // <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <RecoilRoot>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false}}></Stack.Screen>
         <Stack.Screen name="Login" options={{ headerShown: false}}></Stack.Screen>
@@ -36,6 +40,7 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
+    </RecoilRoot>
     // </ThemeProvider>
   );
 }
