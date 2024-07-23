@@ -89,6 +89,7 @@ export default function App() {
   }
 
   const handleInserts = (payload: any) => {
+    setChat([...chat, payload.new.chatting]);
     console.log('Change received!', payload);
   };
   supabase
@@ -101,7 +102,7 @@ export default function App() {
     <View>
       <Button onPress={performOAuth}>Sign in with Kakao</Button>
       <Button onPress={signOut}>Sign out</Button>
-      {chat.map((item: any, index: number) => (
+      {chat.map((item, index) => (
         <Text key={index}>{item}</Text>
       ))}
       <View className={'mt-10'}>
