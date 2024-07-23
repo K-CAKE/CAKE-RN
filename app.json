@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "cake",
-    "slug": "cau-cake",
+    "slug": "cake",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -39,9 +39,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "153181e4-f5ce-4c31-95b0-5d356ca14f5f"
+        "projectId": "55b9ba69-e022-4ed6-b146-294e11154b44"
       }
     },
-    "owner": "2unhi"
+    "owner": "eunjjin"
   }
 }
