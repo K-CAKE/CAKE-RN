@@ -1,5 +1,5 @@
 import { supabase } from '@/hooks/supabase';
-import { Platform, View } from 'react-native';
+import { Platform, TextInput, View, Text } from 'react-native';
 import * as Linking from 'expo-linking';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button } from '@rneui/themed/dist/Button';
@@ -8,15 +8,30 @@ import * as WebBrowser from 'expo-web-browser';
 import * as QueryParams from 'expo-auth-session/build/QueryParams';
 import { useRecoilState } from 'recoil';
 import { userid } from '@/atoms/userState';
+import { useEffect, useState } from 'react';
 
 const redirectTo = makeRedirectUri();
 WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
-  const [useridState, setUseridState] = useRecoilState(userid);
+  const [useridState] = useRecoilState(userid);
+  const [chatting, setChatting] = useState('');
+  const [chat, setChat] = useState<any>([]);
 
-  const Updatetoken = async () => {
-    const { error } = await supabase.from('profiles').update({ username: 'aaaa' }).eq('id', useridState);
+  useEffect(() => {
+    const fetchChat = async () => {
+      const { data, error } = await supabase.from('chat').select('chatting');
+      if (error) {
+        console.log(error);
+      } else {
+        setChat(data.map((item) => item.chatting?.toString() ?? ''));
+      }
+    };
+    fetchChat();
+  }, []);
+
+  const Updatetoken = async (text: string) => {
+    const { error } = await supabase.from('chat').insert({ chatting: text });
     if (error) {
       console.log(error);
     } else {
@@ -38,15 +53,15 @@ export default function App() {
     if (error) throw error;
     console.log(data.user);
     // setUseridState(data.user?.user_metadata);
-    setItem('access_token', data.session?.access_token ?? '');
-    setItem('refresh_token', data.session?.refresh_token ?? '');
+    await setItem('access_token', data.session?.access_token ?? '');
+    await setItem('refresh_token', data.session?.refresh_token ?? '');
     return data.session;
   };
   async function setItem(key: string, value: string) {
     if (Platform.OS === 'web') {
       return localStorage.setItem(key, value);
     }
-    AsyncStorage.setItem(key, value);
+    await AsyncStorage.setItem(key, value);
   }
 
   const performOAuth = async () => {
@@ -69,11 +84,12 @@ export default function App() {
   async function signOut() {
     await supabase.auth.signOut();
     // setUseridState('');
-    AsyncStorage.removeItem('access_token');
-    AsyncStorage.removeItem('refresh_token');
+    await AsyncStorage.removeItem('access_token');
+    await AsyncStorage.removeItem('refresh_token');
   }
 
   const handleInserts = (payload: any) => {
+    setChat([...chat, payload.new.chatting]);
     console.log('Change received!', payload);
   };
   supabase
@@ -86,7 +102,18 @@ export default function App() {
     <View>
       <Button onPress={performOAuth}>Sign in with Kakao</Button>
       <Button onPress={signOut}>Sign out</Button>
-      <Button onPress={() => Updatetoken()} title="Update" />
+      {chat.map((item: any, index: number) => (
+        <Text>{item}</Text>
+      ))}
+      <View className={'mt-10'}>
+        <TextInput
+          onChangeText={(text) => {
+            setChatting(text);
+          }}
+          placeholder="아무거나 입력해주세요."
+        />
+        <Button onPress={() => Updatetoken(chatting)} title="Send" />
+      </View>
     </View>
   );
 }
