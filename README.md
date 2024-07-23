@@ -1,11 +1,8 @@
-/components - 사용자 인터페이스의 재사용 가능한 부분을 담은 컴포넌트들을 저장
+### 코드 수정
+1. (Tab) 폴더 안 _layout.tsx 수정
+2. home 폴더 안 index.tsx, assets(폴더) 수정
 
-/hooks - 커스텀 훅 저장(로직 재사용)
-
-/scripts - 프로젝트에서 사용할 수 있는 스크립트나 유틸리티
-
-/app/(tabs)/home - 홈화면  
-/app/(tabs)/mypage - 마이페이지  
-/app/(tabs)/way - 길찾기  
-/app/(tabs)/delivery - 배달대행 신청  
-/app/(tabs)/taxi - 택시대행 신청  
+### 다운 받은 라이브러리
+1. expo-linear-gradient
+2. react-native-svg
+3. expo-blur
