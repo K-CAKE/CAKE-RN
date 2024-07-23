@@ -16,7 +16,7 @@ WebBrowser.maybeCompleteAuthSession();
 export default function App() {
   const [useridState] = useRecoilState(userid);
   const [chatting, setChatting] = useState('');
-  const [chat, setChat] = useState<any>([]);
+  const [chat, setChat] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchChat = async () => {
@@ -35,7 +35,7 @@ export default function App() {
     if (error) {
       console.log(error);
     } else {
-      console.log('success');
+      // console.log('success');
     }
   };
   const createSessionFromUrl = async (url: string) => {
@@ -89,7 +89,6 @@ export default function App() {
   }
 
   const handleInserts = (payload: any) => {
-    setChat([...chat, payload.new.chatting]);
     console.log('Change received!', payload);
   };
   supabase
@@ -103,7 +102,7 @@ export default function App() {
       <Button onPress={performOAuth}>Sign in with Kakao</Button>
       <Button onPress={signOut}>Sign out</Button>
       {chat.map((item: any, index: number) => (
-        <Text>{item}</Text>
+        <Text key={index}>{item}</Text>
       ))}
       <View className={'mt-10'}>
         <TextInput
