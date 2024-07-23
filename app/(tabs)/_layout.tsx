@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 import React from "react";
-
+import { StyleSheet } from "react-native";
+import { BlurView } from 'expo-blur';
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -10,9 +11,29 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      initialRouteName="home"
       screenOptions={{
         // tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
+        tabBarActiveTintColor: '#F02F04',
+        tabBarStyle: {
+          position: "absolute",
+          borderTopWidth: 0,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+        },
+        tabBarBackground: () => (
+          <BlurView 
+            intensity={80}
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              overflow: "hidden",
+              backgroundColor: "transparent", 
+            }} 
+          />
+        ),
       }}
     >
       <Tabs.Screen
@@ -49,7 +70,7 @@ export default function TabLayout() {
               color={color}
             />
           ),
-        }}
+        }}        
       />
       <Tabs.Screen
         name="delivery"

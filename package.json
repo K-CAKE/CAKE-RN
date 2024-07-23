@@ -56,11 +56,14 @@
     "recoil": "^0.7.7",
     "tailwind": "^4.0.0",
     "tailwindcss-react-native": "^1.7.10",
-    "twrnc": "^4.4.0"
+    "twrnc": "^4.4.0",
+    "expo-blur": "~13.0.2",
+    "react-native-svg": "15.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/aes-js": "^3.1.4",
+    "@types/expo": "^33.0.1",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.2.45",
     "@types/react-test-renderer": "^18.0.7",

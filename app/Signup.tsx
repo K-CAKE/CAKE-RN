@@ -50,30 +50,30 @@ export default function Signup() {
       <StatusBar style="light" />
       
       {/* 상단 문구 */}
-      <Text className="text-3xl text-left mb-6 mt-32">
+      <Text className="mt-32 mb-6 text-3xl text-left">
         어서와 한국은 처음이지?{'\n'}
         배달과 택시 파트너입니다.
       </Text>
-      <Text className="text-base text-left mt-6 mb-6">
+      <Text className="mt-6 mb-6 text-base text-left">
         먼저 회원가입을 해주세요 :)
       </Text>
       
       {/* 회원가입 폼 */}
       <View className="mb-4">
         <TextInput 
-          className="h-12 border-b border-gray-600 text-gray-500 mb-2" 
+          className="h-12 mb-2 text-gray-500 border-b border-gray-600" 
           placeholder="이름" 
           placeholderTextColor="gray"
           value={name}
           onChangeText={handleNameChange}
         />
         <TextInput 
-          className="h-12 border-b border-gray-600 text-gray-500 mb-2" 
+          className="h-12 mb-2 text-gray-500 border-b border-gray-600" 
           placeholder="이메일" 
           placeholderTextColor="gray"
         />
         <TextInput 
-          className="h-12 border-b border-gray-600 text-gray-500 mb-2" 
+          className="h-12 mb-2 text-gray-500 border-b border-gray-600" 
           placeholder="비밀번호" 
           secureTextEntry 
           placeholderTextColor="gray"
@@ -81,7 +81,7 @@ export default function Signup() {
           onChangeText={handlePasswordChange}
         />
         <TextInput 
-          className="h-12 border-b border-gray-600 text-gray-500 mb-0" 
+          className="h-12 mb-0 text-gray-500 border-b border-gray-600" 
           placeholder="비밀번호 확인" 
           secureTextEntry 
           placeholderTextColor="gray"
@@ -97,10 +97,10 @@ export default function Signup() {
 
       {/* 회원가입 버튼 */}
       <TouchableOpacity 
-        className="bg-blue-500 h-14 rounded-lg justify-center items-center"
+        className="items-center justify-center bg-blue-500 rounded-lg h-14"
         onPress={handleSignup}
       >
-        <Text className="text-white text-xl font-bold">회원가입</Text>
+        <Text className="text-xl font-bold text-white">회원가입</Text>
       </TouchableOpacity>
     </View>
   );
