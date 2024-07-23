@@ -29,7 +29,7 @@
     "@rneui/themed": "^4.0.0-rc.8",
     "@supabase/supabase-js": "^2.44.4",
     "aes-js": "^3.1.2",
-    "expo": "~51.0.21",
+    "expo": "~51.0.22",
     "expo-auth-session": "~5.5.2",
     "expo-constants": "~16.0.2",
     "expo-crypto": "~13.0.2",
