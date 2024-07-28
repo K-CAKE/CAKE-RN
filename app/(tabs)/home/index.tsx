@@ -15,7 +15,7 @@ export default function Page() {
   const headerHeight = useHeaderHeight();
   const [paddingTop, setPaddingTop] = useState(0);
   const { height } = Dimensions.get('window');
-  const buttonHeight = (3 / 5) * height / 4.5;
+  const buttonHeight = (3 / 5) * (height) / 4.5;
 
   const navigation = useNavigation();
 
