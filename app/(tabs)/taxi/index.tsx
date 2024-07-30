@@ -1,6 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Stack, useNavigation } from "expo-router";
-import { Animated, Dimensions, Text, View, StyleSheet, Pressable, Keyboard, ScrollView } from "react-native";
+import { Stack, useNavigation } from 'expo-router';
+import { Animated, Dimensions, Text, View, StyleSheet, Pressable, Keyboard } from 'react-native';
 import { useState, useRef } from 'react';
 import * as Progress from 'react-native-progress';
 import Checkbox from 'expo-checkbox';
@@ -11,30 +11,33 @@ import { MaterialIcons } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { padding } from 'aes-js';
+
+interface IntputProps {
+  label: string;
+  isChecked: boolean;
+  setChecked: any;
+  quantity: string;
+  setQuantity: any;
+}
 
 // 체크박스 컴포넌트
-const CustomCheckbox = ({ label, value, onValueChange }) => {
+const CustomCheckbox = ({ label, value, onValueChange }: { label: string; value: boolean; onValueChange: any }) => {
   return (
     <View style={styles.checkboxContainer}>
       <Checkbox
         value={value}
         onValueChange={onValueChange}
-        color={value ? '#F02F04' : "lightgray"}
+        color={value ? '#F02F04' : 'lightgray'}
         style={styles.checkbox}
       />
       <Text style={value ? styles.clickedLabel : styles.label}>{label}</Text>
     </View>
   );
 };
-const CheckboxWithInput = ({ label, isChecked, setChecked, quantity, setQuantity }) => {
+const CheckboxWithInput = ({ label, isChecked, setChecked, quantity, setQuantity }: IntputProps) => {
   return (
     <View>
-      <CustomCheckbox
-        label={label}
-        value={isChecked}
-        onValueChange={setChecked}
-      />
+      <CustomCheckbox label={label} value={isChecked} onValueChange={setChecked} />
       {isChecked && (
         <TextInput
           style={styles.quantityInput}
@@ -42,7 +45,7 @@ const CheckboxWithInput = ({ label, isChecked, setChecked, quantity, setQuantity
           placeholder="Enter quantity"
           value={quantity}
           onChangeText={setQuantity}
-          returnKeyType='done'
+          returnKeyType="done"
           onSubmitEditing={() => Keyboard.dismiss()}
         />
       )}
@@ -57,10 +60,10 @@ export default function Page() {
   //navigation
   const navigation = useNavigation();
   //input
-  const [Dep, setDep] = useState("");
-  const [Arrival, setArrival] = useState("");
-  const [HC, setHC] = useState(0);
-  const [quickBooking, setQuick] = useState(false);
+  const [Dep, setDep] = useState('');
+  const [Arrival, setArrival] = useState('');
+  // const [HC, setHC] = useState(0);
+  // const [quickBooking, setQuick] = useState(false);
   // luggage checkbox
   const [isCheckedCarryOn, setCheckedCarryOn] = useState(false);
   const [quantityCarryOn, setQuantityCarryOn] = useState('');
@@ -83,140 +86,135 @@ export default function Page() {
     { label: '4', value: 4, key: 'item4' },
     { label: '5', value: 5, key: 'item5' },
   ]);
-  const CustomTickIcon = () => (
-    <Feather name="check-circle" size={24} color="#F89B87" />
-  );
+  const CustomTickIcon = () => <Feather name="check-circle" size={24} color="#F89B87" />;
   //Handler
   //focus event handler
-    const focusAnimation1 = useRef(new Animated.Value(0)).current;
-    const focusAnimation2 = useRef(new Animated.Value(0)).current;
-    const handleFocus = (animation: any) => {
-      Animated.timing(animation, {
-        toValue: 1,
-        duration: 500,
-        useNativeDriver: false,
-      }).start();
-    };
-    const handleBlur = (animation: any) => {
-      Animated.timing(animation, {
-        toValue: 0,
-        duration: 500,
-        useNativeDriver: false,
-      }).start();
-    };
-    const interpolateColor = (animation: any) =>
-      animation.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['lightgray', '#F02F04'], // 색상 변경
+  const focusAnimation1 = useRef(new Animated.Value(0)).current;
+  const focusAnimation2 = useRef(new Animated.Value(0)).current;
+  const handleFocus = (animation: any) => {
+    Animated.timing(animation, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+  };
+  const handleBlur = (animation: any) => {
+    Animated.timing(animation, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+  };
+  const interpolateColor = (animation: any) =>
+    animation.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['lightgray', '#F02F04'], // 색상 변경
     });
 
   //change text handler
-  const handleChangeText = (inputName:string, val:string) => {
-    if ("Departure" === inputName) {
+  const handleChangeText = (inputName: string, val: string) => {
+    if ('Departure' === inputName) {
       setDep(val);
-    }
-    else if ("Arrival" === inputName) {
+    } else if ('Arrival' === inputName) {
       setArrival(val);
     }
   };
 
-  const data = [
-    {key: 'input1'},
-    {key: 'input2'},
-    {key: 'button'},
-  ]
+  const data = [{ key: 'input1' }, { key: 'input2' }, { key: 'button' }];
   // render item
-  const renderItem = ({ item }) => (
-    <View style={{paddingLeft: 30, paddingRight: 30}}>
-      {item.key === 'input1'? (
-        <View style={{marginBottom: 15}}>
+  const renderItem = ({ item }: { item: { key: string } }) => (
+    <View style={{ paddingLeft: 30, paddingRight: 30 }}>
+      {item.key === 'input1' ? (
+        <View style={{ marginBottom: 15 }}>
           {['Departure', 'Arrival'].map((inputName) => (
             <>
               <Text style={styles.title}>{inputName}</Text>
-              <Animated.View 
+              <Animated.View
                 key={inputName}
                 style={[
-                  styles.inputContainer, 
-                  inputName === 'Departure' ? { borderBottomColor: interpolateColor(focusAnimation1)} : {borderBottomColor: interpolateColor(focusAnimation2)},
-                ]}>
+                  styles.inputContainer,
+                  inputName === 'Departure'
+                    ? { borderBottomColor: interpolateColor(focusAnimation1) }
+                    : { borderBottomColor: interpolateColor(focusAnimation2) },
+                ]}
+              >
                 <TextInput
                   style={styles.input}
                   value={inputName === 'Departure' ? Dep : Arrival}
-                  onFocus={() => inputName === 'Departure' ? handleFocus(focusAnimation1) : handleFocus(focusAnimation2)}
-                  onBlur={() => inputName === 'Departure' ? handleBlur(focusAnimation1) : handleBlur(focusAnimation2)}
-                  placeholder={inputName === 'Departure' ? 'Enter departure': 'Enter arrival'}
-                  onChangeText={ (val) => handleChangeText(inputName, val)}
+                  onFocus={() =>
+                    inputName === 'Departure' ? handleFocus(focusAnimation1) : handleFocus(focusAnimation2)
+                  }
+                  onBlur={() => (inputName === 'Departure' ? handleBlur(focusAnimation1) : handleBlur(focusAnimation2))}
+                  placeholder={inputName === 'Departure' ? 'Enter departure' : 'Enter arrival'}
+                  onChangeText={(val) => handleChangeText(inputName, val)}
                 />
                 <Pressable
                   style={({ pressed }) => [
                     {
-                      opacity: pressed ? 0.7: 1
+                      opacity: pressed ? 0.7 : 1,
                     },
-                    { flex: 1, alignItems: 'flex-end' }
+                    { flex: 1, alignItems: 'flex-end' },
                   ]}
-                  onPress={() => handleChangeText(inputName, "")}>
+                  onPress={() => handleChangeText(inputName, '')}
+                >
                   <MaterialIcons name="cancel" size={23} color="lightgray" />
                 </Pressable>
               </Animated.View>
             </>
           ))}
         </View>
-      ): item.key === 'input2' ? (
+      ) : item.key === 'input2' ? (
         <>
-        <View style={{zIndex: 50, marginBottom: 10}}>
-          <Text style={styles.title}>Headcount</Text>
-          <DropDownPicker
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            placeholder='Select number of people'
-            style={[ 
-              styles.dropdown,
-              open ? styles.dropdownOpen : styles.dropdownClosed 
-            ]}
-            dropDownContainerStyle={[
-              { borderWidth: 2, borderColor: '#F02F04', backgroundColor: 'white'}
-            ]}
-            TickIconComponent={CustomTickIcon}
-            arrowIconStyle={open ? styles.arrowOpen : styles.arrowClosed}
-            selectedItemContainerStyle={{ backgroundColor: '#FEECEB' }}
-          />
-        </View>
-        <View style={{zIndex: 1, marginBottom: 20}}>
-        <Text style={styles.title}>Luggage Size(based on the height)</Text>
-        <CheckboxWithInput
-          label="Carry-On(18~22 in)"
-          isChecked={isCheckedCarryOn}
-          setChecked={setCheckedCarryOn}
-          quantity={quantityCarryOn}
-          setQuantity={setQuantityCarryOn}
-        />
-        <CheckboxWithInput
-          label="Small(23~24 in)"
-          isChecked={isCheckedSmall}
-          setChecked={setCheckedSmall}
-          quantity={quantitySmall}
-          setQuantity={setQuantitySmall}
-        />
-        <CheckboxWithInput
-          label="Medium(25~27 in)"
-          isChecked={isCheckedMedium}
-          setChecked={setCheckedMedium}
-          quantity={quantityMedium}
-          setQuantity={setQuantityMedium}
-        />
-        <CheckboxWithInput
-          label="Large(28~32 in)"
-          isChecked={isCheckedLarge}
-          setChecked={setCheckedLarge}
-          quantity={quantityLarge}
-          setQuantity={setQuantityLarge}
-        />
-      </View>
-      </>
+          <View style={{ zIndex: 50, marginBottom: 10 }}>
+            <Text style={styles.title}>Headcount</Text>
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              placeholder="Select number of people"
+              style={[styles.dropdown, open ? styles.dropdownOpen : styles.dropdownClosed]}
+              dropDownContainerStyle={[{ borderWidth: 2, borderColor: '#F02F04', backgroundColor: 'white' }]}
+              TickIconComponent={CustomTickIcon}
+              // @ts-ignore
+              arrowIconStyle={open ? styles.arrowOpen : styles.arrowClosed}
+              selectedItemContainerStyle={{ backgroundColor: '#FEECEB' }}
+            />
+          </View>
+          <View style={{ zIndex: 1, marginBottom: 20 }}>
+            <Text style={styles.title}>Luggage Size(based on the height)</Text>
+            <CheckboxWithInput
+              label="Carry-On(18~22 in)"
+              isChecked={isCheckedCarryOn}
+              setChecked={setCheckedCarryOn}
+              quantity={quantityCarryOn}
+              setQuantity={setQuantityCarryOn}
+            />
+            <CheckboxWithInput
+              label="Small(23~24 in)"
+              isChecked={isCheckedSmall}
+              setChecked={setCheckedSmall}
+              quantity={quantitySmall}
+              setQuantity={setQuantitySmall}
+            />
+            <CheckboxWithInput
+              label="Medium(25~27 in)"
+              isChecked={isCheckedMedium}
+              setChecked={setCheckedMedium}
+              quantity={quantityMedium}
+              setQuantity={setQuantityMedium}
+            />
+            <CheckboxWithInput
+              label="Large(28~32 in)"
+              isChecked={isCheckedLarge}
+              setChecked={setCheckedLarge}
+              quantity={quantityLarge}
+              setQuantity={setQuantityLarge}
+            />
+          </View>
+        </>
       ) : item.key === 'button' ? (
         <Pressable
           onPress={() => {
@@ -224,56 +222,57 @@ export default function Page() {
           }}
           style={({ pressed }) => [
             {
-              opacity: pressed ? 0.7: 1 
+              opacity: pressed ? 0.7 : 1,
             },
-            styles.nextButton
+            styles.nextButton,
           ]}
         >
-          <Text style={{ color: 'white', fontSize: 20,}}>Next</Text>
-        </Pressable> 
-      ): null}
+          <Text style={{ color: 'white', fontSize: 20 }}>Next</Text>
+        </Pressable>
+      ) : null}
     </View>
-    
   );
   return (
-    <View style={{ flex:1 }}>
-      <Stack.Screen 
+    <View style={{ flex: 1 }}>
+      <Stack.Screen
         options={{
           headerTitle: 'Call taxi',
           headerBackVisible: false,
           headerRight: () => (
             <Pressable
-            onPress={() => {
-              console.log('question button');
-            }}
-            style={({ pressed }) => [
-              {
-                opacity: pressed ? 0.7: 1
-              },
-            ]}
-          >
-            <FontAwesome name="question-circle-o" size={24} color="black" />
-          </Pressable>
+              onPress={() => {
+                console.log('question button');
+              }}
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.7 : 1,
+                },
+              ]}
+            >
+              <FontAwesome name="question-circle-o" size={24} color="black" />
+            </Pressable>
           ),
           headerLeft: () => (
             <Pressable
-            onPress={() => {
-              navigation.navigate('home');
-            }}
-            style={({ pressed }) => [
-              {
-                opacity: pressed ? 0.7: 1
-              },
-            ]}
-          >
-            <Ionicons name="chevron-back" size={24} color="black" />
-          </Pressable>
+              onPress={() => {
+                navigation.navigate('home' as never);
+              }}
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.7 : 1,
+                },
+              ]}
+            >
+              <Ionicons name="chevron-back" size={24} color="black" />
+            </Pressable>
           ),
         }}
       />
-      <View style={styles.block}>  
-        <View style={{ padding: 20, alignSelf: 'center', marginBottom: 10}}> 
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+      <View style={styles.block}>
+        <View style={{ padding: 20, alignSelf: 'center', marginBottom: 10 }}>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}
+          >
             <View style={{ flex: 1, alignItems: 'flex-end' }}>
               <MaterialCommunityIcons name="numeric-1-circle-outline" size={24} color="#FFD4D1" />
             </View>
@@ -281,12 +280,12 @@ export default function Page() {
               <MaterialCommunityIcons name="numeric-2-circle-outline" size={24} color="#FFD4D1" />
             </View>
           </View>
-          <Progress.Bar 
-            progress={0} 
+          <Progress.Bar
+            progress={0}
             width={barWidth}
             height={13}
             color="#F02F04"
-            borderColor='white'
+            borderColor="white"
             unfilledColor="#FFD4D1"
             borderRadius={50}
           />
@@ -294,9 +293,9 @@ export default function Page() {
         <FlatList
           data={data}
           renderItem={renderItem}
-          keyExtractor={item => item.key}
-          ListFooterComponent={<View style={{height: 150}}/>}
-        /> 
+          keyExtractor={(item) => item.key}
+          ListFooterComponent={<View style={{ height: 150 }} />}
+        />
       </View>
     </View>
   );

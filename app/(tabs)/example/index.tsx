@@ -1,21 +1,22 @@
 import { supabase } from '@/hooks/supabase';
-import { Platform, TextInput, View, Text } from 'react-native';
+// import { Platform, TextInput, View, Text } from 'react-native';
+import { Platform } from 'react-native';
 import * as Linking from 'expo-linking';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Button } from '@rneui/themed/dist/Button';
-import { makeRedirectUri } from 'expo-auth-session';
+// import { Button } from '@rneui/themed/dist/Button';
+// import { makeRedirectUri } from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
 import * as QueryParams from 'expo-auth-session/build/QueryParams';
-import { useRecoilState } from 'recoil';
-import { userid } from '@/atoms/userState';
+// import { useRecoilState } from 'recoil';
+// import { userid } from '@/atoms/userState';
 import { useEffect, useState } from 'react';
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
-const redirectTo = makeRedirectUri();
+// const redirectTo = makeRedirectUri();
 WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
-  const [useridState] = useRecoilState(userid);
-  const [chatting, setChatting] = useState('');
+  // const [useridState] = useRecoilState(userid);
+  // const [chatting, setChatting] = useState('');
   const [chat, setChat] = useState<string[]>([]);
 
   useEffect(() => {
@@ -30,14 +31,14 @@ export default function App() {
     fetchChat();
   }, []);
 
-  const Updatetoken = async (text: string) => {
-    const { error } = await supabase.from('chat').insert({ chatting: text });
-    if (error) {
-      console.log(error);
-    } else {
-      // console.log('success');
-    }
-  };
+  // const Updatetoken = async (text: string) => {
+  //   const { error } = await supabase.from('chat').insert({ chatting: text });
+  //   if (error) {
+  //     console.log(error);
+  //   } else {
+  //     // console.log('success');
+  //   }
+  // };
   const createSessionFromUrl = async (url: string) => {
     const { params, errorCode } = QueryParams.getQueryParams(url);
 
@@ -64,29 +65,29 @@ export default function App() {
     await AsyncStorage.setItem(key, value);
   }
 
-  const performOAuth = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'kakao',
-      options: {
-        redirectTo,
-        skipBrowserRedirect: true,
-      },
-    });
-    if (error) throw error;
+  // const performOAuth = async () => {
+  //   const { data, error } = await supabase.auth.signInWithOAuth({
+  //     provider: 'kakao',
+  //     options: {
+  //       redirectTo,
+  //       skipBrowserRedirect: true,
+  //     },
+  //   });
+  //   if (error) throw error;
 
-    const res = await WebBrowser.openAuthSessionAsync(data?.url ?? '', redirectTo);
+  //   const res = await WebBrowser.openAuthSessionAsync(data?.url ?? '', redirectTo);
 
-    if (res.type === 'success') {
-      const { url } = res;
-      await createSessionFromUrl(url);
-    }
-  };
-  async function signOut() {
-    await supabase.auth.signOut();
-    // setUseridState('');
-    await AsyncStorage.removeItem('access_token');
-    await AsyncStorage.removeItem('refresh_token');
-  }
+  //   if (res.type === 'success') {
+  //     const { url } = res;
+  //     await createSessionFromUrl(url);
+  //   }
+  // };
+  // async function signOut() {
+  //   await supabase.auth.signOut();
+  //   // setUseridState('');
+  //   await AsyncStorage.removeItem('access_token');
+  //   await AsyncStorage.removeItem('refresh_token');
+  // }
 
   const handleInserts = (payload: any) => {
     setChat([...chat, payload.new.chatting]);
