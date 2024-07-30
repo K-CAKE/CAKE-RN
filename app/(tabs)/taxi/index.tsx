@@ -127,10 +127,9 @@ export default function Page() {
       {item.key === 'input1' ? (
         <View style={{ marginBottom: 15 }}>
           {['Departure', 'Arrival'].map((inputName) => (
-            <>
+            <View key={inputName}>
               <Text style={styles.title}>{inputName}</Text>
               <Animated.View
-                key={inputName}
                 style={[
                   styles.inputContainer,
                   inputName === 'Departure'
@@ -160,7 +159,7 @@ export default function Page() {
                   <MaterialIcons name="cancel" size={23} color="lightgray" />
                 </Pressable>
               </Animated.View>
-            </>
+            </View>
           ))}
         </View>
       ) : item.key === 'input2' ? (

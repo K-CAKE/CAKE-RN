@@ -39,9 +39,6 @@ export default function RootLayout() {
           <Stack.Screen name="Signup" options={{ headerShown: false }}></Stack.Screen>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
-          <Stack.Screen name="Delivery" options={{ headerShown: false }} />
-          <Stack.Screen name="Orders" options={{ headerShown: false }} />
-          <Stack.Screen name="OrderDelivery" options={{ headerShown: false }} />
         </Stack>
       </RecoilRoot>
     </GestureHandlerRootView>
