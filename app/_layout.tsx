@@ -1,10 +1,11 @@
+
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack,useRouter } from "expo-router";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from 'react';
 import "react-native-reanimated";
@@ -12,8 +13,11 @@ import { RecoilRoot } from "recoil";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import DeliveryScreen from "@/app/(tabs)/delivery";
+
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync(); 
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -41,6 +45,9 @@ export default function RootLayout() {
           <Stack.Screen name="Signup" options={{ headerShown: false}}></Stack.Screen>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
+          <Stack.Screen name="Delivery" options={{ headerShown: false }} />
+          <Stack.Screen name="Orders" options={{ headerShown: false }} />
+          <Stack.Screen name="OrderDelivery" options={{ headerShown: false }} />
         </Stack>
       </RecoilRoot>
     </GestureHandlerRootView>
