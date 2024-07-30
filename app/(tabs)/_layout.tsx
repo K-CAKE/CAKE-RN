@@ -3,6 +3,8 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { BlurView } from 'expo-blur';
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
@@ -21,6 +23,7 @@ export default function TabLayout() {
           borderTopWidth: 0,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
+          minHeight: 85,
         },
         tabBarBackground: () => (
           <BlurView 
@@ -29,8 +32,7 @@ export default function TabLayout() {
               ...StyleSheet.absoluteFillObject,
               borderTopLeftRadius: 20,
               borderTopRightRadius: 20,
-              overflow: "hidden",
-              backgroundColor: "transparent", 
+              overflow: "hidden", 
             }} 
           />
         ),
@@ -41,10 +43,10 @@ export default function TabLayout() {
         options={{
           title: "Way",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "settings" : "settings-outline"}
-              color={color}
-            />
+            <FontAwesome5 
+              name={focused ? "map-marked-alt" : "map"} 
+              size={24} 
+              color={color} />
           ),
         }}
       />
@@ -53,10 +55,7 @@ export default function TabLayout() {
         options={{
           title: "Taxi",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
-              color={color}
-            />
+            <FontAwesome5 name="taxi" size={27} color={color} />
           ),
         }}
       />
@@ -77,8 +76,9 @@ export default function TabLayout() {
         options={{
           title: "Delivery",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "settings" : "settings-outline"}
+            <Ionicons
+              name={focused ? "fast-food" : "fast-food-outline"}
+              size={27}
               color={color}
             />
           ),
