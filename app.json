@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "cake",
-    "slug": "k-cake",
+    "slug": "cake",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -35,9 +35,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "4c16e30e-31d5-41b3-b487-1c3aa29915bb"
+        "projectId": "061cdedb-d7fd-4bbb-b1ee-e1f1b9a6a56a"
       }
     },
-    "owner": "mycindy0710"
+    "owner": "cake-cau"
   }
 }
