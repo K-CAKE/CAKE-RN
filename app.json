@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "cake",
-    "slug": "cake",
+    "slug": "k-cake",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -24,7 +24,7 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "experiments": {
@@ -35,9 +35,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "55b9ba69-e022-4ed6-b146-294e11154b44"
+        "projectId": "4c16e30e-31d5-41b3-b487-1c3aa29915bb"
       }
     },
-    "owner": "eunjjin"
+    "owner": "mycindy0710"
   }
 }

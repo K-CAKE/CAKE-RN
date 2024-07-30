@@ -37,6 +37,7 @@
     "expo-constants": "~16.0.2",
     "expo-crypto": "~13.0.2",
     "expo-font": "~12.0.9",
+    "expo-image-picker": "~15.0.7",
     "expo-linear-gradient": "~13.0.2",
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.18",
@@ -62,7 +63,8 @@
     "recoil": "^0.7.7",
     "tailwind": "^4.0.0",
     "tailwindcss-react-native": "^1.7.10",
-    "twrnc": "^4.4.0",
+    "tesseract.js": "^5.1.0",
+    "twrnc": "^4.4.0"
     "expo-checkbox": "~3.0.0"
   },
   "devDependencies": {
@@ -80,7 +82,7 @@
     "jest-expo": "~51.0.3",
     "prettier": "^3.3.3",
     "react-test-renderer": "18.2.0",
-    "tailwindcss": "3.3.2",
+    "tailwindcss": "^3.3.2",
     "typescript": "~5.3.3"
   },
   "private": true
