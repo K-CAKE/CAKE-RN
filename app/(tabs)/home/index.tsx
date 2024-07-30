@@ -1,26 +1,26 @@
-import { Stack } from "expo-router";
-import { StyleSheet, Text, Pressable, View, Dimensions, ScrollView } from "react-native";
+import { Stack } from 'expo-router';
+import { StyleSheet, Text, Pressable, View, Dimensions, ScrollView } from 'react-native';
 
 import { useHeaderHeight } from '@react-navigation/elements';
-import Svg, { Path } from "react-native-svg"
-import { LinearGradient } from "expo-linear-gradient";
-import { useState, useEffect } from "react";
+import Svg, { Path } from 'react-native-svg';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useState, useEffect } from 'react';
 
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
-import { useNavigation } from "expo-router";
+import { useNavigation } from 'expo-router';
 
 export default function Page() {
   const headerHeight = useHeaderHeight();
   const [paddingTop, setPaddingTop] = useState(0);
   const { height } = Dimensions.get('window');
-  const buttonHeight = (3 / 5) * (height) / 4.5;
+  const buttonHeight = ((3 / 5) * height) / 4.5;
 
   const navigation = useNavigation();
 
   const handlePress = (screen: string) => {
-    navigation.navigate(screen);
+    navigation.navigate(screen as never);
   };
 
   useEffect(() => {
@@ -28,139 +28,135 @@ export default function Page() {
   }, [headerHeight]);
 
   return (
-      <LinearGradient 
-        colors={["#F02F04", "#F5ECEA"]}
-        style={[styles.block, { paddingTop }]}
-      >
-        <Stack.Screen
-          options={{
-            headerTransparent: true,
-            headerLeft: () => (
-              <Svg
-                width={23}
-                height={23}
-                viewBox="0 0 23 23"
-              >
-                <Path d="M6.10892 4.03538C8.30163 -0.453042 14.6984 -0.453054 16.8911 4.03536L21.5716 13.6163C23.5189 17.6022 20.6167 22.25 16.1806 22.25H6.81944C2.38329 22.25 -0.518867 17.6023 1.42837 13.6163L6.10892 4.03538Z" fill="#FFD4D1" />
-              </Svg>
-            ),
-            headerRight: () => (
-              <Pressable
+    <LinearGradient colors={['#F02F04', '#F5ECEA']} style={[styles.block, { paddingTop }]}>
+      <Stack.Screen
+        options={{
+          headerTransparent: true,
+          headerLeft: () => (
+            <Svg width={23} height={23} viewBox="0 0 23 23">
+              <Path
+                d="M6.10892 4.03538C8.30163 -0.453042 14.6984 -0.453054 16.8911 4.03536L21.5716 13.6163C23.5189 17.6022 20.6167 22.25 16.1806 22.25H6.81944C2.38329 22.25 -0.518867 17.6023 1.42837 13.6163L6.10892 4.03538Z"
+                fill="#FFD4D1"
+              />
+            </Svg>
+          ),
+          headerRight: () => (
+            <Pressable
               onPress={() => {
                 console.log('user button');
               }}
               style={({ pressed }) => [
                 {
-                  opacity: pressed ? 0.7: 1
+                  opacity: pressed ? 0.7 : 1,
                 },
-                styles.paypal_button
+                styles.paypal_button,
               ]}
             >
-              <FontAwesome name="user-circle" size={35} color='#FFD4D1' />
+              <FontAwesome name="user-circle" size={35} color="#FFD4D1" />
             </Pressable>
-            ),
-            headerTitle: ''
-          }}
-        />
-        <View style={styles.paypal}>
-          <View style={styles.top}>
-            <Text style={[styles.text, { fontSize: 15 }]}>PayPal balance</Text>
-            <View style={{ flexDirection: 'row',alignItems: 'center' }}>
-              <Text style={styles.balance}>$ 0.00</Text>
-            </View>
-          </View>
-          <View style={styles.bottom}>
-            <View style={styles.button}>
-              <Pressable
-                onPress={() => {
-                  console.log('Add button');
-                }}
-                style={({ pressed }) => [
-                  {
-                    opacity: pressed ? 0.9: 0.7
-                  },
-                  styles.add
-                ]} 
-              >
-                <AntDesign name="pluscircle" size={45} color='#FEECEB'/>
-              </Pressable>
-            </View>
-            <View style={styles.button}>
-              <Pressable
-                onPress={() => {
-                  console.log('PayPal button');
-                }}
-                style={({ pressed }) => [
-                  {
-                    opacity: pressed ? 0.9: 0.7
-                  },
-                  styles.paypal_button
-                ]}
-              >
-                <FontAwesome name="cc-paypal" size={39} color="#FEECEB" />
-              </Pressable>
-            </View>
+          ),
+          headerTitle: '',
+        }}
+      />
+      <View style={styles.paypal}>
+        <View style={styles.top}>
+          <Text style={[styles.text, { fontSize: 15 }]}>PayPal balance</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={styles.balance}>$ 0.00</Text>
           </View>
         </View>
-        <View style={styles.contents}>
-          <ScrollView style={{ flex: 1 }}>
-            <View style={styles.button}>
-              <Pressable
-                onPress={() => {
-                  handlePress('way');
-                }}
-                style={({ pressed }) => [
-                  {
-                    backgroundColor: pressed ? '#d9d9d9': '#ffffff',
-                    padding: pressed ? 25: 20
-                  },
-                  styles.content,
-                  { height: buttonHeight }
-                ]}
-              >
-                <View style={{ flexDirection: 'row'}}>
-                  <Text> 아이콘 자리 </Text>
-                  <Text> Map 서비스 설명 자리 </Text>
-                </View>
-              </Pressable>
-            </View>
-            <View style={styles.button}>
-              <Pressable
-                onPress={() => {
-                  handlePress('taxi');
-                }}
-                style={({ pressed }) => [
-                  {
-                    backgroundColor: pressed ? '#d9d9d9': '#ffffff',
-                    padding: pressed ? 25: 20
-                  },
-                  styles.content,
-                  { height: buttonHeight }
-                ]}
-              >
-                <Text>Taxi</Text>
-              </Pressable>
-            </View>
-            <View style={styles.button}>
-              <Pressable
-                onPress={() => {
-                  handlePress('delivery');
-                }}
-                style={({ pressed }) => [
-                  {
-                    backgroundColor: pressed ? '#cdcdcd': '#ffffff',
-                    padding: pressed ? 25: 20
-                  },
-                  styles.content,
-                  { height: buttonHeight }
-                ]}
-              >
-                <Text>Food delivery</Text>
-              </Pressable>
-            </View>
-          </ScrollView>
+        <View style={styles.bottom}>
+          <View style={styles.button}>
+            <Pressable
+              onPress={() => {
+                console.log('Add button');
+              }}
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.9 : 0.7,
+                },
+                styles.add,
+              ]}
+            >
+              <AntDesign name="pluscircle" size={45} color="#FEECEB" />
+            </Pressable>
+          </View>
+          <View style={styles.button}>
+            <Pressable
+              onPress={() => {
+                console.log('PayPal button');
+              }}
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.9 : 0.7,
+                },
+                styles.paypal_button,
+              ]}
+            >
+              <FontAwesome name="cc-paypal" size={39} color="#FEECEB" />
+            </Pressable>
+          </View>
         </View>
-      </LinearGradient>
+      </View>
+      <View style={styles.contents}>
+        <ScrollView style={{ flex: 1 }}>
+          <View style={styles.button}>
+            <Pressable
+              onPress={() => {
+                handlePress('way');
+              }}
+              style={({ pressed }) => [
+                {
+                  backgroundColor: pressed ? '#d9d9d9' : '#ffffff',
+                  padding: pressed ? 25 : 20,
+                },
+                styles.content,
+                { height: buttonHeight },
+              ]}
+            >
+              <View style={{ flexDirection: 'row' }}>
+                <Text> 아이콘 자리 </Text>
+                <Text> Map 서비스 설명 자리 </Text>
+              </View>
+            </Pressable>
+          </View>
+          <View style={styles.button}>
+            <Pressable
+              onPress={() => {
+                handlePress('taxi');
+              }}
+              style={({ pressed }) => [
+                {
+                  backgroundColor: pressed ? '#d9d9d9' : '#ffffff',
+                  padding: pressed ? 25 : 20,
+                },
+                styles.content,
+                { height: buttonHeight },
+              ]}
+            >
+              <Text>Taxi</Text>
+            </Pressable>
+          </View>
+          <View style={styles.button}>
+            <Pressable
+              onPress={() => {
+                handlePress('delivery');
+              }}
+              style={({ pressed }) => [
+                {
+                  backgroundColor: pressed ? '#cdcdcd' : '#ffffff',
+                  padding: pressed ? 25 : 20,
+                },
+                styles.content,
+                { height: buttonHeight },
+              ]}
+            >
+              <Text>Food delivery</Text>
+            </Pressable>
+          </View>
+        </ScrollView>
+      </View>
+    </LinearGradient>
   );
 }
 
@@ -222,6 +218,5 @@ const styles = StyleSheet.create({
     width: '89%',
     justifyContent: 'center',
     marginTop: 20,
-  }
+  },
 });
-

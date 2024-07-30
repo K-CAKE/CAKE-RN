@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import { Stack } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
@@ -85,54 +85,54 @@ export default function Page() {
 
   return (
     <>
-    <View>
-      <Stack.Screen options={{ headerShown: false }} />
-    </View>
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.button}>
-          <FontAwesome name="arrow-left" size={24} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <FontAwesome name="road" size={24} color="black" />
-        </TouchableOpacity>
+      <View>
+        <Stack.Screen options={{ headerShown: false }} />
       </View>
-      <View style={styles.mapContainer}>
-        <Text style={styles.mapText}>Map Area</Text>
-      </View>
-      <View style={styles.filterContainer}>
-        <TouchableOpacity
-          style={[styles.filterButton, selectedFilter === 'restaurants' && styles.selectedFilterButton]}
-          onPress={() => setSelectedFilter('restaurants')}
-        >
-          <Text style={styles.filterText}>restaurants</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.filterButton, selectedFilter === 'cafe' && styles.selectedFilterButton]}
-          onPress={() => setSelectedFilter('cafe')}
-        >
-          <Text style={styles.filterText}>cafe</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.filterButton, selectedFilter === 'CVS' && styles.selectedFilterButton]}
-          onPress={() => setSelectedFilter('CVS')}
-        >
-          <Text style={styles.filterText}>CVS</Text>
-        </TouchableOpacity>
-      </View>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {filteredLocations.map((location, index) => (
-          <TouchableOpacity key={index} style={styles.locationCard}>
-            <View style={styles.locationImage}></View>
-            <View style={styles.locationInfo}>
-              <Text style={styles.locationText}>{location.name}</Text>
-              <Text style={styles.metadataText}>Address: {location.address}</Text>
-              <Text style={styles.metadataText}>Hours: {location.openingHours}</Text>
-            </View>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.button}>
+            <FontAwesome name="arrow-left" size={24} color="black" />
           </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </View>
+          <TouchableOpacity style={styles.button}>
+            <FontAwesome name="road" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.mapContainer}>
+          <Text style={styles.mapText}>Map Area</Text>
+        </View>
+        <View style={styles.filterContainer}>
+          <TouchableOpacity
+            style={[styles.filterButton, selectedFilter === 'restaurants' && styles.selectedFilterButton]}
+            onPress={() => setSelectedFilter('restaurants')}
+          >
+            <Text style={styles.filterText}>restaurants</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.filterButton, selectedFilter === 'cafe' && styles.selectedFilterButton]}
+            onPress={() => setSelectedFilter('cafe')}
+          >
+            <Text style={styles.filterText}>cafe</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.filterButton, selectedFilter === 'CVS' && styles.selectedFilterButton]}
+            onPress={() => setSelectedFilter('CVS')}
+          >
+            <Text style={styles.filterText}>CVS</Text>
+          </TouchableOpacity>
+        </View>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          {filteredLocations.map((location, index) => (
+            <TouchableOpacity key={index} style={styles.locationCard}>
+              <View style={styles.locationImage}></View>
+              <View style={styles.locationInfo}>
+                <Text style={styles.locationText}>{location.name}</Text>
+                <Text style={styles.metadataText}>Address: {location.address}</Text>
+                <Text style={styles.metadataText}>Hours: {location.openingHours}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
     </>
   );
 }
