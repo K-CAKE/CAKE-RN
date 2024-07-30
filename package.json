@@ -64,7 +64,7 @@
     "tailwind": "^4.0.0",
     "tailwindcss-react-native": "^1.7.10",
     "tesseract.js": "^5.1.0",
-    "twrnc": "^4.4.0"
+    "twrnc": "^4.4.0",
     "expo-checkbox": "~3.0.0"
   },
   "devDependencies": {
