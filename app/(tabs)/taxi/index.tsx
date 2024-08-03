@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Stack, useNavigation } from 'expo-router';
+import { Stack, useNavigation, useRouter } from 'expo-router';
 import { Animated, Dimensions, Text, View, StyleSheet, Pressable, Keyboard } from 'react-native';
 import { useState, useRef } from 'react';
 import * as Progress from 'react-native-progress';
@@ -53,7 +53,9 @@ const CheckboxWithInput = ({ label, isChecked, setChecked, quantity, setQuantity
   );
 };
 
-export default function Page() {
+export default function Step1Screen() {
+  //router
+  const router = useRouter();
   //progress bar 관련
   const screenWidth = Dimensions.get('window').width;
   const barWidth = 0.85 * screenWidth;
@@ -120,8 +122,8 @@ export default function Page() {
     }
   };
 
-  const data = [{ key: 'input1' }, { key: 'input2' }, { key: 'button' }];
   // render item
+  const data = [{ key: 'input1' }, { key: 'input2' }, { key: 'button' }];
   const renderItem = ({ item }: { item: { key: string } }) => (
     <View style={{ paddingLeft: 30, paddingRight: 30 }}>
       {item.key === 'input1' ? (
@@ -217,7 +219,13 @@ export default function Page() {
       ) : item.key === 'button' ? (
         <Pressable
           onPress={() => {
-            console.log('next button');
+            router.push({
+              pathname: '/taxi/step2' as never,
+              params: {
+                Dep: Dep,
+                Arrival: Arrival,
+              },
+            });
           }}
           style={({ pressed }) => [
             {
@@ -236,6 +244,7 @@ export default function Page() {
       <Stack.Screen
         options={{
           headerTitle: 'Call taxi',
+          headerTitleAlign: 'center',
           headerBackVisible: false,
           headerRight: () => (
             <Pressable
