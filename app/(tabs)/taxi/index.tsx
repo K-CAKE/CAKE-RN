@@ -277,29 +277,7 @@ export default function Step1Screen() {
         }}
       />
       <View style={styles.block}>
-        <View style={{ padding: 20, alignSelf: 'center', marginBottom: 10 }}>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}
-          >
-            <View style={{ flex: 1, alignItems: 'flex-end' }}>
-              <MaterialCommunityIcons name="numeric-1-circle-outline" size={24} color="#FFD4D1" />
-            </View>
-            <View style={{ flex: 1, alignItems: 'flex-end' }}>
-              <MaterialCommunityIcons name="numeric-2-circle-outline" size={24} color="#FFD4D1" />
-            </View>
-          </View>
-          /*
-          <Progress.Bar
-            progress={0}
-            width={barWidth}
-            height={13}
-            color="#F02F04"
-            borderColor="white"
-            unfilledColor="#FFD4D1"
-            borderRadius={50}
-          />
-          */
-        </View>
+        <View style={{ marginBottom: 25 }} />
         <FlatList
           data={data}
           renderItem={renderItem}
