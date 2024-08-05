@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
 import { Stack } from 'expo-router';
 import { useRouter } from 'expo-router';
 
@@ -13,43 +13,54 @@ export default function Step2Screen() {
     <View style={styles.block}>
       <Stack.Screen
         options={{
-          headerTitle: '',
-          headerTransparent: true,
-          headerLeft: () => (
-            <Pressable
-              onPress={() => {
-                router.back();
-              }}
-              style={({ pressed }) => [
-                {
-                  opacity: pressed ? 0.7 : 0.9,
-                },
-                styles.back,
-              ]}
-            >
-              <Ionicons name="chevron-back" size={24} color="black" />
-            </Pressable>
-          ),
+          headerShown: false,
         }}
       />
       <View style={styles.container}>
         <View style={styles.mapView}>
           <NaverMapView style={styles.map} />
+          <Pressable
+            onPress={() => {
+              router.back();
+            }}
+            style={({ pressed }) => [
+              {
+                opacity: pressed ? 0.7 : 0.9,
+              },
+              styles.back,
+            ]}
+          >
+            <Ionicons name="chevron-back" size={24} color="black" />
+          </Pressable>
         </View>
-        <View style={styles.detail}></View>
-        <Pressable
-          onPress={() => {
-            router.push('/taxi/step3' as never);
-          }}
-          style={({ pressed }) => [
-            {
-              opacity: pressed ? 0.7 : 1,
-            },
-            styles.nextButton,
-          ]}
-        >
-          <Text style={{ color: 'white', fontSize: 20 }}>Next</Text>
-        </Pressable>
+        <ScrollView style={{ flex: 1 }}>
+          <View>
+            <View style={styles.title}>
+              <Text style={{ fontSize: 40, fontWeight: 'bold', marginRight: 8 }}>30</Text>
+              <Text style={{ fontSize: 20, marginRight: 20 }}>minutes</Text>
+              <Text style={{ fontSize: 15, color: 'gray' }}>27</Text>
+              <Text style={{ fontSize: 15, color: 'gray' }}>km</Text>
+            </View>
+            <View style={styles.detail}>
+              <Text style={{ fontSize: 18 }}>Estimated taxi fare :</Text>
+            </View>
+          </View>
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <Pressable
+              onPress={() => {
+                router.push('/taxi/step3' as never);
+              }}
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.7 : 1,
+                },
+                styles.nextButton,
+              ]}
+            >
+              <Text style={{ color: 'white', fontSize: 20 }}>Call taxi</Text>
+            </Pressable>
+          </View>
+        </ScrollView>
       </View>
     </View>
   );
@@ -74,16 +85,15 @@ const styles = StyleSheet.create({
     shadowRadius: 5, // 그림자 블러 반경
     // Android 전용 그림자 속성
     elevation: 3, // 그림자의 깊이
+    position: 'absolute',
+    top: 30,
+    left: 25,
   },
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   mapView: {
     flex: 1,
-    position: 'absolute',
-    top: 0,
     height: '50%',
     width: '100%',
   },
@@ -91,12 +101,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   detail: {
-    flex: 1,
-    backgroundColor: 'white',
+    padding: 10,
+  },
+  title: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 13,
+    paddingTop: 10,
+    paddingBottom: 5,
+    borderBottomWidth: 1,
+    borderColor: 'lightgray',
   },
   nextButton: {
     borderRadius: 30,
-    width: '80%',
+    width: '86%',
     height: 50,
     backgroundColor: '#F02F04',
     alignItems: 'center',
