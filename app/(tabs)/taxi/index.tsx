@@ -288,6 +288,7 @@ export default function Step1Screen() {
               <MaterialCommunityIcons name="numeric-2-circle-outline" size={24} color="#FFD4D1" />
             </View>
           </View>
+          /*
           <Progress.Bar
             progress={0}
             width={barWidth}
@@ -297,6 +298,7 @@ export default function Step1Screen() {
             unfilledColor="#FFD4D1"
             borderRadius={50}
           />
+          */
         </View>
         <FlatList
           data={data}
