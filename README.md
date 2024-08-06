@@ -1,8 +1,13 @@
-### 코드 수정
-1. (Tab) 폴더 안 _layout.tsx 수정
-2. home 폴더 안 index.tsx, assets(폴더) 수정
+### 여러 화면 다루기
+탭 화면 폴더 안에서의 _layout.tsx에서 다루어야 함
 
-### 다운 받은 라이브러리
-1. expo-linear-gradient
-2. react-native-svg
-3. expo-blur
+
+> 자세한 건 taxi 디렉토리 안 _layout.tsx 코드 참고
+
+> 현재 taxi 폴더 구조는 _layout.tsx, index.tsx(첫 번째 화면), step2.tsx(두 번째 화면)으로 이루어짐
+
+
+> 해당 폴더 안에 만들고자 하는 스크린 개수만큼 파일 생성(+ 코드 작성) cf. 파일 이름은 자기가 원하는대로 설정
+
+
+> Stack.Screen name='파일이름'

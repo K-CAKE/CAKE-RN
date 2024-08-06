@@ -23,19 +23,16 @@ export default function TabLayout() {
           borderTopWidth: 0,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
-          minHeight: 85,
+          minHeight: 70,
+          maxHeight: 70,
+          backgroundColor: 'rgba(255,255,255,0.7)',
+          elevation: 0,
+          shadowOpacity: 0,
         },
-        tabBarBackground: () => (
-          <BlurView
-            intensity={80}
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-              overflow: 'hidden',
-            }}
-          />
-        ),
+        tabBarItemStyle: {
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
       }}
     >
       <Tabs.Screen
