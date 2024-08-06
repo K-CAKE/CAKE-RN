@@ -147,7 +147,9 @@ export default function Step1Screen() {
                   }
                   onBlur={() => (inputName === 'Departure' ? handleBlur(focusAnimation1) : handleBlur(focusAnimation2))}
                   placeholder={inputName === 'Departure' ? 'Enter departure' : 'Enter arrival'}
-                  onChangeText={(val) => handleChangeText(inputName, val)}
+                  onChangeText={(val) => {
+                    handleChangeText(inputName, val);
+                  }}
                 />
                 <Pressable
                   style={({ pressed }) => [

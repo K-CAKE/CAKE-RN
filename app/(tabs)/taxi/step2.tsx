@@ -1,14 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
 import { Stack } from 'expo-router';
-import { useRouter } from 'expo-router';
-
+import { useRouter, useLocalSearchParams } from 'expo-router';
+//Icon
 import { Ionicons } from '@expo/vector-icons';
-
+//Map
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
+//Fare
+import { calculateTaxiFare } from './TaxiFareCalculator';
 
 export default function Step2Screen() {
   const router = useRouter();
+  const params = useLocalSearchParams();
+  // 출발지 도착지
+  const { arrival = null, dep = null } = params;
+  // 거리
+  const [distance, setDistance] = useState<number | null>(null);
+  // 예상시간
+  const [time, setTime] = useState<number | null>(null);
+  // 예상택시비
+  const [fare, setFare] = useState<number | null>(null);
+  // 택시비 계산
+  // 기본요금(4800원) + 거리요금(0.131km당 100원) + (거리(km)/14.6(km/h))/35(s)*100(원)
+  useEffect(() => {
+    if (dep && arrival) {
+      //임시로 거리 설정(27km)
+      setDistance(27);
+
+      try {
+        const calculateFare = calculateTaxiFare(distance);
+        setFare(calculateFare);
+      } catch (error) {
+        console.log('계산 에러 발생');
+        setFare(null);
+      }
+    }
+  }, [dep, arrival]);
   return (
     <View style={styles.block}>
       <Stack.Screen
@@ -42,7 +69,13 @@ export default function Step2Screen() {
               <Text style={{ fontSize: 15, color: 'gray' }}>km</Text>
             </View>
             <View style={styles.detail}>
-              <Text style={{ fontSize: 18 }}>Estimated taxi fare :</Text>
+              <Text>
+                Arrival: {arrival} Dep: {dep}
+              </Text>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={{ fontSize: 18 }}>Estimated taxi fare :</Text>
+                <Text>{fare}</Text>
+              </View>
             </View>
           </View>
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
