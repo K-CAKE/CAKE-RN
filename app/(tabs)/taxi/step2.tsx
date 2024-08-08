@@ -13,7 +13,8 @@ export default function Step2Screen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   // 출발지 도착지
-  const { arrival = null, dep = null } = params;
+  const [arrival, setArrival] = useState<any>(null);
+  const [dep, setDep] = useState<any>(null);
   // 거리
   const [distance, setDistance] = useState<number | null>(null);
   // 예상시간
@@ -23,19 +24,21 @@ export default function Step2Screen() {
   // 택시비 계산
   // 기본요금(4800원) + 거리요금(0.131km당 100원) + (거리(km)/14.6(km/h))/35(s)*100(원)
   useEffect(() => {
-    if (dep && arrival) {
+    if (params) {
       //임시로 거리 설정(27km)
+      setArrival(params.Arrival);
+      setDep(params.Dep);
       setDistance(27);
-
       try {
         const calculateFare = calculateTaxiFare(distance);
-        setFare(calculateFare);
+        setFare(Math.floor(calculateFare));
+        console.log(fare);
       } catch (error) {
         console.log('계산 에러 발생');
         setFare(null);
       }
     }
-  }, [dep, arrival]);
+  }, [params]);
   return (
     <View style={styles.block}>
       <Stack.Screen
@@ -65,7 +68,17 @@ export default function Step2Screen() {
             <View style={styles.title}>
               <Text style={{ fontSize: 40, fontWeight: 'bold', marginRight: 8 }}>30</Text>
               <Text style={{ fontSize: 20, marginRight: 20 }}>minutes</Text>
-              <Text style={{ fontSize: 15, color: 'gray' }}>27</Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: 'gray',
+                  borderLeftWidth: 1,
+                  borderLeftColor: 'lightgray',
+                  paddingLeft: 15,
+                }}
+              >
+                27
+              </Text>
               <Text style={{ fontSize: 15, color: 'gray' }}>km</Text>
             </View>
             <View style={styles.detail}>
