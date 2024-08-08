@@ -32,7 +32,6 @@ export default function Step2Screen() {
       try {
         const calculateFare = calculateTaxiFare(distance);
         setFare(Math.floor(calculateFare));
-        console.log(fare);
       } catch (error) {
         console.log('계산 에러 발생');
         setFare(null);
