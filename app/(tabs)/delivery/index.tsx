@@ -7,15 +7,13 @@ import { useUploadImage } from '../../../hooks/useUploadImage';
 
 // Define the types for the navigation routes
 type RootStackParamList = {
-  Delivery: undefined;
+  DeliveryScreen: undefined;
   Orders: undefined;
-  OrderDelivery: undefined;
 };
 
-// Specify the type for the navigation prop
-type DeliveryScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Delivery'>;
+type DeliveryScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'DeliveryScreen'>;
 
-export default function DeliveryScreen() {
+export default function DeliveryIndexScreen() {
   const [image, setImage] = useState<string | null>(null);
   const navigation = useNavigation<DeliveryScreenNavigationProp>();
   const { uploadedUrl, uploadImage } = useUploadImage();
@@ -55,7 +53,7 @@ export default function DeliveryScreen() {
       )}
       <View style={styles.buttonContainer}>
         <Button title="View my orders" onPress={() => navigation.navigate('Orders')} />
-        <Button title="Order delivery" onPress={() => navigation.navigate('OrderDelivery')} />
+        <Button title="Order delivery" onPress={() => navigation.navigate('DeliveryScreen')} />
       </View>
     </ScrollView>
   );
