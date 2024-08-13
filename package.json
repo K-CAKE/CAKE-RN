@@ -29,6 +29,7 @@
     "@rneui/themed": "^4.0.0-rc.8",
     "@supabase/supabase-js": "^2.44.4",
     "aes-js": "^3.1.2",
+    "amqplib": "^0.10.4",
     "axios": "^1.7.3",
     "babel-preset-expo": "^11.0.12",
     "expo": "~51.0.22",
@@ -66,9 +67,9 @@
     "react-native-webview": "^13.10.5",
     "recoil": "^0.7.7",
     "tailwind": "^4.0.0",
-    "tailwindcss-react-native": "^1.7.10",
     "tesseract.js": "^5.1.0",
-    "twrnc": "^4.4.0"
+    "twrnc": "^4.4.0",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
