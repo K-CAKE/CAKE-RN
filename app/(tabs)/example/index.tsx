@@ -11,13 +11,11 @@ import * as QueryParams from 'expo-auth-session/build/QueryParams';
 // import { userid } from '@/atoms/userState';
 import { useEffect, useState } from 'react';
 import { Button } from 'react-native-paper';
-import { useTheme } from 'react-native-paper';
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
 // const redirectTo = makeRedirectUri();
 WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
-  const theme = useTheme();
   // const [useridState] = useRecoilState(userid);
   // const [chatting, setChatting] = useState('');
   const [chat, setChat] = useState<string[]>([]);
