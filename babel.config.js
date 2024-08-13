@@ -19,5 +19,10 @@ module.exports = function (api) {
       // ['expo-router/babel'], // router
       'react-native-reanimated/plugin', // eanimated
     ],
+    env: {
+      production: {
+        plugins: ['react-native-paper/babel'],
+      },
+    },
   };
 };
