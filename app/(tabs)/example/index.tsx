@@ -10,6 +10,7 @@ import * as QueryParams from 'expo-auth-session/build/QueryParams';
 // import { useRecoilState } from 'recoil';
 // import { userid } from '@/atoms/userState';
 import { useEffect, useState } from 'react';
+import { Button } from 'react-native-paper';
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
 // const redirectTo = makeRedirectUri();
 WebBrowser.maybeCompleteAuthSession();
@@ -100,7 +101,10 @@ export default function App() {
   const url = Linking.useURL();
   if (url) createSessionFromUrl(url);
   return (
-    <NaverMapView style={{ flex: 1 }} />
+    <Button icon="camera" mode="contained" onPress={() => console.log('Pressed')}>
+      Press me
+    </Button>
+    // <NaverMapView style={{ flex: 1 }} />
     // <View>
     //   <Button onPress={performOAuth}>Sign in with Kakao</Button>
     //   <Button onPress={signOut}>Sign out</Button>
