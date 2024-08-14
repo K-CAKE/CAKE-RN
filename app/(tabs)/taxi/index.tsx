@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Stack, useNavigation } from 'expo-router';
+import { Stack, useNavigation, useRouter } from 'expo-router';
 import { Animated, Dimensions, Text, View, StyleSheet, Pressable, Keyboard } from 'react-native';
 import { useState, useRef } from 'react';
 import * as Progress from 'react-native-progress';
@@ -53,7 +53,9 @@ const CheckboxWithInput = ({ label, isChecked, setChecked, quantity, setQuantity
   );
 };
 
-export default function Page() {
+export default function Step1Screen() {
+  //router
+  const router = useRouter();
   //progress bar 관련
   const screenWidth = Dimensions.get('window').width;
   const barWidth = 0.85 * screenWidth;
@@ -120,8 +122,8 @@ export default function Page() {
     }
   };
 
-  const data = [{ key: 'input1' }, { key: 'input2' }, { key: 'button' }];
   // render item
+  const data = [{ key: 'input1' }, { key: 'input2' }, { key: 'button' }];
   const renderItem = ({ item }: { item: { key: string } }) => (
     <View style={{ paddingLeft: 30, paddingRight: 30 }}>
       {item.key === 'input1' ? (
@@ -145,7 +147,9 @@ export default function Page() {
                   }
                   onBlur={() => (inputName === 'Departure' ? handleBlur(focusAnimation1) : handleBlur(focusAnimation2))}
                   placeholder={inputName === 'Departure' ? 'Enter departure' : 'Enter arrival'}
-                  onChangeText={(val) => handleChangeText(inputName, val)}
+                  onChangeText={(val) => {
+                    handleChangeText(inputName, val);
+                  }}
                 />
                 <Pressable
                   style={({ pressed }) => [
@@ -217,7 +221,13 @@ export default function Page() {
       ) : item.key === 'button' ? (
         <Pressable
           onPress={() => {
-            console.log('next button');
+            router.push({
+              pathname: '/taxi/step2' as never,
+              params: {
+                Dep: Dep,
+                Arrival: Arrival,
+              },
+            });
           }}
           style={({ pressed }) => [
             {
@@ -236,6 +246,7 @@ export default function Page() {
       <Stack.Screen
         options={{
           headerTitle: 'Call taxi',
+          headerTitleAlign: 'center',
           headerBackVisible: false,
           headerRight: () => (
             <Pressable
@@ -268,27 +279,7 @@ export default function Page() {
         }}
       />
       <View style={styles.block}>
-        <View style={{ padding: 20, alignSelf: 'center', marginBottom: 10 }}>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}
-          >
-            <View style={{ flex: 1, alignItems: 'flex-end' }}>
-              <MaterialCommunityIcons name="numeric-1-circle-outline" size={24} color="#FFD4D1" />
-            </View>
-            <View style={{ flex: 1, alignItems: 'flex-end' }}>
-              <MaterialCommunityIcons name="numeric-2-circle-outline" size={24} color="#FFD4D1" />
-            </View>
-          </View>
-          <Progress.Bar
-            progress={0}
-            width={barWidth}
-            height={13}
-            color="#F02F04"
-            borderColor="white"
-            unfilledColor="#FFD4D1"
-            borderRadius={50}
-          />
-        </View>
+        <View style={{ marginBottom: 25 }} />
         <FlatList
           data={data}
           renderItem={renderItem}

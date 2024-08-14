@@ -10,6 +10,7 @@ import * as QueryParams from 'expo-auth-session/build/QueryParams';
 import { useRecoilState } from 'recoil';
 import { userid } from '@/atoms/userState';
 import { useEffect, useState } from 'react';
+import { Button } from 'react-native-paper';
 import { NaverMapView } from '@mj-studio/react-native-naver-map';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-google-signin/google-signin';
 
@@ -136,22 +137,25 @@ export default function App() {
   const url = Linking.useURL();
   if (url) createSessionFromUrl(url);
   return (
+    <Button icon="camera" mode="contained" onPress={() => console.log('Pressed')}>
+      Press me
+    </Button>
     // <NaverMapView style={{ flex: 1 }} />
-    <View>
-      <Button onPress={signInWithGoogle}>Sign in with Google</Button>
-      <Button onPress={signOut}>Sign out</Button>
-      {chat.map((item, index) => (
-        <Text key={index}>{item}</Text>
-      ))}
-      <View className={'mt-10'}>
-        <TextInput
-          onChangeText={(text) => {
-            setChatting(text);
-          }}
-          placeholder="아무거나 입력해주세요."
-        />
-        <Button onPress={() => Updatetoken(chatting)} title="Send" />
-      </View>
-    </View>
+    // <View>
+    //   <Button onPress={performOAuth}>Sign in with Kakao</Button>
+    //   <Button onPress={signOut}>Sign out</Button>
+    //   {chat.map((item, index) => (
+    //     <Text key={index}>{item}</Text>
+    //   ))}
+    //   <View className={'mt-10'}>
+    //     <TextInput
+    //       onChangeText={(text) => {
+    //         setChatting(text);
+    //       }}
+    //       placeholder="아무거나 입력해주세요."
+    //     />
+    //     <Button onPress={() => Updatetoken(chatting)} title="Send" />
+    //   </View>
+    // </View>
   );
 }
