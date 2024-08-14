@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef, useState } from 'react';
-import { Text, View, TouchableOpacity, Animated } from 'react-native';
+import { Text, View, TouchableOpacity, Animated, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 
@@ -51,28 +51,30 @@ export default function Index() {
 
   // main code
   return (
-    <View className="flex items-center justify-center flex-1 bg-white">
+    <LinearGradient colors={['#ffafbd', '#ffc3a0']} className="items-center justify-center flex-1">
       <StatusBar style="light" />
-      <Animated.Image
-        style={{ width: 160, height: 160, transform: [{ translateY }] }}
-        className="w-40 h-40 bottom-10"
-        source={require('../assets/images/strawberry-cake.png')}
-      />
+      <View className="flex items-center justify-center w-full mt-28">
+        <Animated.View style={{ transform: [{ translateY }] }} className="w-[40%] aspect-square mb-10">
+          <Image
+            style={{ width: '100%', height: '100%' }}
+            source={require('../assets/images/strawberry-cake.png')}
+            resizeMode="contain"
+          />
+        </Animated.View>
 
-      <LinearGradient colors={['transform']} className="absolute bottom-0 left-0 right-0 p-4">
-        <View className="flex items-center mb-6">
+        <View className="flex items-center w-full max-w-lg mb-6 mt-28">
           <Text className="text-2xl font-bold tracking-wide text-black">{displayedText}</Text>
         </View>
-        <View className="w-full max-w-[500px] items-center">
+        <View className="flex items-center w-full max-w-lg">
           <TouchableOpacity
             // 로그인 페이지로 이동
             onPress={() => router.push('/Login')}
-            className="bg-rose-400 flex h-16 w-[300px] mb-16 justify-center rounded-full border-[3px]"
+            className="bg-rose-400 h-16 w-full max-w-xs justify-center rounded-full border-[3px]"
           >
             <Text className="text-2xl font-bold tracking-wide text-center text-black">START</Text>
           </TouchableOpacity>
         </View>
-      </LinearGradient>
-    </View>
+      </View>
+    </LinearGradient>
   );
 }
