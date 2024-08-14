@@ -4,14 +4,14 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
 
-// DeliveryScreen 컴포넌트
 export default function DeliveryScreen() {
   const [image, setImage] = useState<string | null>(null);
+  const [ocrText, setOcrText] = useState<string | null>(null);
   const [translatedText, setTranslatedText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
@@ -28,9 +28,11 @@ export default function DeliveryScreen() {
   const processImage = async (uri: string) => {
     setLoading(true);
     try {
-      // 이미지를 Base64로 인코딩
       const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
-      const translated = await sendImageToGPT(base64);
+      const ocrResult = await sendImageToClovaOCR(base64);
+      const extractedText = extractTextFromResponse(ocrResult);
+      setOcrText(extractedText);
+      const translated = await translateTextWithGPT(extractedText);
       setTranslatedText(translated);
     } catch (error) {
       console.error('Error processing image:', error);
@@ -39,7 +41,49 @@ export default function DeliveryScreen() {
     }
   };
 
-  const sendImageToGPT = async (base64Image: string) => {
+  const sendImageToClovaOCR = async (base64Image: string) => {
+    const apiUrl = process.env.EXPO_PUBLIC_NAVER_CLOVA_OCR_API_URL as string;
+    const secretKey = process.env.EXPO_PUBLIC_NAVER_CLOVA_OCR_SECRET as string;
+
+    const requestBody = {
+      images: [
+        {
+          format: "jpg",
+          name: "demo",
+          data: base64Image,
+        },
+      ],
+      requestId: "demo-request",
+      version: "V2",
+      timestamp: Date.now(),
+    };
+
+    try {
+      const response = await axios.post(apiUrl, requestBody, {
+        headers: {
+          'X-OCR-SECRET': secretKey,
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error sending image to Clova OCR:', error);
+      throw error;
+    }
+  };
+
+  const extractTextFromResponse = (response: any): string => {
+    try {
+      const { images } = response;
+      const lines = images[0].fields.map((field: any) => field.inferText);
+      return lines.join(' ');
+    } catch (error) {
+      console.error('Error extracting text from OCR response:', error);
+      return 'Text extraction failed';
+    }
+  };
+
+  const translateTextWithGPT = async (text: string) => {
     try {
       const response = await axios.post(
         'https://api.openai.com/v1/chat/completions',
@@ -48,8 +92,7 @@ export default function DeliveryScreen() {
           messages: [
             {
               role: 'user',
-              content: `Translate the following Korean text to English:`,
-              image: base64Image,
+              content: `Translate the following Korean text to English: ${text}`,
             },
           ],
         },
@@ -80,12 +123,24 @@ export default function DeliveryScreen() {
         )}
       </TouchableOpacity>
       {loading && <ActivityIndicator size="large" color="#0000ff" />}
+      {ocrText && (
+        <View style={styles.resultContainer}>
+          <Text style={styles.resultTitle}>OCR Text:</Text>
+          <Text>{ocrText}</Text>
+        </View>
+      )}
       {translatedText && (
-        <View style={styles.translatedTextContainer}>
-          <Text style={styles.translatedTextTitle}>Translated Text:</Text>
+        <View style={styles.resultContainer}>
+          <Text style={styles.resultTitle}>Translated Text:</Text>
           <Text>{translatedText}</Text>
         </View>
       )}
+      {/* 추가된 버튼 */}
+      <TouchableOpacity style={styles.button} onPress={() => console.log('Button Pressed')}>
+        <Text style={styles.buttonText}>Confirm the order</Text>
+      </TouchableOpacity>
+      {/* 빈 공간 추가 */}
+      <View style={{ height: 50 }} />
     </ScrollView>
   );
 }
@@ -119,13 +174,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
   },
-  translatedTextContainer: {
+  resultContainer: {
     marginVertical: 20,
     alignItems: 'center',
   },
-  translatedTextTitle: {
+  resultTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
+  },
+  button: {
+    marginTop: 30,
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
