@@ -221,11 +221,17 @@ export default function Step1Screen() {
       ) : item.key === 'button' ? (
         <Pressable
           onPress={() => {
+            const arrivalValues = Arrival.split(',')
+              .map((val) => parseFloat(val.trim()))
+              .filter((val) => !isNaN(val));
+            const depValues = Dep.split(',')
+              .map((val) => parseFloat(val.trim()))
+              .filter((val) => !isNaN(val));
             router.push({
               pathname: '/taxi/step2' as never,
               params: {
-                Dep: Dep,
-                Arrival: Arrival,
+                Dep: depValues,
+                Arrival: arrivalValues,
               },
             });
           }}

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Text, View, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
+import { Pressable, Text, View, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
 import { router } from 'expo-router';
 
 const { width, height } = Dimensions.get('window');
@@ -32,7 +32,19 @@ export default function Login() {
         <Image source={require('../assets/images/google_logo.png')} style={styles.googleLogo} />
         <Text style={styles.googleLoginText}>Google Login</Text>
       </TouchableOpacity>
-
+      <Pressable
+        onPress={() => {
+          router.push('/(tabs)/home' as never);
+        }}
+        style={({ pressed }) => [
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+          styles.homeButton,
+        ]}
+      >
+        <Text style={{ color: 'black', fontSize: 20 }}>로그인 없이 홈으로</Text>
+      </Pressable>
       {/* 하단 문구 */}
       <Text style={styles.footerText}>
         By signing up, you agree to the CAKE{'\n'}Terms of Service and Privacy Policy.
@@ -94,5 +106,11 @@ const styles = StyleSheet.create({
     marginTop: height * 0.2,
     fontSize: width * 0.03,
     textAlign: 'center',
+  },
+  homeButton: {
+    height: 30,
+    width: '80%',
+    alignSelf: 'center',
+    alignItems: 'center',
   },
 });

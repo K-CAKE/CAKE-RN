@@ -27,7 +27,11 @@ export default function Step2Screen() {
     if (params) {
       //임시로 거리 설정(27km)
       setArrival(params.Arrival);
-      setDep(params.Dep);
+      setDep({
+        latitude: params.Dep[0],
+        longitude: params.Dep[1],
+      });
+      console.log(dep);
       setDistance(27);
       try {
         const calculateFare = calculateTaxiFare(distance);
@@ -47,7 +51,16 @@ export default function Step2Screen() {
       />
       <View style={styles.container}>
         <View style={styles.mapView}>
-          <NaverMapView style={styles.map} />
+          <NaverMapView
+            style={styles.map}
+            layerGroups={{
+              CADASTRAL: false,
+              BICYCLE: false,
+              BUILDING: true,
+              TRAFFIC: true,
+              TRANSIT: true,
+            }}
+          />
           <Pressable
             onPress={() => {
               router.back();
