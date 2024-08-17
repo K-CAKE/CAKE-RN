@@ -4,11 +4,13 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useUploadImage } from '../../../hooks/useUploadImage';
+import { FontAwesome } from '@expo/vector-icons';
 
 // Define the types for the navigation routes
 type RootStackParamList = {
   DeliveryScreen: undefined;
   Orders: undefined;
+  DeliveryHistory: undefined;
 };
 
 type DeliveryScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'DeliveryScreen'>;
@@ -41,7 +43,8 @@ export default function DeliveryIndexScreen() {
           <Image source={{ uri: image }} style={styles.image} />
         ) : (
           <View style={styles.placeholder}>
-            <Text>Tap to select an image</Text>
+            {/* <Text>Tap to select an image</Text> */}
+            <FontAwesome name="camera" size={89} color="#000000" />
           </View>
         )}
       </TouchableOpacity>
@@ -52,7 +55,7 @@ export default function DeliveryIndexScreen() {
         </View>
       )}
       <View style={styles.buttonContainer}>
-        <Button title="View my orders" onPress={() => navigation.navigate('Orders')} />
+        <Button title="Delivery History" onPress={() => navigation.navigate('DeliveryHistory')} />
         <Button title="Order delivery" onPress={() => navigation.navigate('DeliveryScreen')} />
       </View>
     </ScrollView>

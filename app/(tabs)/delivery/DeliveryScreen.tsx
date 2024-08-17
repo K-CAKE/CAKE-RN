@@ -1,14 +1,31 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
+import { FontAwesome } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+
+type RootStackParamList = {
+  DeliveryScreen: undefined; // any도 됨
+  Orders: undefined;
+  DeliveryHistory: undefined;
+  Confirm: undefined;
+}; // 화면에 대한 매개 변수의 타입을 미리 정의 해줌
+// 현재 화면 기준 어떤 화면으로 가는 지 명시 컴파일 하면 없어짐
+
+type DeliveryScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function DeliveryScreen() {
   const [image, setImage] = useState<string | null>(null);
   const [ocrText, setOcrText] = useState<string | null>(null);
   const [translatedText, setTranslatedText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+
+  const navigation = useNavigation<DeliveryScreenNavigationProp>();
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -111,41 +128,46 @@ export default function DeliveryScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Delivery Screen</Text>
-      <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
-        {image ? (
-          <Image source={{ uri: image }} style={styles.image} />
-        ) : (
-          <View style={styles.placeholder}>
-            <Text>Tap to select an image</Text>
+    <LinearGradient colors={['#ffafbd', '#ffc3a0']} style={styles.gradientContainer}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>Delivery Screen</Text>
+        <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
+          {image ? (
+            <Image source={{ uri: image }} style={styles.image} />
+          ) : (
+            <View style={styles.placeholder}>
+              <FontAwesome name="camera" size={89} color="#000000" />
+            </View>
+          )}
+        </TouchableOpacity>
+        {loading && <ActivityIndicator size="large" color="#0000ff" />}
+        {ocrText && (
+          <View style={styles.resultContainer}>
+            <Text style={styles.resultTitle}>OCR Text:</Text>
+            <Text>{ocrText}</Text>
           </View>
         )}
-      </TouchableOpacity>
-      {loading && <ActivityIndicator size="large" color="#0000ff" />}
-      {ocrText && (
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultTitle}>OCR Text:</Text>
-          <Text>{ocrText}</Text>
-        </View>
-      )}
-      {translatedText && (
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultTitle}>Translated Text:</Text>
-          <Text>{translatedText}</Text>
-        </View>
-      )}
-      {/* 추가된 버튼 */}
-      <TouchableOpacity style={styles.button} onPress={() => console.log('Button Pressed')}>
-        <Text style={styles.buttonText}>Confirm the order</Text>
-      </TouchableOpacity>
-      {/* 빈 공간 추가 */}
-      <View style={{ height: 50 }} />
-    </ScrollView>
+        {translatedText && (
+          <View style={styles.resultContainer}>
+            <Text style={styles.resultTitle}>Translated Text:</Text>
+            <Text>{translatedText}</Text>
+          </View>
+        )}
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Confirm')
+
+        }>
+          <Text style={styles.buttonText}>Confirm the order</Text>
+        </TouchableOpacity>
+        <View style={{ height: 50 }} />
+      </ScrollView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  gradientContainer: {
+    flex: 1,
+  },
   container: {
     flexGrow: 1,
     justifyContent: 'center',
