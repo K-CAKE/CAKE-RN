@@ -13,6 +13,7 @@ type RootStackParamList = {
   Orders: undefined;
   DeliveryHistory: undefined;
   Confirm: undefined;
+  DeliveryStatus : undefined;
 }; // 화면에 대한 매개 변수의 타입을 미리 정의 해줌
 // 현재 화면 기준 어떤 화면으로 가는 지 명시 컴파일 하면 없어짐
 
@@ -25,7 +26,7 @@ export default function DeliveryScreen() {
   const [loading, setLoading] = useState(false);
 
 
-  const navigation = useNavigation<DeliveryScreenNavigationProp>();
+  const navigation = useNavigation<DeliveryScreenNavigationProp>();//리팩토링 필요
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -128,7 +129,7 @@ export default function DeliveryScreen() {
   };
 
   return (
-    <LinearGradient colors={['#ffafbd', '#ffc3a0']} style={styles.gradientContainer}>
+    <LinearGradient colors={['#F02F04', '#F5ECEA']} style={styles.gradientContainer}>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>Delivery Screen</Text>
         <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
@@ -136,11 +137,11 @@ export default function DeliveryScreen() {
             <Image source={{ uri: image }} style={styles.image} />
           ) : (
             <View style={styles.placeholder}>
-              <FontAwesome name="camera" size={89} color="#000000" />
+              <FontAwesome name="image" size={100} color="#FFD4D1" />
             </View>
           )}
         </TouchableOpacity>
-        {loading && <ActivityIndicator size="large" color="#0000ff" />}
+        {loading && <ActivityIndicator size="large" color="#FFD4D1" />}
         {ocrText && (
           <View style={styles.resultContainer}>
             <Text style={styles.resultTitle}>OCR Text:</Text>
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 30,
-    backgroundColor: '#007BFF',
+    backgroundColor: '#F02F04',
     padding: 10,
     borderRadius: 5,
   },

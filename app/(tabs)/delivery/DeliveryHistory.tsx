@@ -2,7 +2,13 @@ import * as React from 'react';
 import { Avatar, Card, IconButton } from 'react-native-paper';
 import { View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-
+type RootStackParamList = {
+  DeliveryScreen: undefined; // any도 됨
+  Orders: undefined;
+  DeliveryHistory: undefined;
+  Confirm: undefined;
+  DeliveryStatus : undefined;
+}; 
 const MyComponent = () => (
   <Card style={{ backgroundColor: '#FFD4D1' }}> 
     <Card.Title

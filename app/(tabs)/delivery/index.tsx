@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -7,7 +7,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 // Define the types for the navigation routes
 type RootStackParamList = {
   DeliveryScreen: undefined;
-  Orders: undefined;
   DeliveryHistory: undefined;
 };
 
@@ -17,20 +16,33 @@ export default function DeliveryIndexScreen() {
   const navigation = useNavigation<DeliveryScreenNavigationProp>();
 
   return (
-    <LinearGradient colors={['#ffafbd', '#ffc3a0']} style={styles.gradientContainer}>
+    <LinearGradient colors={['#F02F04', '#F5ECEA']} style={styles.gradientContainer}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Step 3 : 네이버 맵 api 를 통해 음식점 추천 받아서 order 하는 방식</Text>
+        <Text style={styles.title}>
+          Step 3 : 네이버 맵 api 를 통해 음식점 추천 받아서 order 하는 방식
+        </Text>
         <View style={styles.infoContainer}>
           {/* 코드 : 나중에 음식점 정보 추가 -> 추천 */}
           <Text>외부 VIEW</Text>
+
           <View style={styles.placeholder}>
             <Text>Restaurant information will go here</Text>
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <Button title="View my orders" onPress={() => navigation.navigate('DeliveryHistory')} />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('DeliveryHistory')}
+          >
+            <Text style={styles.buttonText}>View my orders</Text>
+          </TouchableOpacity>
           <View style={styles.buttonSpacing} />
-          <Button title="Order delivery" onPress={() => navigation.navigate('DeliveryScreen')} />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('DeliveryScreen')}
+          >
+            <Text style={styles.buttonText}>Order delivery</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </LinearGradient>
@@ -76,5 +88,17 @@ const styles = StyleSheet.create({
   },
   buttonSpacing: {
     height: 10, // 버튼 사이의 간격을 주기 위해 추가된 높이
+  },
+  button: {
+    backgroundColor: '#F02F04', // 버튼 색상 변경
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 25, // 둥근 버튼
+    width: '80%', // 버튼 너비 조정
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 16,
   },
 });

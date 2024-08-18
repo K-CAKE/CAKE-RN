@@ -1,15 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { FontAwesome } from '@expo/vector-icons';
 
 type RootStackParamList = {
-  DeliveryScreen: undefined; // any도 됨
+  DeliveryScreen: undefined;
   Orders: undefined;
   DeliveryHistory: undefined;
   Confirm: undefined;
   index: undefined;
+  DeliveryStatus : undefined;
 };
 
 type ConfirmationScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -21,17 +23,14 @@ export default function ConfirmationScreen() {
     <View style={styles.container}>
       <LinearGradient colors={['#ffffff', '#f5f5f5']} style={styles.gradientContainer}>
         <View style={styles.iconContainer}>
-          <Image
-            source={{ uri: 'https://img.icons8.com/fluency/48/000000/ok.png' }}
-            style={styles.icon}
-          />
+          <FontAwesome name="paper-plane" size={50} color="#F02F04" />
         </View>
         <Text style={styles.title}>Congratulations!!!</Text>
         <Text style={styles.subtitle}>Your order have been taken and is being attended to</Text>
 
         <TouchableOpacity
           style={styles.trackOrderButton}
-          onPress={() => navigation.navigate('DeliveryHistory')}
+          onPress={() => navigation.navigate('DeliveryStatus')}
         >
           <Text style={styles.trackOrderText}>Track order</Text>
         </TouchableOpacity>
@@ -60,14 +59,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconContainer: {
-    backgroundColor: '#E0F7EC',
+    backgroundColor: '#FFD4D1',
     borderRadius: 50,
     padding: 20,
-    marginBottom: 30,
-  },
-  icon: {
-    width: 50,
-    height: 50,
+    marginBottom: 50,
   },
   title: {
     fontSize: 24,
