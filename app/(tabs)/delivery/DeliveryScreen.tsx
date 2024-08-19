@@ -3,19 +3,19 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIn
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, EvilIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 
 type RootStackParamList = {
-  DeliveryScreen: undefined; // any도 됨
+  DeliveryScreen: undefined;
   Orders: undefined;
   DeliveryHistory: undefined;
   Confirm: undefined;
-  DeliveryStatus : undefined;
-}; // 화면에 대한 매개 변수의 타입을 미리 정의 해줌
-// 현재 화면 기준 어떤 화면으로 가는 지 명시 컴파일 하면 없어짐
+  DeliveryStatus: undefined;
+  tutorial: undefined;
+};
 
 type DeliveryScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -25,8 +25,7 @@ export default function DeliveryScreen() {
   const [translatedText, setTranslatedText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-
-  const navigation = useNavigation<DeliveryScreenNavigationProp>();//리팩토링 필요
+  const navigation = useNavigation<DeliveryScreenNavigationProp>();
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -130,6 +129,14 @@ export default function DeliveryScreen() {
 
   return (
     <LinearGradient colors={['#F02F04', '#F5ECEA']} style={styles.gradientContainer}>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity
+          style={styles.questionIcon}
+          onPress={() => navigation.navigate('tutorial')}
+        >
+          <EvilIcons name="question" size={30} color='#F5ECEA' />
+        </TouchableOpacity>
+      </View>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>Delivery Screen</Text>
         <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
@@ -154,9 +161,7 @@ export default function DeliveryScreen() {
             <Text>{translatedText}</Text>
           </View>
         )}
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Confirm')
-
-        }>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Confirm')}>
           <Text style={styles.buttonText}>Confirm the order</Text>
         </TouchableOpacity>
         <View style={{ height: 50 }} />
@@ -168,6 +173,17 @@ export default function DeliveryScreen() {
 const styles = StyleSheet.create({
   gradientContainer: {
     flex: 1,
+  },
+  headerContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 10,
+  },
+  questionIcon: {
+    paddingBottom: 5,
+    paddingTop: 5,
+    marginRight: 20,
   },
   container: {
     flexGrow: 1,
@@ -187,7 +203,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
-    backgroundColor: '#ffffff', // 이미지 선택 부분의 배경을 흰색으로 설정
+    backgroundColor: '#ffffff',
   },
   image: {
     width: '100%',
@@ -197,7 +213,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
-    backgroundColor: '#ffffff', // 이미지가 없을 때의 배경도 흰색으로 설정
+    backgroundColor: '#ffffff',
   },
   resultContainer: {
     marginVertical: 20,
@@ -207,23 +223,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
-  },
-  inputContainer: {
-    width: '100%',
-    marginVertical: 10,
-  },
-  inputLabel: {
-    fontSize: 16,
-    marginBottom: 5,
-  },
-  input: {
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 10,
-    fontSize: 16,
-    width: '100%',
-    backgroundColor: '#f0f0f0',
   },
   button: {
     marginTop: 30,

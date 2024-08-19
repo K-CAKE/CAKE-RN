@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, Card, IconButton } from 'react-native-paper';
 import { View, ScrollView, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { createClient } from '@supabase/supabase-js';
-
-// Supabase 클라이언트 초기화
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
+import { createClient } from '@supabase/supabase-js'; 
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || ''; // as string 붙여도됨
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
+// Supabase 클라이언트 초기화
 const MyComponent = () => {
   const [cardCount, setCardCount] = useState(0);
   const [loading, setLoading] = useState(true);
