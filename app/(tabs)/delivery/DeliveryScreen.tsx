@@ -1,14 +1,33 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
+import { FontAwesome } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+
+type RootStackParamList = {
+  DeliveryScreen: undefined;
+  Orders: undefined;
+  DeliveryHistory: undefined;
+  Confirm: undefined;
+  DeliveryStatus: undefined;
+};
+
+type DeliveryScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function DeliveryScreen() {
   const [image, setImage] = useState<string | null>(null);
   const [ocrText, setOcrText] = useState<string | null>(null);
   const [translatedText, setTranslatedText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [address, setAddress] = useState<string>('');
+  const [additionalRequirements, setAdditionalRequirements] = useState<string>('');
+  const [numberOfPeople, setNumberOfPeople] = useState<string>('');
+
+  const navigation = useNavigation<DeliveryScreenNavigationProp>();
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -111,41 +130,79 @@ export default function DeliveryScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Delivery Screen</Text>
-      <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
-        {image ? (
-          <Image source={{ uri: image }} style={styles.image} />
-        ) : (
-          <View style={styles.placeholder}>
-            <Text>Tap to select an image</Text>
+    <LinearGradient colors={['#F02F04', '#F5ECEA']} style={styles.gradientContainer}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>Delivery Screen</Text>
+        <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
+          {image ? (
+            <Image source={{ uri: image }} style={styles.image} />
+          ) : (
+            <View style={styles.placeholder}>
+              <FontAwesome name="image" size={100} color="#FFD4D1" />
+            </View>
+          )}
+        </TouchableOpacity>
+        {loading && <ActivityIndicator size="large" color="#FFD4D1" />}
+        {ocrText && (
+          <View style={styles.resultContainer}>
+            <Text style={styles.resultTitle}>OCR Text:</Text>
+            <Text>{ocrText}</Text>
           </View>
         )}
-      </TouchableOpacity>
-      {loading && <ActivityIndicator size="large" color="#0000ff" />}
-      {ocrText && (
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultTitle}>OCR Text:</Text>
-          <Text>{ocrText}</Text>
+        {translatedText && (
+          <View style={styles.resultContainer}>
+            <Text style={styles.resultTitle}>Translated Text:</Text>
+            <Text>{translatedText}</Text>
+          </View>
+        )}
+
+        {/* Address Input */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>Address:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your address"
+            value={address}
+            onChangeText={setAddress}
+          />
         </View>
-      )}
-      {translatedText && (
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultTitle}>Translated Text:</Text>
-          <Text>{translatedText}</Text>
+
+        {/* Additional Requirements Input */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>Additional Requirements:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Any additional requirements"
+            value={additionalRequirements}
+            onChangeText={setAdditionalRequirements}
+          />
         </View>
-      )}
-      {/* 추가된 버튼 */}
-      <TouchableOpacity style={styles.button} onPress={() => console.log('Button Pressed')}>
-        <Text style={styles.buttonText}>Confirm the order</Text>
-      </TouchableOpacity>
-      {/* 빈 공간 추가 */}
-      <View style={{ height: 50 }} />
-    </ScrollView>
+
+        {/* Number of People Input */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>Number of People:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter number of people"
+            value={numberOfPeople}
+            onChangeText={setNumberOfPeople}
+            keyboardType="numeric"
+          />
+        </View>
+
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Confirm')}>
+          <Text style={styles.buttonText}>Confirm the order</Text>
+        </TouchableOpacity>
+        <View style={{ height: 50 }} />
+      </ScrollView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  gradientContainer: {
+    flex: 1,
+  },
   container: {
     flexGrow: 1,
     justifyContent: 'center',
@@ -164,6 +221,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+    backgroundColor: '#ffffff', // 이미지 선택 부분의 배경을 흰색으로 설정
   },
   image: {
     width: '100%',
@@ -173,6 +231,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
+    backgroundColor: '#ffffff', // 이미지가 없을 때의 배경도 흰색으로 설정
   },
   resultContainer: {
     marginVertical: 20,
@@ -183,9 +242,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
+  inputContainer: {
+    width: '100%',
+    marginVertical: 10,
+  },
+  inputLabel: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  input: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    fontSize: 16,
+    width: '100%',
+    backgroundColor: '#f0f0f0',
+  },
   button: {
     marginTop: 30,
-    backgroundColor: '#007BFF',
+    backgroundColor: '#F02F04',
     padding: 10,
     borderRadius: 5,
   },

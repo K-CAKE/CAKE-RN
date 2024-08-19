@@ -26,6 +26,7 @@ export default function Login() {
       <TouchableOpacity
         style={styles.googleLoginButton}
         onPress={() => {
+          router.push('/(tabs)/home');
           /* Google login logic */
         }}
       >
