@@ -62,8 +62,8 @@ export default function Step1Screen() {
   //navigation
   const navigation = useNavigation();
   //input
-  const [Dep, setDep] = useState('');
-  const [Arrival, setArrival] = useState('');
+  const [Dep, setDep] = useState<string>('');
+  const [Arrival, setArrival] = useState<string>('');
   // const [HC, setHC] = useState(0);
   // const [quickBooking, setQuick] = useState(false);
   // luggage checkbox
@@ -220,18 +220,13 @@ export default function Step1Screen() {
         </>
       ) : item.key === 'button' ? (
         <Pressable
+          disabled={!Arrival || !Dep} // 출발지 또는 도착지 값 비어 있으면 버튼 비활성화
           onPress={() => {
-            const arrivalValues = Arrival.split(',')
-              .map((val) => parseFloat(val.trim()))
-              .filter((val) => !isNaN(val));
-            const depValues = Dep.split(',')
-              .map((val) => parseFloat(val.trim()))
-              .filter((val) => !isNaN(val));
             router.push({
-              pathname: '/taxi/step2' as never,
+              pathname: '/taxi/test' as never,
               params: {
-                Dep: depValues,
-                Arrival: arrivalValues,
+                Dep: Dep as string,
+                Arrival: Arrival as string,
               },
             });
           }}
