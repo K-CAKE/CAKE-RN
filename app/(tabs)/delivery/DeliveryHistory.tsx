@@ -5,83 +5,46 @@ import { Ionicons } from '@expo/vector-icons';
 import { createClient } from '@supabase/supabase-js';
 
 // Supabase 클라이언트 초기화
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL as string;
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY as string;
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
-// Supabase initialization 공식 문서 코드에서 as string 만 추가
-//  typescript를 사용할 것이기 때문에 불러올 데이터의 타입도 함께 지정
-// Read all rows - supabase 홈페이지 > api docs > tables and views > product 코드 참조
 
-// let { data: food_request_history, error } = await supabase
-//   .from('food_request_history')
-//   .select('*')
-
-// Read specific columns
-// let { data: food_request_history, error } = await supabase
-//   .from('food_request_history')
-//   .select('some_column,other_column')
-
-// Read referenced tables
-// let { data: food_request_history, error } = await supabase
-//   .from('food_request_history')
-//   .select(`
-//     some_column,
-//     other_table (
-//       foreign_key
-//     )
-//   `)
-
-// With pagination
-// let { data: food_request_history, error } = await supabase
-//   .from('food_request_history')
-//   .select('*')
-//   .range(0, 9)
-// food_request_history 테이블의 데이터 타입 정의
-type FoodRequestHistory = {
-  food_request_id: string;
-  request_state: string;
-  request_price: string;
-  food_payment: string;
-  processing_date: string;
-  serial_number: string;
-  korean_id: number;
-  foreigner_id: number;
-  food_request_name: string;
-};
-
-const FoodRequestHistoryList = () => {
-  const [foodRequests, setFoodRequests] = useState<FoodRequestHistory[]>([]);
+const MyComponent = () => {
+  const [cardCount, setCardCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getFoodRequests();
-  }, []);
-
-  const getFoodRequests = async () => {
-    try {
+    // foreigner_id가 2인 food_request_history 레코드 수 가져오기
+    const fetchData = async () => {
       const { data, error } = await supabase
         .from('food_request_history')
-        .select('*')
-        .eq('foreigner_id', 2); // foreigner_id가 2인 데이터만 가져옴
+        .select('*', { count: 'exact' })
+        .eq('foreigner_id', 2);
 
-      if (error) throw error;
-
-      if (data) {
-        setFoodRequests(data);
+      if (error) {
+        console.error('데이터 가져오기 에러:', error);
+      } else {
         console.log('가져온 데이터:', data);
+        setCardCount(data.length); // 매칭되는 레코드 수 설정
       }
-    } catch (error) {
-      console.error('예상치 못한 문제가 발생하였습니다:', error);
-    }
-  };
+      setLoading(false); // 로딩 상태 업데이트
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <Text>데이터를 불러오는 중...</Text>; // 로딩 중 메시지
+  }
 
   return (
     <ScrollView>
-      <View style={{ flexDirection: 'column', gap: 10, padding: 20 }}>
-        {foodRequests.map((foodRequest, index) => (
+      {cardCount > 0 ? (
+        Array.from({ length: cardCount }).map((_, index) => (
           <Card key={index} style={{ backgroundColor: '#FFD4D1', marginBottom: 10 }}>
             <Card.Title
-              title={foodRequest.food_request_name}
-              subtitle={`가격: ${foodRequest.request_price}원`}
+              title={`카드 제목 ${index + 1}`}
+              subtitle="카드 서브타이틀"
               left={(props) => (
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                   <Avatar.Icon
@@ -96,10 +59,12 @@ const FoodRequestHistoryList = () => {
               )}
             />
           </Card>
-        ))}
-      </View>
+        ))
+      ) : (
+        <Text>해당 foreigner_id에 대한 데이터가 없습니다.</Text>
+      )}
     </ScrollView>
   );
 };
 
-export default FoodRequestHistoryList;
+export default MyComponent;

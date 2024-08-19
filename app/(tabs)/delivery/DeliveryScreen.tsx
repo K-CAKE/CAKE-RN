@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, TextInput } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
@@ -9,12 +9,13 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 
 type RootStackParamList = {
-  DeliveryScreen: undefined;
+  DeliveryScreen: undefined; // any도 됨
   Orders: undefined;
   DeliveryHistory: undefined;
   Confirm: undefined;
-  DeliveryStatus: undefined;
-};
+  DeliveryStatus : undefined;
+}; // 화면에 대한 매개 변수의 타입을 미리 정의 해줌
+// 현재 화면 기준 어떤 화면으로 가는 지 명시 컴파일 하면 없어짐
 
 type DeliveryScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -23,11 +24,9 @@ export default function DeliveryScreen() {
   const [ocrText, setOcrText] = useState<string | null>(null);
   const [translatedText, setTranslatedText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [address, setAddress] = useState<string>('');
-  const [additionalRequirements, setAdditionalRequirements] = useState<string>('');
-  const [numberOfPeople, setNumberOfPeople] = useState<string>('');
 
-  const navigation = useNavigation<DeliveryScreenNavigationProp>();
+
+  const navigation = useNavigation<DeliveryScreenNavigationProp>();//리팩토링 필요
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -155,42 +154,9 @@ export default function DeliveryScreen() {
             <Text>{translatedText}</Text>
           </View>
         )}
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Confirm')
 
-        {/* Address Input */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Address:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your address"
-            value={address}
-            onChangeText={setAddress}
-          />
-        </View>
-
-        {/* Additional Requirements Input */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Additional Requirements:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Any additional requirements"
-            value={additionalRequirements}
-            onChangeText={setAdditionalRequirements}
-          />
-        </View>
-
-        {/* Number of People Input */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Number of People:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter number of people"
-            value={numberOfPeople}
-            onChangeText={setNumberOfPeople}
-            keyboardType="numeric"
-          />
-        </View>
-
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Confirm')}>
+        }>
           <Text style={styles.buttonText}>Confirm the order</Text>
         </TouchableOpacity>
         <View style={{ height: 50 }} />
