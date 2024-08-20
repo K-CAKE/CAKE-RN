@@ -5,6 +5,7 @@ import * as SecureStore from 'expo-secure-store';
 import * as aesjs from 'aes-js';
 import 'react-native-get-random-values';
 import { Database } from '@/database.types';
+import { AppState } from 'react-native';
 // import { Platform } from 'react-native';
 class LargeSecureStore {
   private async _encrypt(key: string, value: string) {
@@ -109,3 +110,10 @@ export const supabase = createClient<Database>(
     },
   },
 );
+AppState.addEventListener('change', (state) => {
+  if (state === 'active') {
+    supabase.auth.startAutoRefresh();
+  } else {
+    supabase.auth.stopAutoRefresh();
+  }
+});
