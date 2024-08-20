@@ -1,14 +1,31 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
+import { FontAwesome, EvilIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+
+type RootStackParamList = {
+  DeliveryScreen: undefined;
+  Orders: undefined;
+  DeliveryHistory: undefined;
+  Confirm: undefined;
+  DeliveryStatus: undefined;
+  tutorial: undefined;
+};
+
+type DeliveryScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function DeliveryScreen() {
   const [image, setImage] = useState<string | null>(null);
   const [ocrText, setOcrText] = useState<string | null>(null);
   const [translatedText, setTranslatedText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const navigation = useNavigation<DeliveryScreenNavigationProp>();
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -111,41 +128,63 @@ export default function DeliveryScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Delivery Screen</Text>
-      <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
-        {image ? (
-          <Image source={{ uri: image }} style={styles.image} />
-        ) : (
-          <View style={styles.placeholder}>
-            <Text>Tap to select an image</Text>
+    <LinearGradient colors={['#F02F04', '#F5ECEA']} style={styles.gradientContainer}>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity
+          style={styles.questionIcon}
+          onPress={() => navigation.navigate('tutorial')}
+        >
+          <EvilIcons name="question" size={30} color='#F5ECEA' />
+        </TouchableOpacity>
+      </View>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>Delivery Screen</Text>
+        <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
+          {image ? (
+            <Image source={{ uri: image }} style={styles.image} />
+          ) : (
+            <View style={styles.placeholder}>
+              <FontAwesome name="image" size={100} color="#FFD4D1" />
+            </View>
+          )}
+        </TouchableOpacity>
+        {loading && <ActivityIndicator size="large" color="#FFD4D1" />}
+        {ocrText && (
+          <View style={styles.resultContainer}>
+            <Text style={styles.resultTitle}>OCR Text:</Text>
+            <Text>{ocrText}</Text>
           </View>
         )}
-      </TouchableOpacity>
-      {loading && <ActivityIndicator size="large" color="#0000ff" />}
-      {ocrText && (
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultTitle}>OCR Text:</Text>
-          <Text>{ocrText}</Text>
-        </View>
-      )}
-      {translatedText && (
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultTitle}>Translated Text:</Text>
-          <Text>{translatedText}</Text>
-        </View>
-      )}
-      {/* 추가된 버튼 */}
-      <TouchableOpacity style={styles.button} onPress={() => console.log('Button Pressed')}>
-        <Text style={styles.buttonText}>Confirm the order</Text>
-      </TouchableOpacity>
-      {/* 빈 공간 추가 */}
-      <View style={{ height: 50 }} />
-    </ScrollView>
+        {translatedText && (
+          <View style={styles.resultContainer}>
+            <Text style={styles.resultTitle}>Translated Text:</Text>
+            <Text>{translatedText}</Text>
+          </View>
+        )}
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Confirm')}>
+          <Text style={styles.buttonText}>Confirm the order</Text>
+        </TouchableOpacity>
+        <View style={{ height: 50 }} />
+      </ScrollView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  gradientContainer: {
+    flex: 1,
+  },
+  headerContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 10,
+  },
+  questionIcon: {
+    paddingBottom: 5,
+    paddingTop: 5,
+    marginRight: 20,
+  },
   container: {
     flexGrow: 1,
     justifyContent: 'center',
@@ -164,6 +203,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+    backgroundColor: '#ffffff',
   },
   image: {
     width: '100%',
@@ -173,6 +213,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
+    backgroundColor: '#ffffff',
   },
   resultContainer: {
     marginVertical: 20,
@@ -185,7 +226,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 30,
-    backgroundColor: '#007BFF',
+    backgroundColor: '#F02F04',
     padding: 10,
     borderRadius: 5,
   },
