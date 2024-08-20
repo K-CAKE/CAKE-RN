@@ -18,6 +18,7 @@ module.exports = function (api) {
       ['nativewind/babel'], // nativewind
       // ['expo-router/babel'], // router
       'react-native-reanimated/plugin', // eanimated
+      ['module:react-native-dotenv'],
     ],
     env: {
       production: {

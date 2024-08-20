@@ -8,46 +8,70 @@ import { Database } from '@/database.types';
 // import { Platform } from 'react-native';
 class LargeSecureStore {
   private async _encrypt(key: string, value: string) {
-    const encryptionKey = crypto.getRandomValues(new Uint8Array(256 / 8));
+    try {
+      const encryptionKey = crypto.getRandomValues(new Uint8Array(256 / 8));
 
-    const cipher = new aesjs.ModeOfOperation.ctr(encryptionKey, new aesjs.Counter(1));
-    const encryptedBytes = cipher.encrypt(aesjs.utils.utf8.toBytes(value));
+      const cipher = new aesjs.ModeOfOperation.ctr(encryptionKey, new aesjs.Counter(1));
+      const encryptedBytes = cipher.encrypt(aesjs.utils.utf8.toBytes(value));
 
-    await SecureStore.setItemAsync(key, aesjs.utils.hex.fromBytes(encryptionKey));
+      await SecureStore.setItemAsync(key, aesjs.utils.hex.fromBytes(encryptionKey));
 
-    return aesjs.utils.hex.fromBytes(encryptedBytes);
+      return aesjs.utils.hex.fromBytes(encryptedBytes);
+    } catch (error) {
+      console.error('Encryption error:', error);
+      throw error;
+    }
   }
 
   private async _decrypt(key: string, value: string) {
-    const encryptionKeyHex = await SecureStore.getItemAsync(key);
-    if (!encryptionKeyHex) {
-      return encryptionKeyHex;
+    try {
+      const encryptionKeyHex = await SecureStore.getItemAsync(key);
+      if (!encryptionKeyHex) {
+        return encryptionKeyHex;
+      }
+
+      const cipher = new aesjs.ModeOfOperation.ctr(aesjs.utils.hex.toBytes(encryptionKeyHex), new aesjs.Counter(1));
+      const decryptedBytes = cipher.decrypt(aesjs.utils.hex.toBytes(value));
+
+      return aesjs.utils.utf8.fromBytes(decryptedBytes);
+    } catch (error) {
+      console.error('Decryption error:', error);
+      throw error;
     }
-
-    const cipher = new aesjs.ModeOfOperation.ctr(aesjs.utils.hex.toBytes(encryptionKeyHex), new aesjs.Counter(1));
-    const decryptedBytes = cipher.decrypt(aesjs.utils.hex.toBytes(value));
-
-    return aesjs.utils.utf8.fromBytes(decryptedBytes);
   }
 
   async getItem(key: string) {
-    const encrypted = await AsyncStorage.getItem(key);
-    if (!encrypted) {
-      return encrypted;
-    }
+    try {
+      const encrypted = await AsyncStorage.getItem(key);
+      if (!encrypted) {
+        return encrypted;
+      }
 
-    return await this._decrypt(key, encrypted);
+      return await this._decrypt(key, encrypted);
+    } catch (error) {
+      console.error('Get item error:', error);
+      throw error;
+    }
   }
 
   async removeItem(key: string) {
-    await AsyncStorage.removeItem(key);
-    await SecureStore.deleteItemAsync(key);
+    try {
+      await AsyncStorage.removeItem(key);
+      await SecureStore.deleteItemAsync(key);
+    } catch (error) {
+      console.error('Remove item error:', error);
+      throw error;
+    }
   }
 
   async setItem(key: string, value: string) {
-    const encrypted = await this._encrypt(key, value);
-
-    await AsyncStorage.setItem(key, encrypted);
+    try {
+      const encrypted = await this._encrypt(key, value);
+      await AsyncStorage.setItem(key, encrypted);
+    } catch (error) {
+      console.error('Set item error:', error);
+      throw error;
+    }
   }
 }
 // class SupabaseStorage { // None Encryption(for web)
