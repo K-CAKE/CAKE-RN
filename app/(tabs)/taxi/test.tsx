@@ -6,12 +6,26 @@ import { Stack } from 'expo-router';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 //Icon
 import { Ionicons } from '@expo/vector-icons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+
 //Map
-import { NaverMapPolygonOverlay, NaverMapView } from '@mj-studio/react-native-naver-map';
+import { NaverMapMarkerOverlay, NaverMapPathOverlay, NaverMapView } from '@mj-studio/react-native-naver-map';
 
 // API KEY
 const ID = process.env.EXPO_PUBLIC_NAVER_MAP_KEY;
 const SECRE = process.env.EXPO_PUBLIC_NAVER_MAP_SECRET;
+
+//type
+type Coord = [number, number];
+type Coords = { latitude: number; longitude: number };
+
+// (lng, lat) 순서의 좌표를 (lat, lng) 순서로 변환하는 함수
+const convertCoordinates = (coords: Coord[]): Coords[] => {
+  return coords.map(([lng, lat]) => ({
+    latitude: lat,
+    longitude: lng,
+  }));
+};
 
 const Test: React.FC = () => {
   const router = useRouter();
@@ -20,20 +34,20 @@ const Test: React.FC = () => {
   // 거리
   const [distance, setDistance] = useState<number | null>(null);
   // 예상시간
-  const [duration, setDuration] = useState<number | null>(null);
+  const [hours, getHours] = useState<number>(0);
+  const [minutes, getMinutes] = useState<number>(0);
   // 예상택시비
   const [fare, setFare] = useState<number | null>(null);
 
-  // Driving API params
-  const [path, setPath] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [start, setStart] = useState<string | null>(null);
   const [goal, setGoal] = useState<string | null>(null);
   const [getCode, setCode] = useState<number | null>(null);
 
-  const [hours, getHours] = useState<number>(0);
-  const [minutes, getMinutes] = useState<number>(0);
+  const [result, setResult] = useState<Coords[]>([]);
+  const [startCoord, setStartCoord] = useState<Coords>({ latitude: 0, longitude: 0 });
+  const [goalCoord, setGoalCoord] = useState<Coords>({ latitude: 0, longitude: 0 });
 
   function millisecondsTo(milli: number) {
     const totalMinutes = Math.floor(milli / (1000 * 60));
@@ -43,12 +57,23 @@ const Test: React.FC = () => {
     getHours(hours);
     getMinutes(minutes);
   }
+  /*
+  function splitAndConvertToFloat(input: string): [number, number] {
+    const numbers = input.split(',').map((num) => parseFloat(num));
+
+    if (numbers.length !== 2) {
+      throw new Error('출발지/도착지 위도 경도 값이 잘못 입력되었습니다.');
+    }
+
+    return [numbers[0], numbers[1]];
+  }
+*/
   useEffect(() => {
     if (params) {
-      setStart('127.1238,37.3851'); //서현역
+      setStart('127.1238,37.3851'); // 서현역
       setGoal('126.9563,37.5057'); // 중앙대학교 후문
     } else {
-      console.log('Error: no params(예상 원인 : 숫자가 아닌 값을 출발지와 도착지에 입력함)');
+      console.log('Error: no params');
     }
   }, [params]);
 
@@ -68,31 +93,39 @@ const Test: React.FC = () => {
         const data = response.data;
         if (data) {
           setCode(data.code);
-          setPath(data.route.trafast[0].path);
+          const result = convertCoordinates(data.route.trafast[0].path);
+          setResult(result);
           setFare(data.route.trafast[0].summary.taxiFare.toLocaleString('ko-KR'));
           setDistance(Math.floor(data.route.trafast[0].summary.distance / 1000));
           millisecondsTo(data.route.trafast[0].summary.duration);
+          setLoading(false);
         } else {
           console.log(`Load Error : code ${data}`);
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error');
-      } finally {
-        setLoading(false);
       }
     };
-    if (start && goal && !path) {
+    if (start && goal && !result) {
       console.log('확인용 출력 : API 호출');
       fetchData();
     }
   }, [start, goal]);
 
-  if (loading)
+  useEffect(() => {
+    if (result?.length > 0) {
+      setStartCoord(result[0]);
+      setGoalCoord(result[result.length - 1]);
+    }
+  }, [result]);
+
+  if (loading) {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator size="large" color="#F02F04" />
       </View>
     );
+  }
   if (error) return <Text>Error: {JSON.stringify(error)}</Text>;
 
   return (
@@ -103,23 +136,51 @@ const Test: React.FC = () => {
         }}
       />
       <View style={styles.container}>
-        {!loading && getCode === 0 ? (
+        {!loading && getCode === 0 && result?.length > 0 ? (
           <>
             <View style={styles.mapView}>
               <NaverMapView
                 style={styles.map}
                 layerGroups={{
+                  MOUNTAIN: false,
                   CADASTRAL: false,
                   BICYCLE: false,
                   BUILDING: true,
-                  TRAFFIC: true,
+                  TRAFFIC: false,
                   TRANSIT: true,
                 }}
                 initialRegion={{
-                  latitude: 37.3851,
-                  longitude: 127.1238,
+                  latitude: startCoord.latitude,
+                  longitude: startCoord.longitude,
+                  latitudeDelta: 0.04,
+                  longitudeDelta: 0.04,
                 }}
-              />
+              >
+                <NaverMapPathOverlay coords={result} width={8} color={'red'} progress={0} passedColor={'green'} />
+                <NaverMapMarkerOverlay
+                  latitude={startCoord.latitude}
+                  longitude={startCoord.longitude}
+                  onTap={() => console.log(1)}
+                  anchor={{ x: 0.5, y: 1 }}
+                  caption={{
+                    key: '1',
+                    text: '',
+                  }}
+                  width={100}
+                  height={100}
+                >
+                  <View
+                    style={{
+                      width: 20,
+                      height: 20,
+                      backgroundColor: 'white',
+                      borderRadius: 100,
+                      borderColor: 'black',
+                      borderWidth: 3,
+                    }}
+                  />
+                </NaverMapMarkerOverlay>
+              </NaverMapView>
               <Pressable
                 onPress={() => {
                   router.back();
@@ -170,9 +231,9 @@ const Test: React.FC = () => {
                   <View style={{ flexDirection: 'row' }}>
                     <Text style={{ fontSize: 18, alignSelf: 'center', marginRight: 10 }}>Estimated taxi fare :</Text>
                     <Text style={{ fontSize: 18, alignSelf: 'center' }}>{fare}</Text>
-                    <Text style={{ fontSize: 13, alignSelf: 'center', color: 'gray' }}> Won</Text>
+                    <Text style={{ fontSize: 13, alignSelf: 'center', color: 'gray', marginLeft: 10 }}>Won</Text>
                   </View>
-                  <Text>{path}</Text>
+                  <Text>{JSON.stringify(result)}</Text>
                 </View>
               </View>
               <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -193,7 +254,7 @@ const Test: React.FC = () => {
             </ScrollView>
           </>
         ) : (
-          <Text>로딩중...</Text>
+          <Text>No data</Text>
         )}
       </View>
     </View>
