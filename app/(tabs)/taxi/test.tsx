@@ -162,17 +162,13 @@ const Test: React.FC = () => {
                   longitude={startCoord.longitude}
                   onTap={() => console.log(1)}
                   anchor={{ x: 0.5, y: 1 }}
-                  caption={{
-                    key: '1',
-                    text: '',
-                  }}
                   width={100}
                   height={100}
                 >
                   <View
                     style={{
-                      width: 20,
-                      height: 20,
+                      width: 10,
+                      height: 10,
                       backgroundColor: 'white',
                       borderRadius: 100,
                       borderColor: 'black',
