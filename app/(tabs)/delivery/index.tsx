@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { LinearGradient } from 'expo-linear-gradient';
-import { EvilIcons } from '@expo/vector-icons';
 import { TouchableRipple } from 'react-native-paper';
+import { Stack } from 'expo-router';
+//ICON
+import { EvilIcons } from '@expo/vector-icons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Ionicons } from '@expo/vector-icons';
+
+import { LinearGradient } from 'expo-linear-gradient';
 
 // Define the types for the navigation routes
 type RootStackParamList = {
@@ -41,49 +46,73 @@ export default function DeliveryIndexScreen() {
   };
 
   return (
-    <LinearGradient colors={['#F02F04', '#F5ECEA']} style={styles.gradientContainer}>
-      <View style={styles.headerContainer}>
-        <TouchableRipple
-          onPress={handlePress}
-          rippleColor="rgba(0, 0, 0, .32)"
-          borderless={true}
-        >
-          <View style={styles.questionIcon}>
-            <EvilIcons name="question" size={30} color='#F5ECEA' />
-          </View>
-        </TouchableRipple>
-        {showTooltip && (
-          <Animated.View style={[styles.tooltipContainer, { opacity: fadeAnim }]}>
-            <Text style={styles.tooltipText}>Learn More</Text>
-          </Animated.View>
-        )}
-      </View>
+    <LinearGradient colors={['#ffff', '#ffff']} style={styles.gradientContainer}>
+      <Stack.Screen
+        options={{
+          headerTitle: 'Food Delivery',
+          headerTitleAlign: 'center',
+          headerBackVisible: false,
+          headerRight: () => (
+            <View>
+              <TouchableRipple onPress={handlePress} rippleColor="rgba(0, 0, 0, .32)" borderless={true}>
+                <View>
+                  <FontAwesome name="question-circle-o" size={26} color="#f02f04" />
+                </View>
+              </TouchableRipple>
+              {showTooltip && (
+                <Animated.View style={[styles.tooltipContainer, { opacity: fadeAnim }]}>
+                  <Text style={styles.tooltipText}>Learn More</Text>
+                </Animated.View>
+              )}
+            </View>
+          ),
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                navigation.navigate('home' as never);
+              }}
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.7 : 1,
+                },
+              ]}
+            >
+              <Ionicons name="chevron-back" size={24} color="black" />
+            </Pressable>
+          ),
+        }}
+      />
 
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>
-          Step 3 : 네이버 맵 api 를 통해 음식점 추천 받아서 order 하는 방식
-        </Text>
+        <View>
+          <Text style={[styles.title, { marginBottom: 10 }]}>Try placing a</Text>
+          <Text style={[styles.title, { marginBottom: 15 }]}>food delivery order!</Text>
+          <Text style={{ marginBottom: 17, fontSize: 15 }}>For detailed instructions, please tap the ? button.</Text>
+        </View>
         <View style={styles.infoContainer}>
           {/* 코드 : 나중에 음식점 정보 추가 -> 추천 */}
-          <Text>외부 VIEW</Text>
-
+          <View
+            style={{
+              marginTop: 5,
+              paddingBottom: 15,
+              marginBottom: 20,
+              borderBottomWidth: 1,
+              borderColor: 'lightgray',
+            }}
+          >
+            <Text style={{ fontSize: 25, fontWeight: 300 }}>Recommendation</Text>
+          </View>
           <View style={styles.placeholder}>
             <Text>Restaurant information will go here</Text>
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('DeliveryHistory')}
-          >
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DeliveryHistory')}>
             <Text style={styles.buttonText}>View my orders</Text>
           </TouchableOpacity>
           <View style={styles.buttonSpacing} />
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('DeliveryScreen')}
-          >
-            <Text style={styles.buttonText}>Order delivery</Text>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DeliveryScreen')}>
+            <Text style={styles.buttonText}>Order food delivery</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -95,49 +124,46 @@ const styles = StyleSheet.create({
   gradientContainer: {
     flex: 1,
   },
-  headerContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    padding: 10,
-  },
-  questionIcon: {
-    paddingBottom: 5,
-    paddingTop: 5,
-    marginRight: 20,
-  },
   tooltipContainer: {
+    width: 80,
     position: 'absolute',
-    right: 60,
-    top: 10,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    right: 30,
+    top: 5,
   },
   tooltipText: {
-    color: '#FFF',
-    fontSize: 12,
+    color: '#f02f04',
+    fontSize: 14,
   },
   container: {
     flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+    padding: 30,
+    paddingBottom: 150,
   },
   title: {
-    fontSize: 15,
-    marginBottom: 20,
+    width: '100%',
+    alignSelf: 'flex-start',
+    fontSize: 24,
+    fontWeight: 'bold',
   },
   infoContainer: {
     width: '100%',
     height: 500, // 세로 길이
     padding: 20,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'white',
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
+    // iOS 전용 그림자 속성
+    shadowColor: '#000', // 그림자 색상
+    shadowOffset: { width: 0, height: 10 }, // 그림자 오프셋
+    shadowOpacity: 0.1, // 그림자 불투명도
+    shadowRadius: 5, // 그림자 블러 반경
+    // Android 전용 그림자 속성
+    elevation: 5, // 그림자의 깊이
+    marginBottom: 30,
   },
   placeholder: {
-    width: '100%',
-    height: 200,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#d9d9d9',
@@ -145,7 +171,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   buttonContainer: {
-    width: '100%',
+    flex: 1,
     alignItems: 'center',
   },
   buttonSpacing: {
@@ -158,6 +184,7 @@ const styles = StyleSheet.create({
     borderRadius: 25, // 둥근 버튼
     width: '80%', // 버튼 너비 조정
     alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonText: {
     color: '#FFF',

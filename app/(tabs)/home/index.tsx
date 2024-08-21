@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { StyleSheet, Text, Pressable, View, Dimensions, ScrollView } from 'react-native';
 
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -6,12 +6,15 @@ import Svg, { Path } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState, useEffect } from 'react';
 
+//ICON
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { useNavigation } from 'expo-router';
 
 export default function Page() {
+  const router = useRouter();
   const headerHeight = useHeaderHeight();
   const [paddingTop, setPaddingTop] = useState(0);
   const { height } = Dimensions.get('window');
@@ -60,7 +63,7 @@ export default function Page() {
       />
       <View style={styles.paypal}>
         <View style={styles.top}>
-          <Text style={[styles.text, { fontSize: 15 }]}>PayPal balance</Text>
+          <Text style={[styles.text, { fontSize: 15 }]}>My cake balance</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={styles.balance}>$ 0.00</Text>
           </View>
@@ -69,7 +72,7 @@ export default function Page() {
           <View style={styles.button}>
             <Pressable
               onPress={() => {
-                console.log('Add button');
+                router.push('/home/Payment' as never);
               }}
               style={({ pressed }) => [
                 {
@@ -84,7 +87,7 @@ export default function Page() {
           <View style={styles.button}>
             <Pressable
               onPress={() => {
-                console.log('PayPal button');
+                router.push('/mypage');
               }}
               style={({ pressed }) => [
                 {
@@ -93,7 +96,7 @@ export default function Page() {
                 styles.paypal_button,
               ]}
             >
-              <FontAwesome name="cc-paypal" size={39} color="#FEECEB" />
+              <Ionicons name="list-circle" size={55} color="#FEECEB" />
             </Pressable>
           </View>
         </View>
@@ -191,7 +194,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingLeft: 14,
-    paddingRight: 19,
+    paddingRight: 14,
     marginVertical: 11,
   },
   button: {

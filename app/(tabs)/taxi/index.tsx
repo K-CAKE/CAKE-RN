@@ -1,4 +1,3 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Stack, useNavigation, useRouter } from 'expo-router';
 import { Animated, Dimensions, Text, View, StyleSheet, Pressable, Keyboard } from 'react-native';
 import { useState, useRef } from 'react';
@@ -8,7 +7,7 @@ import Checkbox from 'expo-checkbox';
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 import DropDownPicker from 'react-native-dropdown-picker';
 
@@ -260,7 +259,7 @@ export default function Step1Screen() {
                 },
               ]}
             >
-              <FontAwesome name="question-circle-o" size={24} color="black" />
+              <FontAwesome name="question-circle-o" size={26} color="#f02f04" />
             </Pressable>
           ),
           headerLeft: () => (
@@ -295,6 +294,7 @@ export default function Step1Screen() {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
+    paddingTop: 20,
     backgroundColor: 'white',
   },
   title: {
