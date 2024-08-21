@@ -212,7 +212,6 @@ const Test: React.FC = () => {
                     <Text style={{ fontSize: 18, alignSelf: 'center' }}>{fare}</Text>
                     <Text style={{ fontSize: 13, alignSelf: 'center', color: 'gray', marginLeft: 10 }}>Won</Text>
                   </View>
-                  <Text>{JSON.stringify(result)}</Text>
                 </View>
               </View>
               <View style={{ alignItems: 'center', justifyContent: 'center' }}>
