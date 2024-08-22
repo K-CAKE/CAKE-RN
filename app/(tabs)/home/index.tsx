@@ -8,8 +8,11 @@ import { useState, useEffect } from 'react';
 
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-
 import { useNavigation } from 'expo-router';
+
+type RootStackParamList = {
+  Payment: undefined;
+};
 
 export default function Page() {
   const headerHeight = useHeaderHeight();
@@ -22,7 +25,6 @@ export default function Page() {
   const handlePress = (screen: string) => {
     navigation.navigate(screen as never);
   };
-
   useEffect(() => {
     setPaddingTop(headerHeight);
   }, [headerHeight]);
@@ -69,7 +71,7 @@ export default function Page() {
           <View style={styles.button}>
             <Pressable
               onPress={() => {
-                console.log('Add button');
+                navigation.navigate('Payment' as never);  // 'Payment' 페이지로 이동
               }}
               style={({ pressed }) => [
                 {
