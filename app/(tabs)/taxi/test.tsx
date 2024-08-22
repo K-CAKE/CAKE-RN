@@ -38,7 +38,7 @@ const Test: React.FC = () => {
   const [minutes, getMinutes] = useState<number>(0);
   // 예상택시비
   const [fare, setFare] = useState<number | null>(null);
-
+  const [path, getPath] = useState<Coord[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [start, setStart] = useState<string | null>(null);
@@ -93,6 +93,7 @@ const Test: React.FC = () => {
         const data = response.data;
         if (data) {
           setCode(data.code);
+          getPath(data.route.trafast[0].path);
           const result = convertCoordinates(data.route.trafast[0].path);
           setResult(result);
           setFare(data.route.trafast[0].summary.taxiFare.toLocaleString('ko-KR'));
@@ -106,12 +107,13 @@ const Test: React.FC = () => {
         setError(err instanceof Error ? err.message : 'Unknown error');
       }
     };
-    if (start && goal && !result) {
+    if (start && goal && !path) {
       console.log('확인용 출력 : API 호출');
       fetchData();
     }
   }, [start, goal]);
 
+  //출발지 도착지 정확한 위도 경도 값 얻기 위함
   useEffect(() => {
     if (result?.length > 0) {
       setStartCoord(result[0]);
@@ -152,30 +154,11 @@ const Test: React.FC = () => {
                 initialRegion={{
                   latitude: startCoord.latitude,
                   longitude: startCoord.longitude,
-                  latitudeDelta: 0.04,
-                  longitudeDelta: 0.04,
+                  latitudeDelta: 0.07,
+                  longitudeDelta: 0.07,
                 }}
               >
                 <NaverMapPathOverlay coords={result} width={8} color={'red'} progress={0} passedColor={'green'} />
-                <NaverMapMarkerOverlay
-                  latitude={startCoord.latitude}
-                  longitude={startCoord.longitude}
-                  onTap={() => console.log(1)}
-                  anchor={{ x: 0.5, y: 1 }}
-                  width={100}
-                  height={100}
-                >
-                  <View
-                    style={{
-                      width: 10,
-                      height: 10,
-                      backgroundColor: 'white',
-                      borderRadius: 100,
-                      borderColor: 'black',
-                      borderWidth: 3,
-                    }}
-                  />
-                </NaverMapMarkerOverlay>
               </NaverMapView>
               <Pressable
                 onPress={() => {
@@ -229,7 +212,6 @@ const Test: React.FC = () => {
                     <Text style={{ fontSize: 18, alignSelf: 'center' }}>{fare}</Text>
                     <Text style={{ fontSize: 13, alignSelf: 'center', color: 'gray', marginLeft: 10 }}>Won</Text>
                   </View>
-                  <Text>{JSON.stringify(result)}</Text>
                 </View>
               </View>
               <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -314,3 +296,38 @@ const styles = StyleSheet.create({
 });
 
 export default Test;
+
+/*
+                <NaverMapMarkerOverlay
+                  latitude={startCoord.latitude}
+                  longitude={startCoord.longitude}
+                  onTap={() => console.log('start')}
+                  anchor={{ x: 0, y: 0 }}
+                  width={100}
+                  height={100}
+                >
+                  <View
+                    style={{
+                      width: 20,
+                      height: 20,
+                      backgroundColor: 'white',
+                      borderRadius: 100,
+                      borderColor: 'black',
+                      borderWidth: 3,
+                    }}
+                  />
+                </NaverMapMarkerOverlay>
+                <NaverMapMarkerOverlay
+                  latitude={goalCoord.latitude}
+                  longitude={goalCoord.longitude}
+                  onTap={() => console.log('start')}
+                  anchor={{ x: 0, y: 0.2 }}
+                  width={100}
+                  height={100}
+                  caption={{ text: 'Start', align: 'BottomLeft' }}
+                >
+                  <FontAwesome5 name="map-marker-alt" size={30} color="black" />
+                </NaverMapMarkerOverlay>
+
+
+*/
