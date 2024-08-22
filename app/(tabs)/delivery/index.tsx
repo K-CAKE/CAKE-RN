@@ -46,12 +46,16 @@ export default function DeliveryIndexScreen() {
   };
 
   return (
-    <LinearGradient colors={['#ffff', '#ffff']} style={styles.gradientContainer}>
+    <LinearGradient colors={['#ffd4d1', '#f6f6f6']} locations={[0.0, 0.5]} style={styles.gradientContainer}>
       <Stack.Screen
         options={{
           headerTitle: 'Food Delivery',
           headerTitleAlign: 'center',
           headerBackVisible: false,
+          headerTransparent: true,
+          headerStyle: {
+            backgroundColor: 'rgba(255, 255, 255, 0.5)', // 배경색을 흰색 50% 투명도로 설정
+          },
           headerRight: () => (
             <View>
               <TouchableRipple onPress={handlePress} rippleColor="rgba(0, 0, 0, .32)" borderless={true}>
@@ -139,12 +143,13 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 30,
+    paddingTop: 120,
     paddingBottom: 150,
   },
   title: {
     width: '100%',
     alignSelf: 'flex-start',
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
   },
   infoContainer: {

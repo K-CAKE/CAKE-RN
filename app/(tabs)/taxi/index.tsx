@@ -1,8 +1,10 @@
 import { Stack, useNavigation, useRouter } from 'expo-router';
-import { Animated, Dimensions, Text, View, StyleSheet, Pressable, Keyboard } from 'react-native';
+import { SafeAreaView, Animated, Dimensions, Text, View, StyleSheet, Pressable, Keyboard } from 'react-native';
 import { useState, useRef } from 'react';
 import * as Progress from 'react-native-progress';
 import Checkbox from 'expo-checkbox';
+import { LinearGradient } from 'expo-linear-gradient';
+
 //Icon
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -124,9 +126,9 @@ export default function Step1Screen() {
   // render item
   const data = [{ key: 'input1' }, { key: 'input2' }, { key: 'button' }];
   const renderItem = ({ item }: { item: { key: string } }) => (
-    <View style={{ paddingLeft: 30, paddingRight: 30 }}>
+    <View style={{ paddingLeft: 15, paddingRight: 15 }}>
       {item.key === 'input1' ? (
-        <View style={{ marginBottom: 15 }}>
+        <View style={{ borderRadius: 10, marginBottom: 10, backgroundColor: 'white', padding: 20 }}>
           {['Departure', 'Arrival'].map((inputName) => (
             <View key={inputName}>
               <Text style={styles.title}>{inputName}</Text>
@@ -167,7 +169,7 @@ export default function Step1Screen() {
         </View>
       ) : item.key === 'input2' ? (
         <>
-          <View style={{ zIndex: 50, marginBottom: 10 }}>
+          <View style={{ zIndex: 50, marginBottom: 10, borderRadius: 10, backgroundColor: 'white', padding: 20 }}>
             <Text style={styles.title}>Headcount</Text>
             <DropDownPicker
               open={open}
@@ -185,7 +187,7 @@ export default function Step1Screen() {
               selectedItemContainerStyle={{ backgroundColor: '#FEECEB' }}
             />
           </View>
-          <View style={{ zIndex: 1, marginBottom: 20 }}>
+          <View style={{ zIndex: 1, marginBottom: 20, borderRadius: 10, backgroundColor: 'white', padding: 20 }}>
             <Text style={styles.title}>Luggage Size(based on the height)</Text>
             <CheckboxWithInput
               label="Carry-On(18~22 in)"
@@ -242,12 +244,16 @@ export default function Step1Screen() {
     </View>
   );
   return (
-    <View style={{ flex: 1 }}>
+    <LinearGradient colors={['#ffd4d1', '#f6f6f6']} locations={[0.0, 0.5]} style={{ flex: 1 }}>
       <Stack.Screen
         options={{
           headerTitle: 'Call taxi',
           headerTitleAlign: 'center',
           headerBackVisible: false,
+          headerTransparent: true,
+          headerStyle: {
+            backgroundColor: 'rgba(255, 255, 255, 0.5)', // 배경색을 흰색 50% 투명도로 설정
+          },
           headerRight: () => (
             <Pressable
               onPress={() => {
@@ -278,24 +284,23 @@ export default function Step1Screen() {
           ),
         }}
       />
+
       <View style={styles.block}>
-        <View style={{ marginBottom: 25 }} />
         <FlatList
+          style={{ paddingTop: 120 }}
           data={data}
           renderItem={renderItem}
           keyExtractor={(item) => item.key}
-          ListFooterComponent={<View style={{ height: 150 }} />}
+          ListFooterComponent={<View style={{ height: 300 }} />}
         />
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   block: {
     flex: 1,
-    paddingTop: 20,
-    backgroundColor: 'white',
   },
   title: {
     color: 'black',
