@@ -220,31 +220,33 @@ export default function Step1Screen() {
           </View>
         </>
       ) : item.key === 'button' ? (
-        <Pressable
-          disabled={!Arrival || !Dep} // 출발지 또는 도착지 값 비어 있으면 버튼 비활성화
-          onPress={() => {
-            router.push({
-              pathname: '/taxi/test' as never,
-              params: {
-                Dep: Dep as string,
-                Arrival: Arrival as string,
+        <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+          <Pressable
+            disabled={!Arrival || !Dep} // 출발지 또는 도착지 값 비어 있으면 버튼 비활성화
+            onPress={() => {
+              router.push({
+                pathname: '/taxi/test' as never,
+                params: {
+                  Dep: Dep as string,
+                  Arrival: Arrival as string,
+                },
+              });
+            }}
+            style={({ pressed }) => [
+              {
+                opacity: pressed ? 0.7 : 1,
               },
-            });
-          }}
-          style={({ pressed }) => [
-            {
-              opacity: pressed ? 0.7 : 1,
-            },
-            styles.nextButton,
-          ]}
-        >
-          <Text style={{ color: 'white', fontSize: 20 }}>Next</Text>
-        </Pressable>
+              styles.nextButton,
+            ]}
+          >
+            <Text style={{ color: 'white', fontSize: 20 }}>Next</Text>
+          </Pressable>
+        </View>
       ) : null}
     </View>
   );
   return (
-    <LinearGradient colors={['#ffd4d1', '#f6f6f6']} locations={[0.0, 0.5]} style={{ flex: 1 }}>
+    <LinearGradient colors={['#ffd4d1', '#efefef']} locations={[0.0, 0.5]} style={{ flex: 1 }}>
       <Stack.Screen
         options={{
           headerTitle: 'Call taxi',
@@ -367,8 +369,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   nextButton: {
-    borderRadius: 30,
-    width: '100%',
+    borderRadius: 13,
+    width: '88%',
     height: 50,
     backgroundColor: '#F02F04',
     alignItems: 'center',

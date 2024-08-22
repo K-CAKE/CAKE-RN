@@ -5,7 +5,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TouchableRipple } from 'react-native-paper';
 import { Stack } from 'expo-router';
 //ICON
-import { EvilIcons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -89,9 +88,13 @@ export default function DeliveryIndexScreen() {
 
       <ScrollView contentContainerStyle={styles.container}>
         <View>
-          <Text style={[styles.title, { marginBottom: 10 }]}>Try placing a</Text>
-          <Text style={[styles.title, { marginBottom: 15 }]}>food delivery order!</Text>
-          <Text style={{ marginBottom: 17, fontSize: 15 }}>For detailed instructions, please tap the ? button.</Text>
+          <Text style={[styles.title, { marginBottom: 10, fontSize: 28, fontWeight: 400 }]}>Try placing a</Text>
+          <Text style={[styles.title, { marginBottom: 15, fontSize: 30, fontWeight: 'bold' }]}>
+            Food delivery order!
+          </Text>
+          <Text style={{ marginBottom: 17, fontSize: 15, fontWeight: 300 }}>
+            For detailed instructions, please tap the ? button.
+          </Text>
         </View>
         <View style={styles.infoContainer}>
           {/* 코드 : 나중에 음식점 정보 추가 -> 추천 */}
@@ -149,8 +152,6 @@ const styles = StyleSheet.create({
   title: {
     width: '100%',
     alignSelf: 'flex-start',
-    fontSize: 28,
-    fontWeight: 'bold',
   },
   infoContainer: {
     width: '100%',
@@ -186,13 +187,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#F02F04', // 버튼 색상 변경
     paddingVertical: 15,
     paddingHorizontal: 30,
-    borderRadius: 25, // 둥근 버튼
-    width: '80%', // 버튼 너비 조정
+    borderRadius: 13, // 둥근 버튼
+    width: '100%', // 버튼 너비 조정
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonText: {
     color: '#FFF',
-    fontSize: 16,
+    fontSize: 20,
   },
 });
