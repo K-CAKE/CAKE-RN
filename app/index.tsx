@@ -68,7 +68,7 @@ export default function Index() {
         <View className="flex items-center w-full max-w-lg">
           <TouchableOpacity
             // 로그인 페이지로 이동
-            onPress={() => router.push('/Login')}
+            onPress={() => router.push('/chat')}
             className="bg-rose-400 h-16 w-full max-w-xs justify-center rounded-full border-[3px]"
           >
             <Text className="text-2xl font-bold tracking-wide text-center text-black">START</Text>
