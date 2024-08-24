@@ -1,6 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Text, View, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, TextInput } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 
 const { width, height } = Dimensions.get('window');
@@ -9,31 +9,21 @@ export default function Login() {
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-
-      {/* 로고 */}
       <View style={styles.imageContainer}>
-        <Image source={require('../assets/images/strawberry-cake.png')} style={styles.topImage} resizeMode="contain" />
+        <Image source={require('../assets/images/cake_logo.png')} style={styles.logo} resizeMode="contain" />
       </View>
-
-      {/* 환영 문구 */}
-      <Text style={styles.headerText}>
-        Welcome! Is this your first time in Korea?{'\n'}
-        We are your delivery and taxi partner.
-      </Text>
-      <Text style={styles.subHeaderText}>Please login first :)</Text>
-
-      {/* 구글 로그인 버튼 */}
+      <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" />
+      <TextInput style={styles.input} placeholder="Password" secureTextEntry />
       <TouchableOpacity
         style={styles.googleLoginButton}
         onPress={() => {
           /* Google login logic */
+          router.push('/home'); // 로그인 성공 후 홈 화면으로 이동
         }}
       >
         <Image source={require('../assets/images/google_logo.png')} style={styles.googleLogo} />
         <Text style={styles.googleLoginText}>Google Login</Text>
       </TouchableOpacity>
-
-      {/* 하단 문구 */}
       <Text style={styles.footerText}>
         By signing up, you agree to the CAKE{'\n'}Terms of Service and Privacy Policy.
       </Text>
@@ -53,7 +43,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: height * 0.05,
   },
-  topImage: {
+  logo: {
     width: width * 0.4,
     height: width * 0.4,
   },
@@ -68,6 +58,14 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.04,
     fontSize: width * 0.04,
     textAlign: 'center',
+  },
+  input: {
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 15,
+    paddingHorizontal: 10,
+    borderRadius: 5,
   },
   googleLoginButton: {
     flexDirection: 'row',
