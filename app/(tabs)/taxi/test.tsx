@@ -57,6 +57,13 @@ const Test: React.FC = () => {
     getHours(hours);
     getMinutes(minutes);
   }
+
+  function resetData() {
+    setResult([]);
+    getPath(undefined);
+    setCode(null);
+    setLoading(true);
+  }
   /*
   function splitAndConvertToFloat(input: string): [number, number] {
     const numbers = input.split(',').map((num) => parseFloat(num));
@@ -70,8 +77,8 @@ const Test: React.FC = () => {
 */
   useEffect(() => {
     if (params) {
-      setStart('127.1238,37.3851'); // 서현역
-      setGoal('126.9563,37.5057'); // 중앙대학교 후문
+      setStart(params.Arrival as string); // 서현역
+      setGoal(params.Dep as string); // 중앙대학교 후문
     } else {
       console.log('Error: no params');
     }
@@ -162,6 +169,7 @@ const Test: React.FC = () => {
               </NaverMapView>
               <Pressable
                 onPress={() => {
+                  resetData();
                   router.back();
                 }}
                 style={({ pressed }) => [

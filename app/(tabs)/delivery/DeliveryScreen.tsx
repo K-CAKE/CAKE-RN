@@ -37,7 +37,6 @@ export default function DeliveryScreen() {
   const [ocrText, setOcrText] = useState<string | null>(null);
   const [translatedText, setTranslatedText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
   const navigation = useNavigation<DeliveryScreenNavigationProp>();
 
   const pickImage = async () => {
@@ -144,7 +143,7 @@ export default function DeliveryScreen() {
     <LinearGradient colors={['#f6f6f6', '#f6f6f6']} style={styles.gradientContainer}>
       <Stack.Screen
         options={{
-          headerTitle: 'Food Delivery',
+          headerTitle: 'Order Delivery',
           headerTitleAlign: 'center',
           headerBackVisible: false,
           headerTransparent: true,
@@ -177,7 +176,7 @@ export default function DeliveryScreen() {
       <ScrollView contentContainerStyle={styles.container}>
         <View style={{ flex: 4, marginBottom: 40 }}>
           <View style={{ marginBottom: 20 }}>
-            <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Your order</Text>
+            <Text style={{ fontSize: 24, fontWeight: 600 }}>Your order : </Text>
           </View>
           <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
             {image ? (
@@ -215,8 +214,7 @@ export default function DeliveryScreen() {
               </Text>
             </>
           )}
-
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Confirm')}>
+          <TouchableOpacity style={styles.button} disabled={!image} onPress={() => navigation.navigate('Confirm')}>
             <Text style={styles.buttonText}>Confirm the order</Text>
           </TouchableOpacity>
         </View>
@@ -287,10 +285,12 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     width: '100%',
     height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonText: {
     color: '#FFF',
-    fontSize: 20,
+    fontSize: 18,
     textAlign: 'center',
   },
 });

@@ -112,14 +112,25 @@ export default function DeliveryIndexScreen() {
           <View style={styles.placeholder}>
             <Text>Restaurant information will go here</Text>
           </View>
+          <View
+            style={{
+              marginBottom: 5,
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+            }}
+          >
+            <Ionicons name="information-circle" size={24} color="#ffd4d1" />
+            <Text style={{ marginLeft: 5 }}>Restaurants near me</Text>
+          </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DeliveryHistory')}>
-            <Text style={styles.buttonText}>View my orders</Text>
+          <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('DeliveryHistory')}>
+            <Text style={styles.buttonText1}>View My Orders</Text>
           </TouchableOpacity>
           <View style={styles.buttonSpacing} />
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DeliveryScreen')}>
-            <Text style={styles.buttonText}>Order food delivery</Text>
+            <Text style={styles.buttonText}>Order Food Delivery</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -166,7 +177,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5, // 그림자 블러 반경
     // Android 전용 그림자 속성
     elevation: 5, // 그림자의 깊이
-    marginBottom: 30,
+    marginBottom: 45,
   },
   placeholder: {
     flex: 1,
@@ -174,26 +185,47 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#d9d9d9',
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 6,
   },
   buttonContainer: {
     flex: 1,
     alignItems: 'center',
   },
   buttonSpacing: {
-    height: 10, // 버튼 사이의 간격을 주기 위해 추가된 높이
+    height: 12, // 버튼 사이의 간격을 주기 위해 추가된 높이
   },
   button: {
     backgroundColor: '#F02F04', // 버튼 색상 변경
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 13, // 둥근 버튼
-    width: '100%', // 버튼 너비 조정
+    width: '90%', // 버튼 너비 조정
     alignItems: 'center',
     justifyContent: 'center',
+    height: 50,
+    flex: 1,
   },
   buttonText: {
     color: '#FFF',
-    fontSize: 20,
+    fontSize: 17,
+  },
+  button1: {
+    backgroundColor: '#fff', // 버튼 색상 변경
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 13, // 둥근 버튼
+    width: '90%', // 버튼 너비 조정
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 50,
+    overflow: 'visible',
+    borderWidth: 2,
+    borderColor: '#f02f04',
+    paddingBottom: 1,
+    paddingTop: 1,
+  },
+  buttonText1: {
+    color: '#F02f04',
+    fontSize: 17,
   },
 });
