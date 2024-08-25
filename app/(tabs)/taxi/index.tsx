@@ -107,11 +107,6 @@ export default function Step1Screen() {
     }
   }
 
-  useEffect(() => {
-    getNowLocation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   async function getLocation(long: number, lat: number) {
     // const url = `http://api.vworld.kr/req/address?service=address&request=getAddress&key=${process.env.EXPO_PUBLIC_GEO_API_KEY}&point=${dep}`;
     // v2현재 404에러 발생, v1으로 진행
