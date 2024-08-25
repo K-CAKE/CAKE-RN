@@ -1,13 +1,12 @@
 import { supabase } from '@/hooks/supabase';
-import { View, Pressable, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Pressable, Text, StyleSheet } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Badge, useTheme } from 'react-native-paper';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { FlatList, TextInput } from 'react-native-gesture-handler';
+import { FlatList } from 'react-native-gesture-handler';
 import { router } from 'expo-router';
 import { useRecoilState } from 'recoil';
 import { userState } from '@/atoms/userState';
@@ -60,13 +59,6 @@ export default function App() {
     );
   };
 
-  /*
-  const [searchQuery, setSearchQuery] = useState('');
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
-*/
-
   return (
     <LinearGradient colors={['#ffd4d1', '#efefef']} locations={[0.0, 0.5]} style={{ flex: 1 }}>
       <Stack.Screen
@@ -78,20 +70,6 @@ export default function App() {
           headerStyle: {
             backgroundColor: 'rgba(255, 255, 255, 0.5)', // 배경색을 흰색 50% 투명도로 설정
           },
-          // headerRight: () => (
-          //   <Pressable
-          //     onPress={() => {
-          //       console.log('question button');
-          //     }}
-          //     style={({ pressed }) => [
-          //       {
-          //         opacity: pressed ? 0.7 : 1,
-          //       },
-          //     ]}
-          //   >
-          //     <FontAwesome name="question-circle-o" size={26} color="#f02f04" />
-          //   </Pressable>
-          // ),
           headerLeft: () => (
             <Pressable
               onPress={() => {
