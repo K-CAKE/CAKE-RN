@@ -1,12 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FontAwesome } from '@expo/vector-icons';
-import { Stack, useRouter } from 'expo-router';
-
-import { Ionicons } from '@expo/vector-icons';
 
 type RootStackParamList = {
   DeliveryScreen: undefined;
@@ -14,60 +11,38 @@ type RootStackParamList = {
   DeliveryHistory: undefined;
   Confirm: undefined;
   index: undefined;
-  DeliveryStatus: undefined;
+  DeliveryStatus : undefined;
 };
 
 type ConfirmationScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function ConfirmationScreen() {
   const navigation = useNavigation<ConfirmationScreenNavigationProp>();
-  const router = useRouter();
+
   return (
-    <>
-      <Stack.Screen
-        options={{
-          headerTitle: 'Confirm Order',
-          headerTitleAlign: 'center',
-          headerBackVisible: false,
-          headerTransparent: true,
-          headerStyle: {
-            backgroundColor: 'rgba(255, 255, 255, 0.5)', // 배경색을 흰색 50% 투명도로 설정
-          },
-          headerLeft: () => (
-            <Pressable
-              onPress={() => {
-                router.back();
-              }}
-              style={({ pressed }) => [
-                {
-                  opacity: pressed ? 0.7 : 1,
-                },
-              ]}
-            >
-              <Ionicons name="chevron-back" size={24} color="black" />
-            </Pressable>
-          ),
-        }}
-      />
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <LinearGradient colors={['#ffffff', '#f5f5f5']} style={styles.gradientContainer}>
         <View style={styles.iconContainer}>
           <FontAwesome name="paper-plane" size={50} color="#F02F04" />
         </View>
-        <Text style={styles.title}>Congratulations!</Text>
-        <View style={{ marginTop: 15, marginBottom: 45 }}>
-          <Text style={[styles.subtitle, { marginBottom: 12 }]}>Your order have been taken</Text>
-          <Text style={styles.subtitle}>and is being attended to</Text>
-        </View>
-        <View style={{}}>
-          <TouchableOpacity style={styles.trackOrderButton} onPress={() => navigation.navigate('DeliveryStatus')}>
-            <Text style={styles.trackOrderText}>Track order</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.continueButton} onPress={() => navigation.navigate('index')}>
-            <Text style={styles.continueText}>Continue Delivery</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </>
+        <Text style={styles.title}>Congratulations!!!</Text>
+        <Text style={styles.subtitle}>Your order have been taken and is being attended to</Text>
+
+        <TouchableOpacity
+          style={styles.trackOrderButton}
+          onPress={() => navigation.navigate('DeliveryStatus')}
+        >
+          <Text style={styles.trackOrderText}>Track order</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.continueButton}
+          onPress={() => navigation.navigate('index')}
+        >
+          <Text style={styles.continueText}>Continue Delivery</Text>
+        </TouchableOpacity> 
+      </LinearGradient>
+    </View>
   );
 }
 
@@ -90,7 +65,7 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   title: {
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#2C2C2C',
     marginBottom: 10,
@@ -99,30 +74,29 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#6E6E6E',
     textAlign: 'center',
+    marginBottom: 30,
+    paddingHorizontal: 20,
   },
   trackOrderButton: {
-    backgroundColor: '#F02f04',
+    backgroundColor: '#FFA07A',
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 25,
     marginBottom: 20,
-    alignContent: 'center',
   },
   trackOrderText: {
-    textAlign: 'center',
     color: '#FFFFFF',
     fontSize: 16,
   },
   continueButton: {
     borderWidth: 2,
-    borderColor: '#f02f04',
+    borderColor: '#FFA07A',
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 25,
   },
   continueText: {
-    textAlign: 'center',
-    color: '#F02f04',
+    color: '#FFA07A',
     fontSize: 16,
   },
 });

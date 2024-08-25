@@ -1,15 +1,14 @@
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Stack, useNavigation, useRouter } from 'expo-router';
-import { SafeAreaView, Animated, Dimensions, Text, View, StyleSheet, Pressable, Keyboard } from 'react-native';
+import { Animated, Dimensions, Text, View, StyleSheet, Pressable, Keyboard } from 'react-native';
 import { useState, useRef } from 'react';
 import * as Progress from 'react-native-progress';
 import Checkbox from 'expo-checkbox';
-import { LinearGradient } from 'expo-linear-gradient';
-
 //Icon
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 import DropDownPicker from 'react-native-dropdown-picker';
 
@@ -55,19 +54,6 @@ const CheckboxWithInput = ({ label, isChecked, setChecked, quantity, setQuantity
 };
 
 export default function Step1Screen() {
-  function resetData() {
-    setArrival('');
-    setDep('');
-    setCheckedCarryOn(false);
-    setCheckedSmall(false);
-    setCheckedMedium(false);
-    setCheckedLarge(false);
-    setValue(null);
-    setQuantityCarryOn('');
-    setQuantitySmall('');
-    setQuantityMedium('');
-    setQuantityLarge('');
-  }
   //router
   const router = useRouter();
   //progress bar 관련
@@ -76,8 +62,8 @@ export default function Step1Screen() {
   //navigation
   const navigation = useNavigation();
   //input
-  const [Dep, setDep] = useState<string>('');
-  const [Arrival, setArrival] = useState<string>('');
+  const [Dep, setDep] = useState('');
+  const [Arrival, setArrival] = useState('');
   // const [HC, setHC] = useState(0);
   // const [quickBooking, setQuick] = useState(false);
   // luggage checkbox
@@ -139,9 +125,9 @@ export default function Step1Screen() {
   // render item
   const data = [{ key: 'input1' }, { key: 'input2' }, { key: 'button' }];
   const renderItem = ({ item }: { item: { key: string } }) => (
-    <View style={{ paddingLeft: 15, paddingRight: 15 }}>
+    <View style={{ paddingLeft: 30, paddingRight: 30 }}>
       {item.key === 'input1' ? (
-        <View style={{ borderRadius: 10, marginBottom: 10, backgroundColor: 'white', padding: 20 }}>
+        <View style={{ marginBottom: 15 }}>
           {['Departure', 'Arrival'].map((inputName) => (
             <View key={inputName}>
               <Text style={styles.title}>{inputName}</Text>
@@ -182,7 +168,7 @@ export default function Step1Screen() {
         </View>
       ) : item.key === 'input2' ? (
         <>
-          <View style={{ zIndex: 50, marginBottom: 10, borderRadius: 10, backgroundColor: 'white', padding: 20 }}>
+          <View style={{ zIndex: 50, marginBottom: 10 }}>
             <Text style={styles.title}>Headcount</Text>
             <DropDownPicker
               open={open}
@@ -200,7 +186,7 @@ export default function Step1Screen() {
               selectedItemContainerStyle={{ backgroundColor: '#FEECEB' }}
             />
           </View>
-          <View style={{ zIndex: 1, marginBottom: 20, borderRadius: 10, backgroundColor: 'white', padding: 20 }}>
+          <View style={{ zIndex: 1, marginBottom: 20 }}>
             <Text style={styles.title}>Luggage Size(based on the height)</Text>
             <CheckboxWithInput
               label="Carry-On(18~22 in)"
@@ -233,42 +219,35 @@ export default function Step1Screen() {
           </View>
         </>
       ) : item.key === 'button' ? (
-        <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-          <Pressable
-            disabled={!Arrival || !Dep} // 출발지 또는 도착지 값 비어 있으면 버튼 비활성화
-            onPress={() => {
-              router.push({
-                pathname: '/taxi/test' as never,
-                params: {
-                  Dep: Dep as string,
-                  Arrival: Arrival as string,
-                },
-              });
-            }}
-            style={({ pressed }) => [
-              {
-                opacity: pressed ? 0.7 : 1,
+        <Pressable
+          onPress={() => {
+            router.push({
+              pathname: '/taxi/step2' as never,
+              params: {
+                Dep: Dep,
+                Arrival: Arrival,
               },
-              styles.nextButton,
-            ]}
-          >
-            <Text style={{ color: 'white', fontSize: 20 }}>Next</Text>
-          </Pressable>
-        </View>
+            });
+          }}
+          style={({ pressed }) => [
+            {
+              opacity: pressed ? 0.7 : 1,
+            },
+            styles.nextButton,
+          ]}
+        >
+          <Text style={{ color: 'white', fontSize: 20 }}>Next</Text>
+        </Pressable>
       ) : null}
     </View>
   );
   return (
-    <LinearGradient colors={['#ffd4d1', '#efefef']} locations={[0.0, 0.5]} style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <Stack.Screen
         options={{
           headerTitle: 'Call taxi',
           headerTitleAlign: 'center',
           headerBackVisible: false,
-          headerTransparent: true,
-          headerStyle: {
-            backgroundColor: 'rgba(255, 255, 255, 0.5)', // 배경색을 흰색 50% 투명도로 설정
-          },
           headerRight: () => (
             <Pressable
               onPress={() => {
@@ -280,13 +259,12 @@ export default function Step1Screen() {
                 },
               ]}
             >
-              <FontAwesome name="question-circle-o" size={26} color="#f02f04" />
+              <FontAwesome name="question-circle-o" size={24} color="black" />
             </Pressable>
           ),
           headerLeft: () => (
             <Pressable
               onPress={() => {
-                resetData();
                 navigation.navigate('home' as never);
               }}
               style={({ pressed }) => [
@@ -300,23 +278,23 @@ export default function Step1Screen() {
           ),
         }}
       />
-
       <View style={styles.block}>
+        <View style={{ marginBottom: 25 }} />
         <FlatList
-          style={{ paddingTop: 120 }}
           data={data}
           renderItem={renderItem}
           keyExtractor={(item) => item.key}
-          ListFooterComponent={<View style={{ height: 300 }} />}
+          ListFooterComponent={<View style={{ height: 150 }} />}
         />
       </View>
-    </LinearGradient>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   block: {
     flex: 1,
+    backgroundColor: 'white',
   },
   title: {
     color: 'black',
@@ -383,8 +361,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   nextButton: {
-    borderRadius: 13,
-    width: '88%',
+    borderRadius: 30,
+    width: '100%',
     height: 50,
     backgroundColor: '#F02F04',
     alignItems: 'center',
