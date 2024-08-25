@@ -1,6 +1,6 @@
 import { Stack, useNavigation, useRouter } from 'expo-router';
 import { Animated, Text, View, StyleSheet, Pressable, Keyboard } from 'react-native';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import Checkbox from 'expo-checkbox';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Location from 'expo-location';
@@ -130,6 +130,7 @@ export default function Step1Screen() {
       setSearchResultDep(data.items);
     } catch (error) {
       console.log(error);
+      setSearchResultDep([]);
     }
   }
   async function getSearchResultArr(search: string) {
@@ -144,6 +145,7 @@ export default function Step1Screen() {
       setSearchResultArr(data.items);
     } catch (error) {
       console.log(error);
+      setSearchResultArr([]);
     }
   }
   function resetData() {
