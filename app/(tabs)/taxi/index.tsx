@@ -1,9 +1,10 @@
 import { Stack, useNavigation, useRouter } from 'expo-router';
-import { SafeAreaView, Animated, Dimensions, Text, View, StyleSheet, Pressable, Keyboard } from 'react-native';
-import { useState, useRef } from 'react';
-import * as Progress from 'react-native-progress';
+import { Animated, Dimensions, Text, View, StyleSheet, Pressable, Keyboard } from 'react-native';
+import { useState, useRef, useEffect } from 'react';
 import Checkbox from 'expo-checkbox';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as Location from 'expo-location';
+import { NaverMapView } from '@mj-studio/react-native-naver-map';
 
 //Icon
 import { Feather } from '@expo/vector-icons';
@@ -12,6 +13,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 import DropDownPicker from 'react-native-dropdown-picker';
+import axios from 'axios';
 
 interface IntputProps {
   label: string;
@@ -55,19 +57,6 @@ const CheckboxWithInput = ({ label, isChecked, setChecked, quantity, setQuantity
 };
 
 export default function Step1Screen() {
-  function resetData() {
-    setArrival('');
-    setDep('');
-    setCheckedCarryOn(false);
-    setCheckedSmall(false);
-    setCheckedMedium(false);
-    setCheckedLarge(false);
-    setValue(null);
-    setQuantityCarryOn('');
-    setQuantitySmall('');
-    setQuantityMedium('');
-    setQuantityLarge('');
-  }
   //router
   const router = useRouter();
   //progress bar 관련
@@ -107,6 +96,47 @@ export default function Step1Screen() {
   //focus event handler
   const focusAnimation1 = useRef(new Animated.Value(0)).current;
   const focusAnimation2 = useRef(new Animated.Value(0)).current;
+  async function getNowLocation() {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    if (location) {
+      // setDep(location.coords.longitude + ',' + location.coords.latitude);
+      getLocation(location.coords.longitude, location.coords.latitude);
+    }
+  }
+
+  useEffect(() => {
+    getNowLocation();
+  }, []);
+
+  async function getLocation(long: number, lat: number) {
+    // const url = `http://api.vworld.kr/req/address?service=address&request=getAddress&key=${process.env.EXPO_PUBLIC_GEO_API_KEY}&point=${dep}`;
+    // v2현재 404에러 발생, v1으로 진행
+    const url = `https://apis.vworld.kr/coord2jibun.do?x=${long}&y=${lat}&output=json&apiKey=${process.env.EXPO_PUBLIC_GEO_API_KEY}`;
+    try {
+      const { data } = await axios.get(url);
+      setDep(data.ADDR);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  function resetData() {
+    setArrival('');
+    setDep('');
+    setCheckedCarryOn(false);
+    setCheckedSmall(false);
+    setCheckedMedium(false);
+    setCheckedLarge(false);
+    setValue(null);
+    setQuantityCarryOn('');
+    setQuantitySmall('');
+    setQuantityMedium('');
+    setQuantityLarge('');
+  }
   const handleFocus = (animation: any) => {
     Animated.timing(animation, {
       toValue: 1,
@@ -140,6 +170,7 @@ export default function Step1Screen() {
   const data = [{ key: 'input1' }, { key: 'input2' }, { key: 'button' }];
   const renderItem = ({ item }: { item: { key: string } }) => (
     <View style={{ paddingLeft: 15, paddingRight: 15 }}>
+      <NaverMapView style={{ flex: 1 }} />
       {item.key === 'input1' ? (
         <View style={{ borderRadius: 10, marginBottom: 10, backgroundColor: 'white', padding: 20 }}>
           {['Departure', 'Arrival'].map((inputName) => (
@@ -172,7 +203,9 @@ export default function Step1Screen() {
                     },
                     { flex: 1, alignItems: 'flex-end' },
                   ]}
-                  onPress={() => handleChangeText(inputName, '')}
+                  onPress={() => {
+                    handleChangeText(inputName, '');
+                  }}
                 >
                   <MaterialIcons name="cancel" size={23} color="lightgray" />
                 </Pressable>
@@ -238,7 +271,7 @@ export default function Step1Screen() {
             disabled={!Arrival || !Dep} // 출발지 또는 도착지 값 비어 있으면 버튼 비활성화
             onPress={() => {
               router.push({
-                pathname: '/taxi/test' as never,
+                pathname: '/taxi/test',
                 params: {
                   Dep: Dep as string,
                   Arrival: Arrival as string,
