@@ -1,111 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Platform, Pressable, Text, View, TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, TextInput } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
-import { supabase } from '@/hooks/supabase';
-import { makeRedirectUri } from 'expo-auth-session';
-import * as WebBrowser from 'expo-web-browser';
-import * as Linking from 'expo-linking';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as QueryParams from 'expo-auth-session/build/QueryParams';
 
 const { width, height } = Dimensions.get('window');
 
-const redirectTo = makeRedirectUri();
-WebBrowser.maybeCompleteAuthSession();
 export default function Login() {
-  const performOAuth = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        queryParams: {
-          access_type: 'offline',
-          prompt: 'consent',
-        },
-        redirectTo,
-        skipBrowserRedirect: true,
-      },
-    });
-    if (error) throw error;
-    // console.log(data.url);
-    const res = await WebBrowser.openAuthSessionAsync(data?.url ?? '', redirectTo);
-
-    // console.log(res);
-    if (res.type === 'success') {
-      const { url } = res;
-      await createSessionFromUrl(url);
-    }
-    router.push('/(tabs)/home');
-  };
-  async function setItem(key: string, value: string) {
-    if (Platform.OS === 'web') {
-      return localStorage.setItem(key, value);
-    }
-    await AsyncStorage.setItem(key, value);
-  }
-  const createSessionFromUrl = async (url: string) => {
-    const { params, errorCode } = QueryParams.getQueryParams(url);
-    if (errorCode) throw new Error(errorCode);
-    console.log(params);
-    const { access_token, refresh_token } = params;
-
-    if (!access_token) {
-      throw new Error('No access_token in URL');
-    }
-
-    const { data, error } = await supabase.auth.setSession({
-      access_token,
-      refresh_token,
-    });
-    if (error) throw error;
-    await setItem('access_token', data.session?.access_token ?? '');
-    await setItem('refresh_token', data.session?.refresh_token ?? '');
-    return data.session;
-  };
-
-  const url = Linking.useURL();
-  if (url) createSessionFromUrl(url);
-
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-
-      {/* 로고 */}
       <View style={styles.imageContainer}>
-        <Image source={require('../assets/images/strawberry-cake.png')} style={styles.topImage} resizeMode="contain" />
+        <Image source={require('../assets/images/cake_logo.png')} style={styles.logo} resizeMode="contain" />
       </View>
-
-      {/* 환영 문구 */}
-      <Text style={styles.headerText}>
-        Welcome! Is this your first time in Korea?{'\n'}
-        We are your delivery and taxi partner.
-      </Text>
-      <Text style={styles.subHeaderText}>Please login first :)</Text>
-
-      {/* 구글 로그인 버튼 */}
+      <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" />
+      <TextInput style={styles.input} placeholder="Password" secureTextEntry />
       <TouchableOpacity
         style={styles.googleLoginButton}
         onPress={() => {
-          performOAuth();
+          /* Google login logic */
+          router.push('/home'); // 로그인 성공 후 홈 화면으로 이동 (임시 지정)
         }}
       >
         <Image source={require('../assets/images/google_logo.png')} style={styles.googleLogo} />
         <Text style={styles.googleLoginText}>Google Login</Text>
       </TouchableOpacity>
-      <Pressable
-        onPress={() => {
-          router.push('/(tabs)/home' as never);
-        }}
-        style={({ pressed }) => [
-          {
-            opacity: pressed ? 0.7 : 1,
-          },
-          styles.homeButton,
-        ]}
-      >
-        <Text style={{ color: 'black', fontSize: 20 }}>로그인 없이 홈으로</Text>
-      </Pressable>
-      {/* 하단 문구 */}
       <Text style={styles.footerText}>
         By signing up, you agree to the CAKE{'\n'}Terms of Service and Privacy Policy.
       </Text>
@@ -125,7 +43,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: height * 0.05,
   },
-  topImage: {
+  logo: {
     width: width * 0.4,
     height: width * 0.4,
   },
@@ -140,6 +58,14 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.04,
     fontSize: width * 0.04,
     textAlign: 'center',
+  },
+  input: {
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 15,
+    paddingHorizontal: 10,
+    borderRadius: 5,
   },
   googleLoginButton: {
     flexDirection: 'row',
@@ -166,11 +92,5 @@ const styles = StyleSheet.create({
     marginTop: height * 0.2,
     fontSize: width * 0.03,
     textAlign: 'center',
-  },
-  homeButton: {
-    height: 30,
-    width: '80%',
-    alignSelf: 'center',
-    alignItems: 'center',
   },
 });

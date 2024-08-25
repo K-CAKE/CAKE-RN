@@ -77,8 +77,8 @@ const Test: React.FC = () => {
 */
   useEffect(() => {
     if (params) {
-      setStart(params.Arrival as string); // 서현역
-      setGoal(params.Dep as string); // 중앙대학교 후문
+      setStart(params.Dep as string); // 서현역
+      setGoal(params.Arrival as string); // 중앙대학교 후문
     } else {
       console.log('Error: no params');
     }
@@ -158,11 +158,10 @@ const Test: React.FC = () => {
                   TRAFFIC: false,
                   TRANSIT: true,
                 }}
-                initialRegion={{
+                initialCamera={{
                   latitude: startCoord.latitude,
                   longitude: startCoord.longitude,
-                  latitudeDelta: 0.07,
-                  longitudeDelta: 0.07,
+                  zoom: 9,
                 }}
               >
                 <NaverMapPathOverlay coords={result} width={8} color={'red'} progress={0} passedColor={'green'} />
