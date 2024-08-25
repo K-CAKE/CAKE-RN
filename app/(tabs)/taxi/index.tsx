@@ -132,7 +132,6 @@ export default function Step1Screen() {
           'X-Naver-Client-Secret': process.env.EXPO_PUBLIC_NAVER_CLIENT_SECRET,
         },
       });
-      console.log(data.items);
       setSearchResultDep(data.items);
     } catch (error) {
       console.log(error);
@@ -147,7 +146,6 @@ export default function Step1Screen() {
           'X-Naver-Client-Secret': process.env.EXPO_PUBLIC_NAVER_CLIENT_SECRET,
         },
       });
-      console.log(data.items);
       setSearchResultArr(data.items);
     } catch (error) {
       console.log(error);
