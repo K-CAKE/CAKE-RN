@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function Payment() {
+export default function DeliveryMap() {
   <View style={styles.block}>
-    <Text>Payment</Text>
+    <Text>DeliveryMap</Text>
   </View>;
 }
 
