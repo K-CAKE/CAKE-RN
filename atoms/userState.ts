@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
 interface UserState {
+  id: number;
   avatar_url: string;
   email: string;
   email_verified: boolean;
@@ -14,9 +15,10 @@ interface UserState {
   username: string;
 }
 
-export const userid = atom<UserState>({
+export const userState = atom<UserState>({
   key: 'userid',
   default: {
+    id: 1,
     email: '',
     avatar_url: '',
     email_verified: false,
