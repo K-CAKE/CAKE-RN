@@ -28,7 +28,7 @@ export default function Page() {
   const headerHeight = useHeaderHeight();
   const [paddingTop, setPaddingTop] = useState(0);
   const { height } = Dimensions.get('window');
-  const buttonHeight = ((3 / 5) * height) / 4.5;
+  const buttonHeight = ((3 / 5) * height) / 4;
 
   const navigation = useNavigation();
 
@@ -110,6 +110,7 @@ export default function Page() {
       </View>
       <View style={styles.contents}>
         <ScrollView style={{ flex: 1 }}>
+          <View style={{ height: 10 }}></View>
           <View style={styles.button}>
             <Pressable
               onPress={() => {
@@ -127,7 +128,7 @@ export default function Page() {
               <View style={{ flexDirection: 'row', flex: 1 }}>
                 <View style={{ padding: 20, justifyContent: 'center', flex: 1 }}>
                   <Text style={{ alignSelf: 'flex-start', fontSize: 20, marginBottom: 5, fontWeight: 600 }}>Chat</Text>
-                  <Text style={{ alignSelf: 'center', fontSize: 14 }} numberOfLines={3} ellipsizeMode="tail">
+                  <Text style={{ alignSelf: 'flex-start', fontSize: 14 }} numberOfLines={3} ellipsizeMode="tail">
                     You can <Text style={styles.redText}>chat</Text> with a representative who will assist you.
                   </Text>
                 </View>
@@ -152,7 +153,7 @@ export default function Page() {
               <View style={{ flexDirection: 'row', flex: 1 }}>
                 <View style={{ padding: 20, justifyContent: 'center', flex: 1 }}>
                   <Text style={{ alignSelf: 'flex-start', fontSize: 20, marginBottom: 5, fontWeight: 600 }}>Taxi</Text>
-                  <Text style={{ alignSelf: 'center', fontSize: 14 }} numberOfLines={3} ellipsizeMode="tail">
+                  <Text style={{ alignSelf: 'flex-start', fontSize: 14 }} numberOfLines={3} ellipsizeMode="tail">
                     Your contact will handle booking a <Text style={styles.redText}>Kakao Taxi</Text> for you.
                   </Text>
                 </View>
@@ -177,17 +178,17 @@ export default function Page() {
               <View style={{ flexDirection: 'row', flex: 1 }}>
                 <View style={{ padding: 20, justifyContent: 'center', flex: 1 }}>
                   <Text
-                    style={{ alignSelf: 'flex-start', fontSize: 20, marginBottom: 5, fontWeight: 600 }}
-                    numberOfLines={2}
+                    style={{ alignSelf: 'flex-start', fontSize: 18, marginBottom: 5, fontWeight: 600 }}
+                    numberOfLines={1}
                     ellipsizeMode="tail"
                   >
                     Food Delivery
                   </Text>
-                  <Text style={{ alignSelf: 'center', fontSize: 14 }} numberOfLines={4} ellipsizeMode="tail">
+                  <Text style={{ alignSelf: 'flex-start', fontSize: 13 }} numberOfLines={3} ellipsizeMode="tail">
                     Get your food delivered through <Text style={styles.redText}>Korean delivery app</Text>!
                   </Text>
                 </View>
-                <CustomImage source={DeliveryImage} style={{ width: '55%', height: '100%' }} resizeMode="cover" />
+                <CustomImage source={DeliveryImage} style={{ width: '50%', height: '100%' }} resizeMode="cover" />
               </View>
             </Pressable>
           </View>
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: '89%',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: 10,
     flex: 1,
   },
   redText: {
