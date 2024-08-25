@@ -110,20 +110,6 @@ export default function App() {
           headerStyle: {
             backgroundColor: 'rgba(255, 255, 255, 0.5)', // 배경색을 흰색 50% 투명도로 설정
           },
-          headerRight: () => (
-            <Pressable
-              onPress={() => {
-                console.log('question button');
-              }}
-              style={({ pressed }) => [
-                {
-                  opacity: pressed ? 0.7 : 1,
-                },
-              ]}
-            >
-              <FontAwesome name="question-circle-o" size={26} color="#f02f04" />
-            </Pressable>
-          ),
           headerLeft: () => (
             <Pressable
               onPress={() => {
@@ -169,7 +155,7 @@ export default function App() {
         <TextInput
           value={chatting}
           onChangeText={(text) => setChatting(text)}
-          placeholder="아무거나 입력해주세요."
+          placeholder="chat input"
           className="w-3/4 px-3 border border-gray-300 mx-1"
         />
         <Button onPress={() => Updatetoken(chatting)} icon="send" mode="contained" textColor="white">
