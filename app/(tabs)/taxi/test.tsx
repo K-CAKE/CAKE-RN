@@ -181,7 +181,7 @@ const Test: React.FC = () => {
                 <Ionicons name="chevron-back" size={24} color="black" />
               </Pressable>
             </View>
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1, paddingBottom: 80 }}>
               <View>
                 <View style={styles.title}>
                   {hours === 0 ? (
@@ -212,29 +212,41 @@ const Test: React.FC = () => {
                     {distance}
                   </Text>
                   <Text style={{ fontSize: 15, color: 'gray' }}>km</Text>
+                  <Pressable
+                    onPress={() => {
+                      router.push('/taxi/step3' as never);
+                    }}
+                    style={({ pressed }) => [
+                      {
+                        opacity: pressed ? 0.7 : 1,
+                      },
+                      styles.nextButton,
+                    ]}
+                  >
+                    <Text style={{ color: 'white', fontSize: 19 }}>Call taxi</Text>
+                  </Pressable>
                 </View>
                 <View style={styles.detail}>
                   <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ fontSize: 18, alignSelf: 'center', marginRight: 10 }}>Estimated taxi fare :</Text>
+                    <Text style={{ fontSize: 18, alignSelf: 'center', marginRight: 10 }}>Estimated Taxi Fare :</Text>
                     <Text style={{ fontSize: 18, alignSelf: 'center' }}>{fare}</Text>
                     <Text style={{ fontSize: 13, alignSelf: 'center', color: 'gray', marginLeft: 10 }}>Won</Text>
                   </View>
                 </View>
               </View>
-              <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <Pressable
-                  onPress={() => {
-                    router.push('/taxi/step3' as never);
-                  }}
-                  style={({ pressed }) => [
-                    {
-                      opacity: pressed ? 0.7 : 1,
-                    },
-                    styles.nextButton,
-                  ]}
-                >
-                  <Text style={{ color: 'white', fontSize: 20 }}>Call taxi</Text>
-                </Pressable>
+              <View
+                style={{
+                  alignItems: 'flex-start',
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                }}
+              >
+                <Ionicons name="information-circle" size={24} color="#ffd4d1" />
+                <Text style={{ color: 'gray', marginLeft: 5 }}>
+                  Prices may vary depending on your choices or traffic conditions
+                </Text>
               </View>
             </ScrollView>
           </>
@@ -273,7 +285,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mapView: {
-    flex: 1,
+    flex: 3,
     height: '50%',
     width: '100%',
   },
@@ -293,12 +305,16 @@ const styles = StyleSheet.create({
     borderColor: 'lightgray',
   },
   nextButton: {
+    padding: 1,
     borderRadius: 30,
-    width: '86%',
-    height: 50,
+    width: 'auto',
+    height: 49,
     backgroundColor: '#F02F04',
     alignItems: 'center',
     justifyContent: 'center',
+    marginLeft: 40,
+    marginRight: 15,
+    flex: 1,
   },
 });
 
