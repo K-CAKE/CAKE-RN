@@ -5,36 +5,40 @@ import { useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link, Stack, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Badge } from 'react-native-paper';
+import { Badge, useTheme } from 'react-native-paper';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { FlatList } from 'react-native-gesture-handler';
+import { router } from 'expo-router';
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function App() {
   // const [useridState] = useRecoilState(userid);
   const [chat] = useState<string[]>(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
-
   const navigation = useNavigation();
+  const {
+    colors: { primary, secondary },
+  } = useTheme();
 
   const renderItem = () => {
     return (
       <View>
         {chat.map((item, index) => (
-          <>
-            <Link
-              href={{
-                pathname: '/(tabs)/chat/[id]',
-                params: { id: index },
-              }}
-              className="border border-gray-300 p-4 my-2 rounded-lg"
-            >
-              <Text>Chat with user {item}</Text>
-              <Badge visible={true} className="bg-red-500">
-                3
-              </Badge>
-            </Link>
-          </>
+          <Pressable
+            key={index}
+            onPress={() => router.push(`/(tabs)/chat/${item}`)}
+            style={({ pressed }) => [
+              {
+                backgroundColor: pressed ? secondary : 'transparent',
+              },
+              { borderBottomColor: 'gray', borderBottomWidth: 1, padding: 4, height: 60, justifyContent: 'center' },
+            ]}
+          >
+            <Text>Chat with user {item}</Text>
+            <Badge style={{ backgroundColor: primary, color: 'white', position: 'absolute', right: 10, top: 10 }}>
+              3
+            </Badge>
+          </Pressable>
         ))}
       </View>
     );
@@ -83,7 +87,7 @@ export default function App() {
 
       <View>
         <FlatList
-          style={{ paddingTop: 120 }}
+          style={{ paddingTop: 85 }}
           data={['']}
           renderItem={renderItem}
           // keyExtractor={(item) => item.key}
@@ -93,78 +97,3 @@ export default function App() {
     </LinearGradient>
   );
 }
-// import * as React from 'react';
-// import { View, StyleSheet } from 'react-native';
-// import { Badge, IconButton, List, Paragraph, Switch, useTheme } from 'react-native-paper';
-
-// const BadgeExample = () => {
-//   const [visible, setVisible] = React.useState<boolean>(true);
-//   const {
-//     colors: { background },
-//   } = useTheme();
-
-//   return (
-//     <View style={[styles.container, { backgroundColor: background }]}>
-//       <View style={[styles.row, styles.item]}>
-//         <Paragraph style={styles.label}>Show badges</Paragraph>
-//         <Switch value={visible} onValueChange={(visible) => setVisible(visible)} />
-//       </View>
-//       <List.Section title="Text">
-//         <View style={styles.row}>
-//           <View style={styles.item}>
-//             <IconButton icon="palette-swatch" size={36} style={styles.button} />
-//             <Badge visible={visible} style={styles.badge}>
-//               12
-//             </Badge>
-//           </View>
-//           <View style={styles.item}>
-//             <IconButton icon="inbox" size={36} style={styles.button} />
-//             <Badge visible={visible} style={[styles.badge, { backgroundColor: 'red' }]}>
-//               999+
-//             </Badge>
-//           </View>
-//         </View>
-//       </List.Section>
-//       <List.Section title="Dot">
-//         <View style={styles.row}>
-//           <View style={styles.item}>
-//             <IconButton icon="book-open" size={36} style={styles.button} />
-//             <Badge visible={visible} style={styles.badge} size={8} />
-//           </View>
-//           <View style={styles.item}>
-//             <IconButton icon="receipt" size={36} style={styles.button} />
-//             <Badge visible={visible} style={styles.badge} size={8} />
-//           </View>
-//         </View>
-//       </List.Section>
-//     </View>
-//   );
-// };
-
-// BadgeExample.title = 'Badge';
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-//   row: {
-//     flexDirection: 'row',
-//     flexWrap: 'wrap',
-//   },
-//   item: {
-//     margin: 16,
-//   },
-//   button: {
-//     opacity: 0.6,
-//   },
-//   badge: {
-//     position: 'absolute',
-//     top: 4,
-//     right: 0,
-//   },
-//   label: {
-//     flex: 1,
-//   },
-// });
-
-// export default BadgeExample;
