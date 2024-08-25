@@ -1,11 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useRef, useState } from 'react';
-import { Text, View, TouchableOpacity, Animated, Image } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Text, View, TouchableOpacity, Animated, Image, StyleSheet, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 
+const { width, height } = Dimensions.get('window');
+
 export default function Index() {
-  // 온보딩 이미지 애니메이션
+  // 로고 애니메이션
   const translateY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -25,56 +27,74 @@ export default function Index() {
     ).start();
   }, [translateY]);
 
-  // 문구 타이핑 애니메이션
-  const [displayedText, setDisplayedText] = useState<string>('');
-  const fullText = "I'M YOUR SUPPOTER";
-  const typingSpeed = 100;
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
-
-    const typeText = (index: number) => {
-      if (index < fullText.length) {
-        setDisplayedText(fullText.slice(0, index + 1));
-        timer = setTimeout(() => typeText(index + 1), typingSpeed);
-      }
-    };
-
-    typeText(0);
-
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    };
-  }, []);
-
-  // main code
   return (
-    <LinearGradient colors={['#ffafbd', '#ffc3a0']} className="items-center justify-center flex-1">
+    <LinearGradient colors={['#ffafbd', '#ffc3a0']} style={styles.gradient}>
       <StatusBar style="light" />
-      <View className="flex items-center justify-center w-full mt-28">
-        <Animated.View style={{ transform: [{ translateY }] }} className="w-[40%] aspect-square mb-10">
-          <Image
-            style={{ width: '100%', height: '100%' }}
-            source={require('../assets/images/strawberry-cake.png')}
-            resizeMode="contain"
-          />
+      <View style={styles.container}>
+        <Animated.View style={[styles.imageContainer, { transform: [{ translateY }] }]}>
+          <Image style={styles.image} source={require('../assets/images/cake_logo.png')} resizeMode="contain" />
         </Animated.View>
 
-        <View className="flex items-center w-full max-w-lg mb-6 mt-28">
-          <Text className="text-2xl font-bold tracking-wide text-black">{displayedText}</Text>
-        </View>
-        <View className="flex items-center w-full max-w-lg">
-          <TouchableOpacity
-            // 로그인 페이지로 이동
-            onPress={() => router.push('/Login')}
-            className="bg-rose-400 h-16 w-full max-w-xs justify-center rounded-full border-[3px]"
-          >
-            <Text className="text-2xl font-bold tracking-wide text-center text-black">START</Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.headerText}>Welcome! 1st time in Korea?{'\n'}Delivery & taxi partner.</Text>
+
+        <TouchableOpacity onPress={() => router.push('/Login')} style={styles.googleLoginButton}>
+          <Image source={require('../assets/images/google_logo.png')} style={styles.googleLogo} />
+          <Text style={styles.googleLoginText}>Google Login</Text>
+        </TouchableOpacity>
       </View>
     </LinearGradient>
   );
 }
+
+const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: width * 0.05,
+  },
+  imageContainer: {
+    width: width * 0.48,
+    aspectRatio: 1,
+    marginBottom: height * 0.05,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  headerText: {
+    marginBottom: height * 0.04,
+    fontSize: width * 0.05,
+    textAlign: 'center',
+    color: 'black',
+    lineHeight: height * 0.04,
+  },
+  googleLoginButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 60,
+    height: height * 0.08,
+    width: width * 0.8,
+    maxWidth: 360,
+    marginTop: height * 0.1,
+  },
+  googleLogo: {
+    width: width * 0.08,
+    height: width * 0.08,
+    marginRight: width * 0.03,
+  },
+  googleLoginText: {
+    fontSize: width * 0.045,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+});
