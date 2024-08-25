@@ -1,19 +1,18 @@
 import { Stack, useNavigation, useRouter } from 'expo-router';
-import { Animated, Dimensions, Text, View, StyleSheet, Pressable, Keyboard } from 'react-native';
+import { Animated, Text, View, StyleSheet, Pressable, Keyboard } from 'react-native';
 import { useState, useRef, useEffect } from 'react';
 import Checkbox from 'expo-checkbox';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Location from 'expo-location';
-import { NaverMapView } from '@mj-studio/react-native-naver-map';
 
 //Icon
 import { Feather } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
 import DropDownPicker from 'react-native-dropdown-picker';
 import axios from 'axios';
+import { InputLineForm } from '@/components/organisms/InputLineForm';
 
 interface IntputProps {
   label: string;
@@ -59,17 +58,14 @@ const CheckboxWithInput = ({ label, isChecked, setChecked, quantity, setQuantity
 export default function Step1Screen() {
   //router
   const router = useRouter();
-  //progress bar 관련
-  const screenWidth = Dimensions.get('window').width;
-  const barWidth = 0.85 * screenWidth;
   //navigation
   const navigation = useNavigation();
   //input
   const [Dep, setDep] = useState<string>('');
+  const [DepGeo, setDepGeo] = useState<string>(''); // 출발지 좌표
   const [Arrival, setArrival] = useState<string>('');
-  // const [HC, setHC] = useState(0);
-  // const [quickBooking, setQuick] = useState(false);
-  // luggage checkbox
+  const [ArrivalGeo, setArrivalGeo] = useState<string>(''); // 도착지 좌표
+  //checkbox
   const [isCheckedCarryOn, setCheckedCarryOn] = useState(false);
   const [quantityCarryOn, setQuantityCarryOn] = useState('');
 
@@ -92,6 +88,8 @@ export default function Step1Screen() {
     { label: '5', value: 5, key: 'item5' },
   ]);
   const CustomTickIcon = () => <Feather name="check-circle" size={24} color="#F89B87" />;
+  const [searchResultDep, setSearchResultDep] = useState([]);
+  const [searchResultArr, setSearchResultArr] = useState([]);
   //Handler
   //focus event handler
   const focusAnimation1 = useRef(new Animated.Value(0)).current;
@@ -104,13 +102,14 @@ export default function Step1Screen() {
 
     let location = await Location.getCurrentPositionAsync({});
     if (location) {
-      // setDep(location.coords.longitude + ',' + location.coords.latitude);
+      setDepGeo(`${location.coords.longitude},${location.coords.latitude}`);
       getLocation(location.coords.longitude, location.coords.latitude);
     }
   }
 
   useEffect(() => {
     getNowLocation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function getLocation(long: number, lat: number) {
@@ -120,6 +119,36 @@ export default function Step1Screen() {
     try {
       const { data } = await axios.get(url);
       setDep(data.ADDR);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function getSearchResultDep(search: string) {
+    const url = `https://openapi.naver.com/v1/search/local.json?query=${search}&display=10&sort=sim`;
+    try {
+      const { data } = await axios.get(url, {
+        headers: {
+          'X-Naver-Client-Id': process.env.EXPO_PUBLIC_NAVER_CLIENT_ID,
+          'X-Naver-Client-Secret': process.env.EXPO_PUBLIC_NAVER_CLIENT_SECRET,
+        },
+      });
+      console.log(data.items);
+      setSearchResultDep(data.items);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function getSearchResultArr(search: string) {
+    const url = `https://openapi.naver.com/v1/search/local.json?query=${search}&display=10&sort=sim`;
+    try {
+      const { data } = await axios.get(url, {
+        headers: {
+          'X-Naver-Client-Id': process.env.EXPO_PUBLIC_NAVER_CLIENT_ID,
+          'X-Naver-Client-Secret': process.env.EXPO_PUBLIC_NAVER_CLIENT_SECRET,
+        },
+      });
+      console.log(data.items);
+      setSearchResultArr(data.items);
     } catch (error) {
       console.log(error);
     }
@@ -137,135 +166,109 @@ export default function Step1Screen() {
     setQuantityMedium('');
     setQuantityLarge('');
   }
-  const handleFocus = (animation: any) => {
-    Animated.timing(animation, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-  };
-  const handleBlur = (animation: any) => {
-    Animated.timing(animation, {
-      toValue: 0,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-  };
-  const interpolateColor = (animation: any) =>
-    animation.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['lightgray', '#F02F04'], // 색상 변경
-    });
-
-  //change text handler
-  const handleChangeText = (inputName: string, val: string) => {
-    if ('Departure' === inputName) {
-      setDep(val);
-    } else if ('Arrival' === inputName) {
-      setArrival(val);
-    }
-  };
-
-  // render item
-  const data = [{ key: 'input1' }, { key: 'input2' }, { key: 'button' }];
-  const renderItem = ({ item }: { item: { key: string } }) => (
-    <View style={{ paddingLeft: 15, paddingRight: 15 }}>
-      <NaverMapView style={{ flex: 1 }} />
-      {item.key === 'input1' ? (
+  const renderItem = () => (
+    <>
+      <View style={{ paddingLeft: 15, paddingRight: 15 }}>
         <View style={{ borderRadius: 10, marginBottom: 10, backgroundColor: 'white', padding: 20 }}>
-          {['Departure', 'Arrival'].map((inputName) => (
-            <View key={inputName}>
-              <Text style={styles.title}>{inputName}</Text>
-              <Animated.View
-                style={[
-                  styles.inputContainer,
-                  inputName === 'Departure'
-                    ? { borderBottomColor: interpolateColor(focusAnimation1) }
-                    : { borderBottomColor: interpolateColor(focusAnimation2) },
-                ]}
-              >
-                <TextInput
-                  style={styles.input}
-                  value={inputName === 'Departure' ? Dep : Arrival}
-                  onFocus={() =>
-                    inputName === 'Departure' ? handleFocus(focusAnimation1) : handleFocus(focusAnimation2)
-                  }
-                  onBlur={() => (inputName === 'Departure' ? handleBlur(focusAnimation1) : handleBlur(focusAnimation2))}
-                  placeholder={inputName === 'Departure' ? 'Enter departure' : 'Enter arrival'}
-                  onChangeText={(val) => {
-                    handleChangeText(inputName, val);
-                  }}
-                />
-                <Pressable
-                  style={({ pressed }) => [
-                    {
-                      opacity: pressed ? 0.7 : 1,
-                    },
-                    { flex: 1, alignItems: 'flex-end' },
-                  ]}
-                  onPress={() => {
-                    handleChangeText(inputName, '');
-                  }}
-                >
-                  <MaterialIcons name="cancel" size={23} color="lightgray" />
-                </Pressable>
-              </Animated.View>
-            </View>
+          <InputLineForm
+            title="Departure"
+            value={Dep}
+            focusAnimation={focusAnimation1}
+            onChangeText={setDep}
+            onSetGeo={getNowLocation}
+            searchResult={getSearchResultDep}
+            placeholder="Enter departure"
+          />
+          {searchResultDep.map((item: any, index: number) => (
+            <Pressable
+              key={index}
+              onPress={() => {
+                setDep(item.title.replace('<b>', '').replace('</b>', ''));
+                setDepGeo(
+                  `${item.mapx.substr(0, 3)}.${item.mapx.substr(3)},${item.mapy.substr(0, 2)}.${item.mapy.substr(2)}`,
+                ); // 좌표값 저장
+                setSearchResultDep([]);
+              }}
+            >
+              <Text style={{ fontSize: 16, color: 'black', marginBottom: 5 }}>
+                {item.title.replace('<b>', '').replace('</b>', '')}
+              </Text>
+            </Pressable>
+          ))}
+          <InputLineForm
+            title="Arrival"
+            value={Arrival}
+            focusAnimation={focusAnimation2}
+            onChangeText={setArrival}
+            searchResult={getSearchResultArr}
+            placeholder="Enter Arrival"
+          />
+          {searchResultArr.map((item: any, index: number) => (
+            <Pressable
+              key={index}
+              onPress={() => {
+                setArrival(item.title.replace('<b>', '').replace('</b>', ''));
+                setArrivalGeo(
+                  `${item.mapx.substr(0, 3)}.${item.mapx.substr(3)},${item.mapy.substr(0, 2)}.${item.mapy.substr(2)}`,
+                ); // 좌표값 저장
+                setSearchResultArr([]);
+              }}
+            >
+              <Text style={{ fontSize: 16, color: 'black', marginBottom: 5 }}>
+                {item.title.replace('<b>', '').replace('</b>', '')}
+              </Text>
+            </Pressable>
           ))}
         </View>
-      ) : item.key === 'input2' ? (
-        <>
-          <View style={{ zIndex: 50, marginBottom: 10, borderRadius: 10, backgroundColor: 'white', padding: 20 }}>
-            <Text style={styles.title}>Headcount</Text>
-            <DropDownPicker
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              placeholder="Select number of people"
-              style={[styles.dropdown, open ? styles.dropdownOpen : styles.dropdownClosed]}
-              dropDownContainerStyle={[{ borderWidth: 2, borderColor: '#F02F04', backgroundColor: 'white' }]}
-              TickIconComponent={CustomTickIcon}
-              // @ts-ignore
-              arrowIconStyle={open ? styles.arrowOpen : styles.arrowClosed}
-              selectedItemContainerStyle={{ backgroundColor: '#FEECEB' }}
-            />
-          </View>
-          <View style={{ zIndex: 1, marginBottom: 20, borderRadius: 10, backgroundColor: 'white', padding: 20 }}>
-            <Text style={styles.title}>Luggage Size(based on the height)</Text>
-            <CheckboxWithInput
-              label="Carry-On(18~22 in)"
-              isChecked={isCheckedCarryOn}
-              setChecked={setCheckedCarryOn}
-              quantity={quantityCarryOn}
-              setQuantity={setQuantityCarryOn}
-            />
-            <CheckboxWithInput
-              label="Small(23~24 in)"
-              isChecked={isCheckedSmall}
-              setChecked={setCheckedSmall}
-              quantity={quantitySmall}
-              setQuantity={setQuantitySmall}
-            />
-            <CheckboxWithInput
-              label="Medium(25~27 in)"
-              isChecked={isCheckedMedium}
-              setChecked={setCheckedMedium}
-              quantity={quantityMedium}
-              setQuantity={setQuantityMedium}
-            />
-            <CheckboxWithInput
-              label="Large(28~32 in)"
-              isChecked={isCheckedLarge}
-              setChecked={setCheckedLarge}
-              quantity={quantityLarge}
-              setQuantity={setQuantityLarge}
-            />
-          </View>
-        </>
-      ) : item.key === 'button' ? (
+        <View style={{ zIndex: 50, marginBottom: 10, borderRadius: 10, backgroundColor: 'white', padding: 20 }}>
+          <Text style={styles.title}>Headcount</Text>
+          <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            placeholder="Select number of people"
+            style={[styles.dropdown, open ? styles.dropdownOpen : styles.dropdownClosed]}
+            dropDownContainerStyle={[{ borderWidth: 2, borderColor: '#F02F04', backgroundColor: 'white' }]}
+            TickIconComponent={CustomTickIcon}
+            // @ts-ignore
+            arrowIconStyle={open ? styles.arrowOpen : styles.arrowClosed}
+            selectedItemContainerStyle={{ backgroundColor: '#FEECEB' }}
+          />
+        </View>
+        <View style={{ zIndex: 1, marginBottom: 20, borderRadius: 10, backgroundColor: 'white', padding: 20 }}>
+          <Text style={styles.title}>Luggage Size(based on the height)</Text>
+          <CheckboxWithInput
+            label="Carry-On(18~22 in)"
+            isChecked={isCheckedCarryOn}
+            setChecked={setCheckedCarryOn}
+            quantity={quantityCarryOn}
+            setQuantity={setQuantityCarryOn}
+          />
+          <CheckboxWithInput
+            label="Small(23~24 in)"
+            isChecked={isCheckedSmall}
+            setChecked={setCheckedSmall}
+            quantity={quantitySmall}
+            setQuantity={setQuantitySmall}
+          />
+          <CheckboxWithInput
+            label="Medium(25~27 in)"
+            isChecked={isCheckedMedium}
+            setChecked={setCheckedMedium}
+            quantity={quantityMedium}
+            setQuantity={setQuantityMedium}
+          />
+          <CheckboxWithInput
+            label="Large(28~32 in)"
+            isChecked={isCheckedLarge}
+            setChecked={setCheckedLarge}
+            quantity={quantityLarge}
+            setQuantity={setQuantityLarge}
+          />
+        </View>
         <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
           <Pressable
             disabled={!Arrival || !Dep} // 출발지 또는 도착지 값 비어 있으면 버튼 비활성화
@@ -273,8 +276,8 @@ export default function Step1Screen() {
               router.push({
                 pathname: '/taxi/test',
                 params: {
-                  Dep: Dep as string,
-                  Arrival: Arrival as string,
+                  Dep: DepGeo as string,
+                  Arrival: ArrivalGeo as string,
                 },
               });
             }}
@@ -288,8 +291,8 @@ export default function Step1Screen() {
             <Text style={{ color: 'white', fontSize: 20 }}>Next</Text>
           </Pressable>
         </View>
-      ) : null}
-    </View>
+      </View>
+    </>
   );
   return (
     <LinearGradient colors={['#ffd4d1', '#efefef']} locations={[0.0, 0.5]} style={{ flex: 1 }}>
@@ -307,11 +310,6 @@ export default function Step1Screen() {
               onPress={() => {
                 console.log('question button');
               }}
-              style={({ pressed }) => [
-                {
-                  opacity: pressed ? 0.7 : 1,
-                },
-              ]}
             >
               <FontAwesome name="question-circle-o" size={26} color="#f02f04" />
             </Pressable>
@@ -337,9 +335,8 @@ export default function Step1Screen() {
       <View style={styles.block}>
         <FlatList
           style={{ paddingTop: 120 }}
-          data={data}
+          data={['']}
           renderItem={renderItem}
-          keyExtractor={(item) => item.key}
           ListFooterComponent={<View style={{ height: 300 }} />}
         />
       </View>
