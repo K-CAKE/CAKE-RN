@@ -95,7 +95,7 @@ export default function Page() {
           <View style={styles.button}>
             <Pressable
               onPress={() => {
-                router.push('/mypage');
+                router.push('/(history)');
               }}
               style={({ pressed }) => [
                 {
