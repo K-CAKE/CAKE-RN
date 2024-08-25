@@ -1,5 +1,5 @@
 import { Stack, useRouter } from 'expo-router';
-import { StyleSheet, Text, Pressable, View, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Text, Pressable, View, Dimensions, ScrollView, Animated, Easing } from 'react-native';
 
 import { useHeaderHeight } from '@react-navigation/elements';
 import Svg, { Path } from 'react-native-svg';
@@ -52,7 +52,6 @@ export default function Page() {
                 {
                   opacity: pressed ? 0.7 : 1,
                 },
-                styles.paypal_button,
               ]}
             >
               <FontAwesome name="user-circle" size={35} color="#FFD4D1" />
@@ -63,7 +62,7 @@ export default function Page() {
       />
       <View style={styles.paypal}>
         <View style={styles.top}>
-          <Text style={[styles.text, { fontSize: 15 }]}>My cake balance</Text>
+          <Text style={[styles.text, { fontSize: 15 }]}>My berry balance</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={styles.balance}>$ 0.00</Text>
           </View>
@@ -93,7 +92,6 @@ export default function Page() {
                 {
                   opacity: pressed ? 0.9 : 0.7,
                 },
-                styles.paypal_button,
               ]}
             >
               <Ionicons name="list-circle" size={55} color="#FEECEB" />
@@ -201,7 +199,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  paypal_button: {},
   add: {},
   contents: {
     flex: 2,

@@ -55,6 +55,19 @@ const CheckboxWithInput = ({ label, isChecked, setChecked, quantity, setQuantity
 };
 
 export default function Step1Screen() {
+  function resetData() {
+    setArrival('');
+    setDep('');
+    setCheckedCarryOn(false);
+    setCheckedSmall(false);
+    setCheckedMedium(false);
+    setCheckedLarge(false);
+    setValue(null);
+    setQuantityCarryOn('');
+    setQuantitySmall('');
+    setQuantityMedium('');
+    setQuantityLarge('');
+  }
   //router
   const router = useRouter();
   //progress bar 관련
@@ -273,6 +286,7 @@ export default function Step1Screen() {
           headerLeft: () => (
             <Pressable
               onPress={() => {
+                resetData();
                 navigation.navigate('home' as never);
               }}
               style={({ pressed }) => [
