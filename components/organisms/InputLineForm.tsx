@@ -50,9 +50,15 @@ export const InputLineForm = (props: InputLineFormProps) => {
         {props.onSetGeo && (
           <Entypo name="location" size={23} color="lightgray" onPress={props.onSetGeo} style={{ marginRight: 5 }} />
         )}
-        {props.searchResult && (
-          <MaterialIcons name="cancel" size={23} color="lightgray" onPress={() => props.searchResult('')} />
-        )}
+        <MaterialIcons
+          name="cancel"
+          size={23}
+          color="lightgray"
+          onPress={() => {
+            props.onChangeText('');
+            props.searchResult('');
+          }}
+        />
       </Animated.View>
     </View>
   );

@@ -14,7 +14,7 @@ export default function MyPage() {
       price: '15,000₩',
       serialNumber: 'SN123456',
       agentId: 'donghee',
-      requestState: 'Completed'
+      requestState: 'Completed',
     },
     {
       id: '2',
@@ -22,7 +22,7 @@ export default function MyPage() {
       price: '18,000₩',
       serialNumber: 'SN654321',
       agentId: 'minji',
-      requestState: 'In Progress'
+      requestState: 'In Progress',
     },
   ];
 
@@ -34,7 +34,7 @@ export default function MyPage() {
       price: '5,000₩',
       serialNumber: 'SN987654',
       agentId: 'hyunwoo',
-      requestState: 'Completed'
+      requestState: 'Completed',
     },
     {
       id: '2',
@@ -43,7 +43,7 @@ export default function MyPage() {
       price: '12,000₩',
       serialNumber: 'SN456789',
       agentId: 'eunji',
-      requestState: 'Pending'
+      requestState: 'Pending',
     },
   ];
 
@@ -75,10 +75,7 @@ export default function MyPage() {
       <Text style={styles.historyText}>Serial Number: {item.serialNumber}</Text>
       <Text style={styles.historyText}>Agent ID: {item.agentId}</Text>
       <TouchableOpacity style={styles.statusButtonWrapper}>
-        <LinearGradient
-          colors={getStatusButtonGradient(item.requestState)}
-          style={styles.statusButton}
-        >
+        <LinearGradient colors={getStatusButtonGradient(item.requestState)} style={styles.statusButton}>
           <Text style={styles.statusText}>{item.requestState}</Text>
         </LinearGradient>
       </TouchableOpacity>
@@ -96,10 +93,7 @@ export default function MyPage() {
       <Text style={styles.historyText}>Serial Number: {item.serialNumber}</Text>
       <Text style={styles.historyText}>Agent ID: {item.agentId}</Text>
       <TouchableOpacity style={styles.statusButtonWrapper}>
-        <LinearGradient
-          colors={getStatusButtonGradient(item.requestState)}
-          style={styles.statusButton}
-        >
+        <LinearGradient colors={getStatusButtonGradient(item.requestState)} style={styles.statusButton}>
           <Text style={styles.statusText}>{item.requestState}</Text>
         </LinearGradient>
       </TouchableOpacity>
@@ -125,6 +119,8 @@ export default function MyPage() {
       />
       <View style={styles.block}>
         <FlatList
+          data={['']}
+          renderItem={() => null}
           ListHeaderComponent={
             <>
               <Text style={styles.title}>Point History</Text>
@@ -138,20 +134,12 @@ export default function MyPage() {
 
               <Text style={styles.title}>Taxi Service History</Text>
               <View style={styles.section}>
-                <FlatList
-                  data={taxiHistory}
-                  renderItem={renderHistoryItem}
-                  keyExtractor={(item) => item.id}
-                />
+                <FlatList data={taxiHistory} renderItem={renderHistoryItem} keyExtractor={(item) => item.id} />
               </View>
 
               <Text style={styles.title}>Delivery Service History</Text>
               <View style={styles.section}>
-                <FlatList
-                  data={deliveryHistory}
-                  renderItem={renderDeliveryItem}
-                  keyExtractor={(item) => item.id}
-                />
+                <FlatList data={deliveryHistory} renderItem={renderDeliveryItem} keyExtractor={(item) => item.id} />
               </View>
             </>
           }

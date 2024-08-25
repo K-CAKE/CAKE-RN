@@ -1,7 +1,5 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { BlurView } from 'expo-blur';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -68,11 +66,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="mypage"
+        name="chat"
         options={{
-          title: 'Mypage',
+          title: 'Chat',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'settings' : 'settings-outline'} color={color} />
+            <TabBarIcon name={focused ? 'chatbox' : 'chatbox-ellipses'} color={color} />
           ),
         }}
       />
