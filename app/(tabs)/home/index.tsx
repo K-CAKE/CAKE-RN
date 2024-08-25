@@ -1,5 +1,5 @@
 import { Stack, useRouter } from 'expo-router';
-import { StyleSheet, Text, Pressable, View, Dimensions, ScrollView, Animated, Easing } from 'react-native';
+import { Image, StyleSheet, Text, Pressable, View, Dimensions, ScrollView, Animated, Easing } from 'react-native';
 
 import { useHeaderHeight } from '@react-navigation/elements';
 import Svg, { Path } from 'react-native-svg';
@@ -12,6 +12,12 @@ import { FontAwesome } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { useNavigation } from 'expo-router';
+
+//I,age
+import CustomImage from '../../../components/CustomImage'; // CustomImage 컴포넌트 import
+import ChatImage from './Chat-pana.png';
+import TaxiImage from './City driver-pana.png';
+import DeliveryImage from './Take Away-rafiki.png';
 
 type RootStackParamList = {
   Payment: undefined;
@@ -107,20 +113,25 @@ export default function Page() {
           <View style={styles.button}>
             <Pressable
               onPress={() => {
-                handlePress('way');
+                handlePress('chat');
               }}
               style={({ pressed }) => [
                 {
                   backgroundColor: pressed ? '#d9d9d9' : '#ffffff',
-                  padding: pressed ? 25 : 20,
+                  padding: pressed ? 5 : 0,
                 },
                 styles.content,
                 { height: buttonHeight },
               ]}
             >
-              <View style={{ flexDirection: 'row' }}>
-                <Text> 아이콘 자리 </Text>
-                <Text> Map 서비스 설명 자리 </Text>
+              <View style={{ flexDirection: 'row', flex: 1 }}>
+                <View style={{ padding: 20, justifyContent: 'center', flex: 1 }}>
+                  <Text style={{ alignSelf: 'flex-start', fontSize: 20, marginBottom: 5, fontWeight: 600 }}>Chat</Text>
+                  <Text style={{ alignSelf: 'center', fontSize: 14 }} numberOfLines={3} ellipsizeMode="tail">
+                    You can <Text style={styles.redText}>chat</Text> with a representative who will assist you.
+                  </Text>
+                </View>
+                <CustomImage source={ChatImage} style={{ width: '55%', height: '100%' }} resizeMode="cover" />
               </View>
             </Pressable>
           </View>
@@ -132,13 +143,21 @@ export default function Page() {
               style={({ pressed }) => [
                 {
                   backgroundColor: pressed ? '#d9d9d9' : '#ffffff',
-                  padding: pressed ? 25 : 20,
+                  padding: pressed ? 5 : 0,
                 },
                 styles.content,
                 { height: buttonHeight },
               ]}
             >
-              <Text>Taxi</Text>
+              <View style={{ flexDirection: 'row', flex: 1 }}>
+                <View style={{ padding: 20, justifyContent: 'center', flex: 1 }}>
+                  <Text style={{ alignSelf: 'flex-start', fontSize: 20, marginBottom: 5, fontWeight: 600 }}>Taxi</Text>
+                  <Text style={{ alignSelf: 'center', fontSize: 14 }} numberOfLines={3} ellipsizeMode="tail">
+                    Your contact will handle booking a <Text style={styles.redText}>Kakao Taxi</Text> for you.
+                  </Text>
+                </View>
+                <CustomImage source={TaxiImage} style={{ width: '55%', height: '100%' }} resizeMode="cover" />
+              </View>
             </Pressable>
           </View>
           <View style={styles.button}>
@@ -148,14 +167,28 @@ export default function Page() {
               }}
               style={({ pressed }) => [
                 {
-                  backgroundColor: pressed ? '#cdcdcd' : '#ffffff',
-                  padding: pressed ? 25 : 20,
+                  backgroundColor: pressed ? '#d9d9d9' : '#ffffff',
+                  padding: pressed ? 5 : 0,
                 },
                 styles.content,
                 { height: buttonHeight },
               ]}
             >
-              <Text>Food delivery</Text>
+              <View style={{ flexDirection: 'row', flex: 1 }}>
+                <View style={{ padding: 20, justifyContent: 'center', flex: 1 }}>
+                  <Text
+                    style={{ alignSelf: 'flex-start', fontSize: 20, marginBottom: 5, fontWeight: 600 }}
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                  >
+                    Food Delivery
+                  </Text>
+                  <Text style={{ alignSelf: 'center', fontSize: 14 }} numberOfLines={4} ellipsizeMode="tail">
+                    Get your food delivered through <Text style={styles.redText}>Korean delivery app</Text>!
+                  </Text>
+                </View>
+                <CustomImage source={DeliveryImage} style={{ width: '55%', height: '100%' }} resizeMode="cover" />
+              </View>
             </Pressable>
           </View>
         </ScrollView>
@@ -221,5 +254,9 @@ const styles = StyleSheet.create({
     width: '89%',
     justifyContent: 'center',
     marginTop: 20,
+    flex: 1,
+  },
+  redText: {
+    color: '#f02f04',
   },
 });
