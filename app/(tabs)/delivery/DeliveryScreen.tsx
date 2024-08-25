@@ -1,21 +1,34 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  Pressable,
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+import { Stack, useRouter } from 'expo-router';
 import axios from 'axios';
-import { FontAwesome } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 
+import { Ionicons } from '@expo/vector-icons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { FontAwesome, EvilIcons } from '@expo/vector-icons';
+
 type RootStackParamList = {
-  DeliveryScreen: undefined; // any도 됨
+  DeliveryScreen: undefined;
   Orders: undefined;
   DeliveryHistory: undefined;
   Confirm: undefined;
-  DeliveryStatus : undefined;
-}; // 화면에 대한 매개 변수의 타입을 미리 정의 해줌
-// 현재 화면 기준 어떤 화면으로 가는 지 명시 컴파일 하면 없어짐
+  DeliveryStatus: undefined;
+  tutorial: undefined;
+};
 
 type DeliveryScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -24,9 +37,7 @@ export default function DeliveryScreen() {
   const [ocrText, setOcrText] = useState<string | null>(null);
   const [translatedText, setTranslatedText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-
-  const navigation = useNavigation<DeliveryScreenNavigationProp>();//리팩토링 필요
+  const navigation = useNavigation<DeliveryScreenNavigationProp>();
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -66,13 +77,13 @@ export default function DeliveryScreen() {
     const requestBody = {
       images: [
         {
-          format: "jpg",
-          name: "demo",
+          format: 'jpg',
+          name: 'demo',
           data: base64Image,
         },
       ],
-      requestId: "demo-request",
-      version: "V2",
+      requestId: 'demo-request',
+      version: 'V2',
       timestamp: Date.now(),
     };
 
@@ -119,7 +130,7 @@ export default function DeliveryScreen() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${process.env.EXPO_PUBLIC_GPT_API_KEY}`,
           },
-        }
+        },
       );
       return response.data.choices[0].message.content;
     } catch (error) {
@@ -127,39 +138,86 @@ export default function DeliveryScreen() {
       return 'Translation failed';
     }
   };
-
+  const router = useRouter();
   return (
-    <LinearGradient colors={['#F02F04', '#F5ECEA']} style={styles.gradientContainer}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Delivery Screen</Text>
-        <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
-          {image ? (
-            <Image source={{ uri: image }} style={styles.image} />
-          ) : (
-            <View style={styles.placeholder}>
-              <FontAwesome name="image" size={100} color="#FFD4D1" />
+    <LinearGradient colors={['#f6f6f6', '#f6f6f6']} style={styles.gradientContainer}>
+      <Stack.Screen
+        options={{
+          headerTitle: 'Order Delivery',
+          headerTitleAlign: 'center',
+          headerBackVisible: false,
+          headerTransparent: true,
+          headerStyle: {
+            backgroundColor: 'rgba(255, 255, 255, 0.5)', // 배경색을 흰색 50% 투명도로 설정
+          },
+          headerRight: () => (
+            <View>
+              <TouchableOpacity onPress={() => navigation.navigate('tutorial')}>
+                <FontAwesome name="question-circle-o" size={26} color="#f02f04" />
+              </TouchableOpacity>
             </View>
+          ),
+          headerLeft: () => (
+            <Pressable
+              onPress={() => {
+                router.back();
+              }}
+              style={({ pressed }) => [
+                {
+                  opacity: pressed ? 0.7 : 1,
+                },
+              ]}
+            >
+              <Ionicons name="chevron-back" size={24} color="black" />
+            </Pressable>
+          ),
+        }}
+      />
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={{ flex: 4, marginBottom: 40 }}>
+          <View style={{ marginBottom: 20 }}>
+            <Text style={{ fontSize: 24, fontWeight: 600 }}>Your order : </Text>
+          </View>
+          <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
+            {image ? (
+              <Image source={{ uri: image }} style={styles.image} />
+            ) : (
+              <View style={styles.placeholder}>
+                <MaterialCommunityIcons name="file-image-plus" size={80} color="gray" />
+              </View>
+            )}
+          </TouchableOpacity>
+        </View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          {image ? (
+            <>
+              {loading && <ActivityIndicator size="large" color="#FFD4D1" />}
+              {ocrText && (
+                <View style={styles.resultContainer}>
+                  <Text style={styles.resultTitle}>OCR Text:</Text>
+                  <Text>{ocrText}</Text>
+                </View>
+              )}
+              {translatedText && (
+                <View style={styles.resultContainer}>
+                  <Text style={styles.resultTitle}>Translated Text:</Text>
+                  <Text>{translatedText}</Text>
+                </View>
+              )}
+            </>
+          ) : (
+            <>
+              <Text style={{ fontSize: 17, fontWeight: 300, marginBottom: 3 }}>Please upload a screenshot</Text>
+              <Text style={{ fontSize: 17, fontWeight: 300, marginBottom: 3 }}>showing the selected dishes and</Text>
+              <Text style={{ fontSize: 17, fontWeight: 300, marginBottom: 3 }}>
+                customization options from the delivery app.
+              </Text>
+            </>
           )}
-        </TouchableOpacity>
-        {loading && <ActivityIndicator size="large" color="#FFD4D1" />}
-        {ocrText && (
-          <View style={styles.resultContainer}>
-            <Text style={styles.resultTitle}>OCR Text:</Text>
-            <Text>{ocrText}</Text>
-          </View>
-        )}
-        {translatedText && (
-          <View style={styles.resultContainer}>
-            <Text style={styles.resultTitle}>Translated Text:</Text>
-            <Text>{translatedText}</Text>
-          </View>
-        )}
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Confirm')
-
-        }>
-          <Text style={styles.buttonText}>Confirm the order</Text>
-        </TouchableOpacity>
-        <View style={{ height: 50 }} />
+          <TouchableOpacity style={styles.button} disabled={!image} onPress={() => navigation.navigate('Confirm')}>
+            <Text style={styles.buttonText}>Confirm the order</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </LinearGradient>
   );
@@ -169,26 +227,39 @@ const styles = StyleSheet.create({
   gradientContainer: {
     flex: 1,
   },
+  headerContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 10,
+  },
+  questionIcon: {
+    paddingBottom: 5,
+    paddingTop: 5,
+    marginRight: 20,
+  },
   container: {
+    marginBottom: 100,
+    paddingTop: 120,
     flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 20,
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
   imageContainer: {
-    width: 200,
-    height: 200,
-    borderColor: '#ccc',
-    borderWidth: 1,
+    borderRadius: 13,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+    backgroundColor: '#ffffff',
+    // iOS 전용 그림자 속성
+    shadowColor: '#000', // 그림자 색상
+    shadowOffset: { width: 0, height: 10 }, // 그림자 오프셋
+    shadowOpacity: 0.1, // 그림자 불투명도
+    shadowRadius: 5, // 그림자 블러 반경
+    // Android 전용 그림자 속성
+    elevation: 5, // 그림자의 깊이
   },
   image: {
+    borderRadius: 13,
     width: '100%',
     height: '100%',
   },
@@ -196,6 +267,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
+    backgroundColor: '#ffffff',
   },
   resultContainer: {
     marginVertical: 20,
@@ -207,14 +279,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    marginTop: 30,
+    marginTop: 20,
     backgroundColor: '#F02F04',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 13,
+    width: '100%',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonText: {
     color: '#FFF',
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
   },
 });
