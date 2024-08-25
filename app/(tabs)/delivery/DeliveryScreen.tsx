@@ -19,7 +19,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { Ionicons } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { FontAwesome, EvilIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 type RootStackParamList = {
   DeliveryScreen: undefined;
@@ -28,6 +28,7 @@ type RootStackParamList = {
   Confirm: undefined;
   DeliveryStatus: undefined;
   tutorial: undefined;
+  Address: undefined;
 };
 
 type DeliveryScreenNavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -37,6 +38,7 @@ export default function DeliveryScreen() {
   const [ocrText, setOcrText] = useState<string | null>(null);
   const [translatedText, setTranslatedText] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
   const navigation = useNavigation<DeliveryScreenNavigationProp>();
 
   const pickImage = async () => {
@@ -138,12 +140,14 @@ export default function DeliveryScreen() {
       return 'Translation failed';
     }
   };
+
   const router = useRouter();
+
   return (
     <LinearGradient colors={['#f6f6f6', '#f6f6f6']} style={styles.gradientContainer}>
       <Stack.Screen
         options={{
-          headerTitle: 'Order Delivery',
+          headerTitle: 'Food Delivery',
           headerTitleAlign: 'center',
           headerBackVisible: false,
           headerTransparent: true,
@@ -176,7 +180,7 @@ export default function DeliveryScreen() {
       <ScrollView contentContainerStyle={styles.container}>
         <View style={{ flex: 4, marginBottom: 40 }}>
           <View style={{ marginBottom: 20 }}>
-            <Text style={{ fontSize: 24, fontWeight: 600 }}>Your order : </Text>
+            <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Your order</Text>
           </View>
           <TouchableOpacity onPress={pickImage} style={styles.imageContainer}>
             {image ? (
@@ -207,15 +211,16 @@ export default function DeliveryScreen() {
             </>
           ) : (
             <>
-              <Text style={{ fontSize: 17, fontWeight: 300, marginBottom: 3 }}>Please upload a screenshot</Text>
-              <Text style={{ fontSize: 17, fontWeight: 300, marginBottom: 3 }}>showing the selected dishes and</Text>
-              <Text style={{ fontSize: 17, fontWeight: 300, marginBottom: 3 }}>
+              <Text style={{ fontSize: 17, fontWeight: '300', marginBottom: 3 }}>Please upload a screenshot</Text>
+              <Text style={{ fontSize: 17, fontWeight: '300', marginBottom: 3 }}>showing the selected dishes and</Text>
+              <Text style={{ fontSize: 17, fontWeight: '300', marginBottom: 3 }}>
                 customization options from the delivery app.
               </Text>
             </>
           )}
-          <TouchableOpacity style={styles.button} disabled={!image} onPress={() => navigation.navigate('Confirm')}>
-            <Text style={styles.buttonText}>Confirm the order</Text>
+
+          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Address')}>
+            <Text style={styles.buttonText}> Register your address.</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -285,12 +290,14 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     width: '100%',
     height: 50,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonText: {
     color: '#FFF',
-    fontSize: 18,
+    fontSize: 20,
     textAlign: 'center',
+    marginLeft: 10,
   },
 });

@@ -13,6 +13,10 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { useNavigation } from 'expo-router';
 
+type RootStackParamList = {
+  Payment: undefined;
+};
+
 export default function Page() {
   const router = useRouter();
   const headerHeight = useHeaderHeight();
@@ -25,7 +29,6 @@ export default function Page() {
   const handlePress = (screen: string) => {
     navigation.navigate(screen as never);
   };
-
   useEffect(() => {
     setPaddingTop(headerHeight);
   }, [headerHeight]);

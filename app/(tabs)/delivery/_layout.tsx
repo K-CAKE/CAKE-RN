@@ -9,6 +9,9 @@ export default function DeliveryLayout() {
       <Stack.Screen name="Confirm" options={{ title: 'Delivery Confirm' }} />
       <Stack.Screen name="DeliveryStatus" options={{ title: 'Delivery Status' }} />
       <Stack.Screen name="tutorial" options={{ title: 'Delivery Tutorial' }} />
+      <Stack.Screen name="Address" options={{ title: 'Address' }} />
+      <Stack.Screen name="DeliveryMap" options={{ title: 'DeliveryMap' }} />
+
     </Stack>
   );
 }
