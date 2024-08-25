@@ -46,7 +46,7 @@ export default function Address() {
       }
 
       Alert.alert('성공', '데이터가 성공적으로 삽입되었습니다.');
-      navigation.navigate('Confirm' as never);  // Confirm으로 네비게이트
+      navigation.navigate('DeliveryHistory' as never);  // Confirm으로 네비게이트
     } catch (error) {
       console.error('데이터 삽입 오류:', (error as Error).message);
       Alert.alert('오류', '데이터 삽입에 실패했습니다.');

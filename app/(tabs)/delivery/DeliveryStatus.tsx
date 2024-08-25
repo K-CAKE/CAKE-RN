@@ -4,31 +4,39 @@ import { Button } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
 import { createClient } from '@supabase/supabase-js';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function DeliveryStatusScreen() {
+  const { food_request_id } = useLocalSearchParams();
+  const router = useRouter();
   const [requestState, setRequestState] = useState(0);
+  const [orderData, setOrderData] = useState(null);
 
   useEffect(() => {
+    console.log('Received food_request_id:', food_request_id); // food_request_id 확인
+
     const fetchRequestState = async () => {
       const { data, error } = await supabase
         .from('food_request_history')
-        .select('request_state')
-        .eq('foreigner_id', 2) // 예시로 foreigner_id가 2인 경우를 사용
+        .select('*')
+        .eq('food_request_id', food_request_id)
         .single();
 
       if (error) {
         console.error('Error fetching request state:', error);
       } else {
+        console.log('Fetched order data:', data); // 가져온 데이터 확인
         setRequestState(data?.request_state || 0);
+        setOrderData(data);
       }
     };
 
     fetchRequestState();
-  }, []);
+  }, [food_request_id]);
 
   return (
     <LinearGradient colors={['#ffffff', '#f5f5f5']} style={styles.gradientContainer}>
@@ -37,7 +45,7 @@ export default function DeliveryStatusScreen() {
           <Button
             icon="arrow-left"
             mode="text"
-            onPress={() => console.log('Go Back')}
+            onPress={() => router.back()}
             style={styles.backButton}
           >
             Go back
@@ -45,7 +53,6 @@ export default function DeliveryStatusScreen() {
           <Text style={styles.headerText}>Delivery Status</Text>
         </View>
 
-        {/* Order Taken  : {request_state : 0} */}
         {requestState >= 0 && (
           <View style={styles.statusContainer}>
             <View style={styles.iconContainer}>
@@ -61,7 +68,6 @@ export default function DeliveryStatusScreen() {
           </View>
         )}
 
-        {/* Order Is Being Prepared  : {request_state : 1 } */}
         {requestState >= 1 && (
           <View style={styles.statusContainer}>
             <View style={styles.iconContainer}>
@@ -77,7 +83,6 @@ export default function DeliveryStatusScreen() {
           </View>
         )}
 
-        {/* Order Is Being Delivered : {request_state : 2} */}
         {requestState >= 2 && (
           <View style={styles.statusContainer}>
             <View style={styles.iconContainer}>
@@ -94,7 +99,6 @@ export default function DeliveryStatusScreen() {
           </View>
         )}
 
-        {/* Order Received : {request_state : 3 or 4} */}
         {requestState >= 3 && (
           <View style={styles.statusContainer}>
             <View style={styles.iconContainer}>

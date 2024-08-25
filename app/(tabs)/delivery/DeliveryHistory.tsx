@@ -19,7 +19,6 @@ const MyComponent = () => {
   const [iconToggle, setToggle] = useState(true);
 
   useEffect(() => {
-    // foreigner_id가 2인 food_request_history 레코드 수 가져오기
     const fetchData = async () => {
       const { data, error } = await supabase
         .from('food_request_history')
@@ -31,7 +30,7 @@ const MyComponent = () => {
       } else {
         setOrders(data || []);
       }
-      setLoading(false); // 로딩 상태 업데이트
+      setLoading(false);
     };
 
     fetchData();
@@ -54,7 +53,7 @@ const MyComponent = () => {
           headerBackVisible: false,
           headerTransparent: true,
           headerStyle: {
-            backgroundColor: 'rgba(255, 255, 255, 0.5)', // 배경색을 흰색 50% 투명도로 설정
+            backgroundColor: 'rgba(255, 255, 255, 0.5)',
           },
           headerLeft: () => (
             <Pressable
@@ -99,7 +98,12 @@ const MyComponent = () => {
           orders.map((order, index) => (
             <View key={index} style={styles.cardContainer}>
               <Text style={styles.dateText}>{new Date(order.processing_date).toLocaleDateString()}</Text>
-              <Card style={styles.card}>
+              <Card
+                style={styles.card}
+                onPress={() => {
+                  router.push(`/delivery/DeliveryStatus?food_request_id=${order.food_request_id}`);
+                }}
+              >
                 <LinearGradient
                   locations={[1, 0.5]}
                   colors={['#feeceb', '#ffff']}
@@ -108,8 +112,8 @@ const MyComponent = () => {
                   style={styles.gradient}
                 >
                   <Card.Title
-                    title={order.food_name}  // 카드 제목을 food_name으로 설정
-                    subtitle={order.request_position}  // 카드 서브타이틀을 request_position으로 설정
+                    title={order.food_name}
+                    subtitle={order.request_position}
                     left={(props) => (
                       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                         <Avatar.Icon
@@ -149,12 +153,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   card: {
-    shadowColor: 'transparent', // 그림자의 색상을 투명하게 설정
-    shadowOffset: { width: 0, height: 0 }, // 그림자의 오프셋을 0으로 설정
-    shadowOpacity: 0, // 그림자의 투명도를 0으로 설정
-    shadowRadius: 0, // 그림자의 블러 반경을 0으로 설정
-    // Android에서 그림자를 제거합니다.
-    elevation: 0, // 그림자의 깊이를 0으로 설정
+    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
     backgroundColor: '#FFD4D1',
   },
 });
