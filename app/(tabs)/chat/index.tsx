@@ -1,5 +1,5 @@
 import { supabase } from '@/hooks/supabase';
-import { View, Pressable, Text } from 'react-native';
+import { View, Pressable, Text, StyleSheet, SafeAreaView } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -7,7 +7,7 @@ import { Stack, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Badge, useTheme } from 'react-native-paper';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, TextInput } from 'react-native-gesture-handler';
 import { router } from 'expo-router';
 import { useRecoilState } from 'recoil';
 import { userState } from '@/atoms/userState';
@@ -59,6 +59,14 @@ export default function App() {
       </View>
     );
   };
+
+  /*
+  const [searchQuery, setSearchQuery] = useState('');
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+*/
+
   return (
     <LinearGradient colors={['#ffd4d1', '#efefef']} locations={[0.0, 0.5]} style={{ flex: 1 }}>
       <Stack.Screen
@@ -100,8 +108,7 @@ export default function App() {
           ),
         }}
       />
-
-      <View>
+      <View style={styles.block}>
         <FlatList
           style={{ paddingTop: 85 }}
           data={['']}
@@ -112,3 +119,7 @@ export default function App() {
     </LinearGradient>
   );
 }
+
+const styles = StyleSheet.create({
+  block: { flex: 1 },
+});
