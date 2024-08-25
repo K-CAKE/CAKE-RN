@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, Animated, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import Entypo from '@expo/vector-icons/Entypo';
 
 interface InputLineFormProps {
   title: string;
@@ -46,9 +47,11 @@ export const InputLineForm = (props: InputLineFormProps) => {
           onChangeText={props.onChangeText}
           onEndEditing={() => props.searchResult(props.value)}
         />
-        {props.onSetGeo && <MaterialIcons name="map" size={23} color="lightgray" onPress={props.onSetGeo} />}
+        {props.onSetGeo && (
+          <Entypo name="location" size={23} color="lightgray" onPress={props.onSetGeo} style={{ marginRight: 5 }} />
+        )}
         {props.searchResult && (
-          <MaterialIcons name="search" size={23} color="lightgray" onPress={() => props.searchResult(props.value)} />
+          <MaterialIcons name="cancel" size={23} color="lightgray" onPress={() => props.searchResult('')} />
         )}
       </Animated.View>
     </View>
