@@ -17,9 +17,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons , FontAwesome } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { FontAwesome } from '@expo/vector-icons';
+
 
 type RootStackParamList = {
   DeliveryScreen: undefined;
