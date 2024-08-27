@@ -57,7 +57,7 @@ export default function Tutorial() {
           <TouchableOpacity onPress={() => Linking.openURL('https://play.google.com/store/apps/details?id=com.fineapp.yogiyo')}>
             <Card.Content style={styles.cardContent}>
               <Image 
-              //  source={require('CAKE_RN/assets/images/delivery/yogiyo.png')} // 요기요 아이콘
+                source={require('../../../assets/images/delivery/yogiyo.png')} // 요기요 아이콘
                 style={styles.image}
               />
               <Text style={styles.cardText}>Install "Yogiyo" and start shopping</Text>
@@ -69,7 +69,7 @@ export default function Tutorial() {
           <TouchableOpacity onPress={() => Linking.openURL('https://play.google.com/store/apps/details?id=com.sampleapp')}>
             <Card.Content style={styles.cardContent}>
               <Image 
-             //   source={require('CAKE_RN/assets/images/delivery/baemin.png')} // 배민 아이콘
+                source={require('../../../assets/images/delivery/baemin.png')} // 배민 아이콘
                 style={styles.image}
               />
               <Text style={styles.cardText}>Install "Baemin" and start shopping</Text>

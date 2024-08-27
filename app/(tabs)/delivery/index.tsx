@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Pressable } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Pressable, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { TouchableRipple } from 'react-native-paper';
 import { Stack } from 'expo-router';
+import * as Location from 'expo-location';
+import axios from 'axios';
+import * as Clipboard from 'expo-clipboard';
 //ICON
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from 'react-native-linear-gradient';
 
 // Define the types for the navigation routes
 type RootStackParamList = {
@@ -22,26 +25,54 @@ type DeliveryScreenNavigationProp = NativeStackNavigationProp<RootStackParamList
 export default function DeliveryIndexScreen() {
   const navigation = useNavigation<DeliveryScreenNavigationProp>();
   const [showTooltip, setShowTooltip] = useState(false);
-  const fadeAnim = useState(new Animated.Value(0))[0];
+  const [restaurants, setRestaurants] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchLocationAndRecommendRestaurants = async () => {
+      // 현재 위치를 얻습니다.
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      
+      if (location) {
+        const { latitude, longitude } = location.coords;
+        const API_KEY = process.env.EXPO_PUBLIC_NAVER_CLIENT_ID;
+        const SECRET_KEY = process.env.EXPO_PUBLIC_NAVER_CLIENT_SECRET;
+        
+        try {
+          const response = await axios.get(
+            `https://openapi.naver.com/v1/search/local.json?query=식당&display=5&start=1&sort=random&x=${longitude}&y=${latitude}`,
+            {
+              headers: {
+                'X-Naver-Client-Id': API_KEY,
+                'X-Naver-Client-Secret': SECRET_KEY,
+              },
+            }
+          );
+          const data = response.data;
+          if (data.items) {
+            setRestaurants(data.items.map((item: any) => item.title.replace(/<\/?[^>]+(>|$)/g, ""))); // HTML 태그 제거
+          }
+        } catch (error) {
+          console.error('Error fetching restaurants:', error);
+        }
+      }
+    };
+
+    fetchLocationAndRecommendRestaurants();
+  }, []);
 
   const handlePress = () => {
     setShowTooltip(true);
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start(() => {
-      setTimeout(() => {
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 500,
-          useNativeDriver: true,
-        }).start(() => {
-          setShowTooltip(false);
-          navigation.navigate('tutorial');
-        });
-      }, 1500);
-    });
+  };
+
+  const handleCopyToClipboard = (restaurant: string) => {
+    Clipboard.setString(restaurant);
+    Alert.alert('Copied to Clipboard', 'The restaurant name has been copied to your clipboard.');
   };
 
   return (
@@ -62,11 +93,6 @@ export default function DeliveryIndexScreen() {
                   <FontAwesome name="question-circle-o" size={26} color="#f02f04" />
                 </View>
               </TouchableRipple>
-              {showTooltip && (
-                <Animated.View style={[styles.tooltipContainer, { opacity: fadeAnim }]}>
-                  <Text style={styles.tooltipText}>Learn More</Text>
-                </Animated.View>
-              )}
             </View>
           ),
           headerLeft: () => (
@@ -97,7 +123,6 @@ export default function DeliveryIndexScreen() {
           </Text>
         </View>
         <View style={styles.infoContainer}>
-          {/* 코드 : 나중에 음식점 정보 추가 -> 추천 */}
           <View
             style={{
               marginTop: 5,
@@ -110,19 +135,17 @@ export default function DeliveryIndexScreen() {
             <Text style={{ fontSize: 25, fontWeight: 300 }}>Recommendation</Text>
           </View>
           <View style={styles.placeholder}>
-            <Text>Restaurant information will go here</Text>
+            {restaurants.length > 0 ? (
+              restaurants.map((restaurant, index) => (
+                <Pressable key={index} onPress={() => handleCopyToClipboard(restaurant)}>
+                  <Text style={styles.restaurantText}>{restaurant}</Text>
+                </Pressable>
+              ))
+            ) : (
+              <Text>Loading restaurant recommendations...</Text>
+            )}
           </View>
-          <View
-            style={{
-              marginBottom: 5,
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-            }}
-          >
-            <Ionicons name="information-circle" size={24} color="#ffd4d1" />
-            <Text style={{ marginLeft: 5 }}>Restaurants near me</Text>
-          </View>
+          <Text style={styles.copyText}>Copy to easily place your order</Text>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('DeliveryHistory')}>
@@ -141,18 +164,6 @@ export default function DeliveryIndexScreen() {
 const styles = StyleSheet.create({
   gradientContainer: {
     flex: 1,
-  },
-  tooltipContainer: {
-    width: 80,
-    position: 'absolute',
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    right: 30,
-    top: 5,
-  },
-  tooltipText: {
-    color: '#f02f04',
-    fontSize: 14,
   },
   container: {
     flexGrow: 1,
@@ -186,6 +197,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#d9d9d9',
     borderRadius: 10,
     marginBottom: 6,
+    padding: 10,
+  },
+  restaurantText: {
+    fontSize: 16,
+    marginVertical: 5,
+    textAlign: 'center',
+    color: '#000',
+  },
+  copyText: {
+    fontSize: 12,
+    color: '#ffd4d1',
+    textAlign: 'center',
+    marginTop: 10,
   },
   buttonContainer: {
     flex: 1,
