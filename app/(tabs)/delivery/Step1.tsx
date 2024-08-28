@@ -5,10 +5,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 
 type RootStackParamList = {
-    DeliveryScreen: undefined;
-    DeliveryHistory: undefined;
-    tutorial: undefined;
-    Step2 : undefined;
+  DeliveryScreen: undefined;
+  DeliveryHistory: undefined;
+  tutorial: undefined;
+  Step2: undefined;
 };
 
 const Step1 = () => {
@@ -24,12 +24,12 @@ const Step1 = () => {
     setVisible(false);
     setNotificationVisible(true);
   };
-  
+
   const hideNotificationModal = () => {
     setNotificationVisible(false);
     setThirdModalVisible(true);
   };
-  
+
   const hideThirdModal = () => {
     setThirdModalVisible(false);
     setFourthModalVisible(true);
@@ -68,7 +68,9 @@ const Step1 = () => {
                 <Text style={styles.sectionTitle}>Camera (Optional)</Text>
                 <Text style={styles.description}>Scan QR codes when placing orders.</Text>
 
-                <Text style={styles.sectionTitle}>Biometric Authentication (Face ID, Fingerprint, etc.) (Optional)</Text>
+                <Text style={styles.sectionTitle}>
+                  Biometric Authentication (Face ID, Fingerprint, etc.) (Optional)
+                </Text>
                 <Text style={styles.description}>Convenient authentication without password using biometrics.</Text>
 
                 <Text style={styles.sectionTitle}>Microphone and Other Permissions (Optional)</Text>
@@ -115,12 +117,13 @@ const Step1 = () => {
                   <Text style={styles.checkboxLabel}>Agree to Location-Based Services Terms (Required)</Text>
                 </View>
 
-                <View style={styles.checkboxContainer}>
-                  <Text style={styles.checkboxLabel}>Agree to Receive Marketing Information via Push Notifications (Optional)</Text>
-                  <Text style={styles.description}>You can receive information on events and benefits.</Text>
+                <View style={[styles.checkboxContainer, { marginBottom: 25 }]}>
+                  <Text style={styles.checkboxLabel}>
+                    Agree to Receive Marketing Information via Push Notifications (Optional)
+                  </Text>
                 </View>
+                <Text style={styles.description}>You can receive information on events and benefits.</Text>
               </View>
-
               <TouchableOpacity style={styles.startButton} onPress={hideThirdModal}>
                 <Text style={styles.startButtonText}>Start</Text>
               </TouchableOpacity>
@@ -137,7 +140,9 @@ const Step1 = () => {
                   Rejection Date and Time: August 6, 2024, 6:00 PM{'\n'}
                   Processed: Rejection Completed
                 </Text>
-                <Text style={styles.noteText}>* Can be changed in settings{'\n'}* Excludes brand campaign push notifications</Text>
+                <Text style={styles.noteText}>
+                  * Can be changed in settings{'\n'}* Excludes brand campaign push notifications
+                </Text>
               </View>
 
               <TouchableOpacity style={styles.confirmButton} onPress={handleFinalConfirmPress}>

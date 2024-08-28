@@ -37,12 +37,12 @@ export default function DeliveryIndexScreen() {
       }
 
       const location = await Location.getCurrentPositionAsync({});
-      
+
       if (location) {
         const { latitude, longitude } = location.coords;
         const API_KEY = process.env.EXPO_PUBLIC_NAVER_CLIENT_ID;
         const SECRET_KEY = process.env.EXPO_PUBLIC_NAVER_CLIENT_SECRET;
-        
+
         try {
           const response = await axios.get(
             `https://openapi.naver.com/v1/search/local.json?query=식당&display=5&start=1&sort=random&x=${longitude}&y=${latitude}`,
@@ -51,11 +51,11 @@ export default function DeliveryIndexScreen() {
                 'X-Naver-Client-Id': API_KEY,
                 'X-Naver-Client-Secret': SECRET_KEY,
               },
-            }
+            },
           );
           const data = response.data;
           if (data.items) {
-            setRestaurants(data.items.map((item: any) => item.title.replace(/<\/?[^>]+(>|$)/g, ""))); // HTML 태그 제거
+            setRestaurants(data.items.map((item: any) => item.title.replace(/<\/?[^>]+(>|$)/g, ''))); // HTML 태그 제거
           }
         } catch (error) {
           console.error('Error fetching restaurants:', error);
@@ -98,6 +98,7 @@ export default function DeliveryIndexScreen() {
           headerLeft: () => (
             <Pressable
               onPress={() => {
+                setRestaurants([]);
                 navigation.navigate('home' as never);
               }}
               style={({ pressed }) => [
@@ -137,7 +138,11 @@ export default function DeliveryIndexScreen() {
           <View style={styles.placeholder}>
             {restaurants.length > 0 ? (
               restaurants.map((restaurant, index) => (
-                <Pressable key={index} onPress={() => handleCopyToClipboard(restaurant)}>
+                <Pressable
+                  style={styles.restaurantButton}
+                  key={index}
+                  onPress={() => handleCopyToClipboard(restaurant)}
+                >
                   <Text style={styles.restaurantText}>{restaurant}</Text>
                 </Pressable>
               ))
@@ -205,6 +210,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#000',
   },
+  restaurantButton: {},
   copyText: {
     fontSize: 12,
     color: '#ffd4d1',
