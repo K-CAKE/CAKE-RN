@@ -37,111 +37,111 @@ const Step1 = () => {
 
   const handleFinalConfirmPress = () => {
     setFourthModalVisible(false);
-    navigation.navigate('Step2' as never); // Step2로 이동
+    navigation.navigate('Step2' as never); // Navigate to Step2
   };
 
   return (
     <PaperProvider>
       <LinearGradient colors={['#F02F04', '#F5ECEA']} style={styles.gradientContainer}>
         <Portal>
-          {/* 첫 번째 모달 */}
+          {/* First Modal */}
           <Modal visible={visible} onDismiss={hideModal} transparent={true}>
             <View style={styles.modalContainer}>
               <View style={styles.permissionBox}>
                 <Text style={styles.title}>
-                  고객님의 편리한 배달민족 이용을 위해 아래 접근권한의 허용이 필요합니다
+                  To enhance your experience with our delivery service, we require the following permissions.
                 </Text>
-                <Text style={styles.sectionTitle}>알림 (선택)</Text>
-                <Text style={styles.description}>배달상태 실시간 알림 전송</Text>
+                <Text style={styles.sectionTitle}>Notifications (Optional)</Text>
+                <Text style={styles.description}>Receive real-time delivery status notifications.</Text>
 
-                <Text style={styles.sectionTitle}>저장공간 (선택)</Text>
-                <Text style={styles.description}>사진첨부 및 프로필 이미지 첨부</Text>
+                <Text style={styles.sectionTitle}>Storage (Optional)</Text>
+                <Text style={styles.description}>Attach photos and profile images.</Text>
 
-                <Text style={styles.sectionTitle}>위치 (선택)</Text>
-                <Text style={styles.description}>현재위치 자동수신</Text>
+                <Text style={styles.sectionTitle}>Location (Optional)</Text>
+                <Text style={styles.description}>Automatically receive your current location.</Text>
 
-                <Text style={styles.sectionTitle}>주소록 (선택)</Text>
+                <Text style={styles.sectionTitle}>Contacts (Optional)</Text>
                 <Text style={styles.description}>
-                  전화번호 및 기재된 노출, 선물하기 시 연락처 입력 편리성
+                  Access to your contacts for easy entry when sending gifts or other interactions.
                 </Text>
 
-                <Text style={styles.sectionTitle}>카메라 (선택)</Text>
-                <Text style={styles.description}>주문 시 QR코드 스캔</Text>
+                <Text style={styles.sectionTitle}>Camera (Optional)</Text>
+                <Text style={styles.description}>Scan QR codes when placing orders.</Text>
 
-                <Text style={styles.sectionTitle}>생체인증 (Face ID, 지문 등) (선택)</Text>
-                <Text style={styles.description}>배달민족 비밀번호 대체하여 인증 편리성</Text>
+                <Text style={styles.sectionTitle}>Biometric Authentication (Face ID, Fingerprint, etc.) (Optional)</Text>
+                <Text style={styles.description}>Convenient authentication without password using biometrics.</Text>
 
-                <Text style={styles.sectionTitle}>마이크, 그밖에 기타 권한, 접근 (선택)</Text>
-                <Text style={styles.description}>배달민족 앱 통화 녹음 기능</Text>
+                <Text style={styles.sectionTitle}>Microphone and Other Permissions (Optional)</Text>
+                <Text style={styles.description}>Enable call recording within the app.</Text>
               </View>
 
               <TouchableOpacity style={styles.confirmButton} onPress={showNotificationModal}>
-                <Text style={styles.confirmButtonText}>확인</Text>
+                <Text style={styles.confirmButtonText}>Confirm</Text>
               </TouchableOpacity>
             </View>
           </Modal>
 
-          {/* 알림 모달 */}
+          {/* Notification Modal */}
           <Modal visible={notificationVisible} onDismiss={hideNotificationModal} transparent={true}>
             <View style={styles.notificationModalContainer}>
               <View style={styles.notificationBox}>
                 <Text style={styles.notificationTitle}>
-                  배달의민족에서 알림을 보내도록 허용하시겠습니까?
+                  Do you allow us to send notifications from the Delivery Service?
                 </Text>
                 <View style={styles.notificationButtonContainer}>
                   <Pressable style={styles.notificationButton} onPress={hideNotificationModal}>
-                    <Text style={styles.notificationButtonText}>허용</Text>
+                    <Text style={styles.notificationButtonText}>Allow</Text>
                   </Pressable>
                   <Pressable style={styles.notificationButton} onPress={hideNotificationModal}>
-                    <Text style={styles.notificationButtonText}>허용 안함</Text>
+                    <Text style={styles.notificationButtonText}>Do Not Allow</Text>
                   </Pressable>
                 </View>
               </View>
             </View>
           </Modal>
 
-          {/* 세 번째 모달 */}
+          {/* Third Modal */}
           <Modal visible={thirdModalVisible} onDismiss={hideThirdModal} transparent={true}>
             <View style={styles.modalContainer}>
               <View style={styles.permissionBox}>
-                <Text style={styles.title}>환영합니다!</Text>
-                <Text style={styles.description}>아래 약관에 동의하시면 맛있는 여행이 시작됩니다</Text>
+                <Text style={styles.title}>Welcome!</Text>
+                <Text style={styles.description}>Agree to the terms below to start your delicious journey.</Text>
 
                 <View style={styles.checkboxContainer}>
-                  <Text style={styles.checkboxLabel}>전체동의</Text>
+                  <Text style={styles.checkboxLabel}>Agree to All</Text>
                 </View>
 
                 <View style={styles.checkboxContainer}>
-                  <Text style={styles.checkboxLabel}>위치 기반 서비스 약관 동의 (필수)</Text>
+                  <Text style={styles.checkboxLabel}>Agree to Location-Based Services Terms (Required)</Text>
                 </View>
 
                 <View style={styles.checkboxContainer}>
-                  <Text style={styles.checkboxLabel}>마케팅 정보 등 푸시 알림 수신 동의 (선택)</Text>
-                  <Text style={styles.description}>이벤트 및 혜택 정보를 받아보실 수 있어요.</Text>
+                  <Text style={styles.checkboxLabel}>Agree to Receive Marketing Information via Push Notifications (Optional)</Text>
+                  <Text style={styles.description}>You can receive information on events and benefits.</Text>
                 </View>
               </View>
 
               <TouchableOpacity style={styles.startButton} onPress={hideThirdModal}>
-                <Text style={styles.startButtonText}>시작하기</Text>
+                <Text style={styles.startButtonText}>Start</Text>
               </TouchableOpacity>
             </View>
           </Modal>
 
-          {/* 네 번째 모달 */}
+          {/* Fourth Modal */}
           <Modal visible={fourthModalVisible} onDismiss={handleFinalConfirmPress} transparent={true}>
             <View style={styles.modalContainer}>
               <View style={styles.permissionBox}>
-                <Text style={styles.title}>마케팅정보 앱 푸시 알림 거부 안내</Text>
+                <Text style={styles.title}>Marketing Information Push Notification Rejection Notice</Text>
                 <Text style={styles.description}>
-                  전송자: 배달의민족{'\n'}
-                  수신거부 일시: 2024년 08월 06일 18시{'\n'}
-                  처리내용: 수신거부 처리완료
+                  Sender: Delivery Service{'\n'}
+                  Rejection Date and Time: August 6, 2024, 6:00 PM{'\n'}
+                  Processed: Rejection Completed
                 </Text>
-                <Text style={styles.noteText}>* 환경 설정에서 변경 가능{'\n'}* 브랜드 캠페인 푸시 제외</Text>
+                <Text style={styles.noteText}>* Can be changed in settings{'\n'}* Excludes brand campaign push notifications</Text>
               </View>
 
               <TouchableOpacity style={styles.confirmButton} onPress={handleFinalConfirmPress}>
-                <Text style={styles.confirmButtonText}>확인</Text>
+                <Text style={styles.confirmButtonText}>Confirm</Text>
               </TouchableOpacity>
             </View>
           </Modal>
