@@ -76,7 +76,7 @@ export default function Page() {
             <Text style={styles.balance}>$ 0.00</Text>
           </View>
         </View>
-        <View style={styles.bottom}>
+        <View style={[styles.bottom]}>
           <View style={styles.button}>
             <Pressable
               onPress={() => {
@@ -86,7 +86,6 @@ export default function Page() {
                 {
                   opacity: pressed ? 0.9 : 0.7,
                 },
-                styles.add,
               ]}
             >
               <AntDesign name="pluscircle" size={45} color="#FEECEB" />
@@ -228,16 +227,17 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 5,
     paddingLeft: 14,
     paddingRight: 14,
-    marginVertical: 11,
   },
   button: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  add: {},
   contents: {
+    marginTop: 8,
     flex: 2,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,

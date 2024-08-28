@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, TextInput } from 'react-native';
+import { Pressable, View, Text, TouchableOpacity, Image, StyleSheet, Dimensions, TextInput } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 
@@ -18,12 +18,27 @@ export default function Login() {
         style={styles.googleLoginButton}
         onPress={() => {
           /* Google login logic */
-          router.push('/home'); // 로그인 성공 후 홈 화면으로 이동 (임시 지정)
         }}
       >
         <Image source={require('../assets/images/google_logo.png')} style={styles.googleLogo} />
         <Text style={styles.googleLoginText}>Google Login</Text>
       </TouchableOpacity>
+      <Pressable
+        onPress={() => {
+          router.push('/home');
+        }}
+        style={({ pressed }) => [
+          {
+            opacity: pressed ? 0.7 : 1,
+          },
+          {
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+        ]}
+      >
+        <Text style={{ fontSize: 15, textDecorationLine: 'underline' }}>로그인없이 홈으로</Text>
+      </Pressable>
       <Text style={styles.footerText}>
         By signing up, you agree to the CAKE{'\n'}Terms of Service and Privacy Policy.
       </Text>
@@ -36,16 +51,24 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: width * 0.05,
     paddingTop: height * 0.1,
-    backgroundColor: 'white',
+    backgroundColor: '#f6f6f6',
     justifyContent: 'center',
   },
   imageContainer: {
+    alignSelf: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 5,
     marginBottom: height * 0.05,
+    width: width * 0.3,
+    height: width * 0.3,
+    elevation: 5,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 100,
   },
   logo: {
-    width: width * 0.4,
-    height: width * 0.4,
+    width: width * 0.33,
+    height: width * 0.33,
   },
   headerText: {
     marginTop: height * 0.03,
@@ -61,7 +84,8 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    borderColor: 'gray',
+    backgroundColor: 'white',
+    borderColor: 'lightgray',
     borderWidth: 1,
     marginBottom: 15,
     paddingHorizontal: 10,
@@ -72,7 +96,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-    borderColor: 'gray',
+    borderColor: 'lightgray',
     borderWidth: 1,
     borderRadius: 8,
     height: height * 0.08,

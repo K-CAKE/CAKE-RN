@@ -17,9 +17,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 
-import { Ionicons , FontAwesome } from '@expo/vector-icons';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-
 
 type RootStackParamList = {
   DeliveryScreen: undefined;
@@ -220,7 +220,13 @@ export default function DeliveryScreen() {
           )}
 
           <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Address')}>
-            <Text style={styles.buttonText}> Register your address.</Text>
+            <Text style={styles.buttonText}> Register your address</Text>
+            <MaterialIcons
+              style={{ alignSelf: 'center', paddingTop: 4 }}
+              name="navigate-next"
+              size={26}
+              color="white"
+            />
           </TouchableOpacity>
         </View>
       </ScrollView>

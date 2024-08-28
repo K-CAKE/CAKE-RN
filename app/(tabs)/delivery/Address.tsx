@@ -34,22 +34,20 @@ export default function Address() {
 
   const handleConfirmPress = async () => {
     try {
-      const { data, error } = await supabase
-        .from('food_request_history')
-        .insert([
-          {
-            request_state: '0',
-            request_price: parseInt(foodPrice, 10),
-            food_payment: parseInt(foodPrice, 10),
-            processing_date: new Date().toISOString().split('T')[0],
-            serial_number: '12345678987699',
-            korean_fee: parseInt(foodPrice, 10),
-            food_name: foodName,
-            foreigner_id: 2,
-            korean_id: 1,
-            request_position: deliveryDestination,
-          },
-        ]);
+      const { data, error } = await supabase.from('food_request_history').insert([
+        {
+          request_state: '0',
+          request_price: parseInt(foodPrice, 10),
+          food_payment: parseInt(foodPrice, 10),
+          processing_date: new Date().toISOString().split('T')[0],
+          serial_number: '12345678987699',
+          korean_fee: parseInt(foodPrice, 10),
+          food_name: foodName,
+          foreigner_id: 2,
+          korean_id: 1,
+          request_position: deliveryDestination,
+        },
+      ]);
 
       if (error) {
         throw error;
@@ -66,8 +64,7 @@ export default function Address() {
   return (
     <LinearGradient colors={['#f6f6f6', '#f6f6f6']} style={styles.gradientContainer}>
       <View style={styles.block}>
-        <Text style={styles.title}> Fill out the order form and complete your order.</Text>
-
+        <Text style={styles.title}>Fill out the order form and complete your order.</Text>
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Food Name</Text>
           <TextInput
@@ -99,13 +96,13 @@ export default function Address() {
           />
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleMapPress}>
-          <FontAwesome name="search" size={20} color="#FFF" />
-          <Text style={styles.buttonText}>현재 위치로 주소 찾기</Text>
+        <TouchableOpacity style={styles.button1} onPress={handleMapPress}>
+          <FontAwesome name="search" size={20} color="black" />
+          <Text style={styles.buttonText1}>Finding an Address from Current Location</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.button, styles.confirmButton]} onPress={handleConfirmPress}>
-          <Text style={styles.buttonText}>주문 완료하기</Text>
+          <Text style={styles.buttonText}>Complete Order</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -123,8 +120,10 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
+    alignSelf: 'flex-start',
     fontSize: 18,
     marginBottom: 20,
+    fontWeight: '500',
   },
   inputContainer: {
     width: '100%',
@@ -132,6 +131,7 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 16,
+    fontWeight: '400',
     marginBottom: 5,
     color: '#333',
   },
@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
+    backgroundColor: '#f9f9f9',
   },
   button: {
     marginTop: 20,
@@ -153,8 +154,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  button1: {
+    marginTop: 20,
+    backgroundColor: 'white',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 13,
+    width: '100%',
+    height: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   buttonText: {
     color: '#FFF',
+    marginLeft: 10,
+    fontSize: 16,
+  },
+  buttonText1: {
+    color: 'black',
     marginLeft: 10,
     fontSize: 16,
   },
